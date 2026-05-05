@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CasaTanja Admin Login</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body class="admin-body login-body">
+    <main class="login-card">
+      <a class="brand admin-brand" href="index.html">
+        <span class="brand-mark">CT</span>
+        <span>CasaTanja Admin</span>
+      </a>
+      <div>
+        <span class="eyebrow">Protected area</span>
+        <h1>Admin login</h1>
+        <p>Use the local admin credentials to manage products and orders.</p>
+      </div>
+      <form class="admin-form login-form" data-login-form>
+        <label>
+          Username
+          <input name="username" autocomplete="username" required />
+        </label>
+        <label>
+          Password
+          <input name="password" type="password" autocomplete="current-password" required />
+        </label>
+        <button class="primary-action" type="submit">Log in</button>
+        <p class="checkout-note" data-login-message>Default local login: admin / admin123</p>
+      </form>
+    </main>
+
+    <script src="admin-login.js"></script>
+  </body>
+</html>

@@ -1,4 +1,4 @@
-const whatsappNumber = "212708012888";
+let whatsappNumber = "212708012888";
 
 const translations = {
   ar: {
@@ -50,6 +50,13 @@ const translations = {
     cod: "عند الاستلام",
     emptyCart: "السلة فارغة. أضف منتجا لإرسال الطلب عبر واتساب.",
     noProducts: "لم نجد أي منتج مطابق للبحث.",
+    outOfStock: "غير متوفر حاليا",
+    lowStock: "باقي عدد محدود",
+    orderedThisWeek: "تم طلبه {count} مرة هذا الأسبوع",
+    bestSellers: "الأكثر طلبا",
+    homeSection: "منتجات المنزل",
+    techSection: "تقنية واكسسوارات",
+    beautySection: "جمال وعناية",
     qty: "الكمية",
     description: "الوصف",
     highlights: "المميزات",
@@ -71,6 +78,10 @@ const translations = {
     faqReturnA: "نراجع أي مشكل في الطلب عبر واتساب ونقترح الحل المناسب.",
     floatingWhatsapp: "مساعدة",
     floatingWhatsappAria: "مساعدة عبر واتساب",
+    whatsappFallbackTitle: "لم يفتح واتساب؟",
+    whatsappFallbackText: "اضغط الزر مرة أخرى لإرسال الطلب.",
+    whatsappFallbackButton: "فتح واتساب",
+    continueShopping: "متابعة التسوق",
   },
   fr: {
     menuAria: "Ouvrir le menu",
@@ -121,6 +132,13 @@ const translations = {
     cod: "COD",
     emptyCart: "Votre panier est vide. Ajoutez un produit pour commander par WhatsApp.",
     noProducts: "Aucun produit trouve pour cette recherche.",
+    outOfStock: "Indisponible",
+    lowStock: "Stock limite",
+    orderedThisWeek: "Commande {count} fois cette semaine",
+    bestSellers: "Best sellers",
+    homeSection: "Maison",
+    techSection: "Tech et accessoires",
+    beautySection: "Beaute et soin",
     qty: "Quantite",
     description: "Description",
     highlights: "Points forts",
@@ -142,10 +160,14 @@ const translations = {
     faqReturnA: "On verifie tout probleme sur WhatsApp et on propose la meilleure solution.",
     floatingWhatsapp: "Aide",
     floatingWhatsappAria: "Aide WhatsApp",
+    whatsappFallbackTitle: "WhatsApp ne s'est pas ouvert ?",
+    whatsappFallbackText: "Appuyez encore une fois pour envoyer la commande.",
+    whatsappFallbackButton: "Ouvrir WhatsApp",
+    continueShopping: "Continuer mes achats",
   },
 };
 
-const products = [
+let products = [
   {
     id: 1,
     category: "Cuisine",
@@ -266,6 +288,7 @@ const cart = new Map();
 let currentFilter = "all";
 let currentSearch = "";
 let currentLang = "ar";
+let storeSettings = {};
 
 const productGrid = document.querySelector("[data-products]");
 const cartDrawer = document.querySelector("[data-cart-drawer]");
@@ -276,9 +299,45 @@ const checkoutForm = document.querySelector("[data-checkout-form]");
 const searchInput = document.querySelector("#productSearch");
 const langToggle = document.querySelector("[data-lang-toggle]");
 const currentLangLabel = document.querySelector("[data-current-lang]");
+const whatsappFallback = document.querySelector("[data-whatsapp-fallback]");
+const whatsappRetry = document.querySelector("[data-whatsapp-retry]");
+const categorySections = document.querySelector("[data-category-sections]");
+
+async function loadBackendStore() {
+  try {
+    const response = await fetch("/api/store");
+    if (!response.ok) return;
+    const store = await response.json();
+    products = (store.products || []).filter((product) => product.active !== false);
+    storeSettings = store.settings || {};
+    whatsappNumber = storeSettings.whatsappNumber || whatsappNumber;
+  } catch (error) {
+    // File previews and GitHub Pages use the bundled fallback products.
+  }
+}
 
 function t(key) {
   return translations[currentLang][key] || key;
+}
+
+function interpolate(template, values) {
+  return Object.entries(values).reduce((text, [key, value]) => text.replaceAll(`{${key}}`, value), template);
+}
+
+function socialCount(product) {
+  return Number(product.ordersThisWeek || product.socialProof || 24 + Number(product.id || 1) * 7);
+}
+
+function trackEvent(event, payload = {}) {
+  const record = { event, ...payload, createdAt: new Date().toISOString() };
+  const localEvents = JSON.parse(localStorage.getItem("storeAnalytics") || "[]");
+  localEvents.unshift(record);
+  localStorage.setItem("storeAnalytics", JSON.stringify(localEvents.slice(0, 200)));
+  fetch("/api/analytics", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ event, productId: payload.productId || null, meta: payload }),
+  }).catch(() => {});
 }
 
 function money(value) {
@@ -317,12 +376,37 @@ function setLanguage(lang) {
   document.querySelectorAll("[data-i18n-aria]").forEach((node) => {
     node.setAttribute("aria-label", t(node.dataset.i18nAria));
   });
+  renderFeaturedDeal();
   renderProducts();
+  renderCategorySections();
   renderCart();
+}
+
+function renderFeaturedDeal() {
+  const featuredId = Number(storeSettings.featuredProductId);
+  const product = products.find((item) => item.id === featuredId) || products.find((item) => item.featured) || products[0];
+  if (!product) return;
+
+  const dealBand = document.querySelector(".deal-band");
+  const dealTitle = document.querySelector("[data-i18n='dealTitle']");
+  const orderButton = document.querySelector("[data-i18n='dealOrder']");
+  const detailsLink = document.querySelector("[data-i18n='dealDetails']");
+  const bgLink = document.querySelector(".deal-bg-link");
+  const priceRow = document.querySelector(".deal-price-row");
+
+  if (dealTitle) dealTitle.textContent = localText(product.title);
+  if (orderButton) orderButton.dataset.add = product.id;
+  if (detailsLink) detailsLink.href = `product.html?id=${product.id}`;
+  if (bgLink) bgLink.href = `product.html?id=${product.id}`;
+  if (dealBand && product.images?.[0]) dealBand.style.backgroundImage = `url("${product.images[0]}")`;
+  if (priceRow) {
+    priceRow.innerHTML = `<strong>${money(product.price)}</strong>${product.oldPrice ? `<span>${money(product.oldPrice)}</span>` : ""}`;
+  }
 }
 
 function visibleProducts() {
   return products.filter((product) => {
+    if (product.active === false) return false;
     const matchesFilter = currentFilter === "all" || product.category === currentFilter;
     const searchText = `${product.title.ar} ${product.title.fr} ${categoryLabel(product.category)}`.toLowerCase();
     return matchesFilter && searchText.includes(currentSearch);
@@ -333,12 +417,14 @@ function renderProducts() {
   const items = visibleProducts();
 
   productGrid.innerHTML = items
-    .map(
-      (product) => `
+    .map((product) => {
+      const soldOut = Number(product.stock || 0) <= 0;
+      const limited = !soldOut && Number(product.stock || 0) <= 5;
+      return `
         <article class="product-card" data-product="${product.id}" tabindex="0" role="button" aria-label="${localText(product.title)}">
           <div class="product-image">
             <img src="${product.images[0]}" alt="${localText(product.title)}" loading="lazy" />
-            <span class="badge">${t("cod")}</span>
+            <span class="badge">${soldOut ? t("outOfStock") : limited ? t("lowStock") : t("cod")}</span>
             <button class="wishlist" type="button" aria-label="Wishlist">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M20.8 8.8c0 5.2-8.8 10-8.8 10s-8.8-4.8-8.8-10A4.8 4.8 0 0 1 12 5.5a4.8 4.8 0 0 1 8.8 3.3Z" />
@@ -352,16 +438,65 @@ function renderProducts() {
               <span class="category">${categoryLabel(product.category)}</span>
             </div>
             <div class="delivery-note">${t("delivery")}</div>
-            <button class="add-button" type="button" data-add="${product.id}">${t("addPay")}</button>
+            <div class="social-proof">${interpolate(t("orderedThisWeek"), { count: socialCount(product) })}</div>
+            <button class="add-button" type="button" data-add="${product.id}" ${soldOut ? "disabled" : ""}>${soldOut ? t("outOfStock") : t("addPay")}</button>
           </div>
         </article>
-      `,
-    )
+      `;
+    })
     .join("");
 
   if (!items.length) {
     productGrid.innerHTML = `<p class="empty-cart">${t("noProducts")}</p>`;
   }
+}
+
+function productCard(product) {
+  const soldOut = Number(product.stock || 0) <= 0;
+  const limited = !soldOut && Number(product.stock || 0) <= 5;
+  return `
+    <article class="product-card compact-card" data-product="${product.id}" tabindex="0" role="button" aria-label="${localText(product.title)}">
+      <div class="product-image">
+        <img src="${product.images[0]}" alt="${localText(product.title)}" loading="lazy" />
+        <span class="badge">${soldOut ? t("outOfStock") : limited ? t("lowStock") : t("cod")}</span>
+      </div>
+      <div class="product-info">
+        <h3 class="product-title">${localText(product.title)}</h3>
+        <div class="product-meta">
+          <strong class="price">${money(product.price)}</strong>
+          <span class="category">${categoryLabel(product.category)}</span>
+        </div>
+        <div class="social-proof">${interpolate(t("orderedThisWeek"), { count: socialCount(product) })}</div>
+      </div>
+    </article>
+  `;
+}
+
+function renderCategorySections() {
+  const sections = [
+    { key: "bestSellers", items: products.filter((product) => product.active !== false && Number(product.stock || 0) > 0).slice(0, 4) },
+    { key: "homeSection", category: "Maison" },
+    { key: "techSection", category: "Tech" },
+    { key: "beautySection", category: "Beaute" },
+  ];
+
+  categorySections.innerHTML = sections
+    .map((section) => {
+      const items = section.items || products.filter((product) => product.active !== false && product.category === section.category).slice(0, 4);
+      if (!items.length) return "";
+      return `
+        <section class="category-block">
+          <div class="section-heading">
+            <div>
+              <span class="eyebrow">${t(section.key)}</span>
+              <h2>${t(section.key)}</h2>
+            </div>
+          </div>
+          <div class="product-grid category-grid">${items.map(productCard).join("")}</div>
+        </section>
+      `;
+    })
+    .join("");
 }
 
 function cartSummary() {
@@ -405,7 +540,21 @@ function renderCart() {
     .join("");
 }
 
+function persistCart() {
+  localStorage.setItem("storeCart", JSON.stringify([...cart.values()]));
+}
+
+function restoreCart() {
+  try {
+    const items = JSON.parse(localStorage.getItem("storeCart") || "[]");
+    items.forEach((item) => cart.set(item.id, item));
+  } catch (error) {
+    localStorage.removeItem("storeCart");
+  }
+}
+
 function openProduct(id) {
+  trackEvent("product_click", { productId: Number(id) });
   window.location.href = `product.html?id=${id}`;
 }
 
@@ -416,9 +565,12 @@ function closeProduct() {
 function addToCart(id, shouldOpenCart = true) {
   const product = products.find((item) => item.id === Number(id));
   if (!product) return;
+  if (Number(product.stock || 0) <= 0) return;
 
   const existing = cart.get(product.id);
   cart.set(product.id, { ...product, qty: existing ? existing.qty + 1 : 1 });
+  trackEvent("add_to_cart", { productId: product.id, qty: existing ? existing.qty + 1 : 1 });
+  persistCart();
   renderCart();
   if (shouldOpenCart) openCart();
 }
@@ -434,6 +586,7 @@ function updateQty(id, delta) {
     cart.set(item.id, { ...item, qty: nextQty });
   }
 
+  persistCart();
   renderCart();
 }
 
@@ -445,6 +598,11 @@ function openCart() {
 function closeCart() {
   cartDrawer.classList.remove("open");
   document.body.style.overflow = "";
+}
+
+function showWhatsAppFallback(url) {
+  whatsappRetry.href = url;
+  whatsappFallback.classList.add("open");
 }
 
 function buildWhatsAppMessage(formData) {
@@ -462,6 +620,38 @@ function buildWhatsAppMessage(formData) {
   ].join("\n");
 }
 
+async function saveOrder(formData) {
+  const { entries, total } = cartSummary();
+  if (!entries.length) return null;
+
+  try {
+    const response = await fetch("/api/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        customer: {
+          name: formData.get("name"),
+          phone: formData.get("phone"),
+          address: formData.get("address"),
+        },
+        items: entries.map((item) => ({
+          id: item.id,
+          sku: item.sku,
+          title: item.title,
+          qty: item.qty,
+          price: item.price,
+        })),
+        total,
+        source: "storefront_whatsapp",
+      }),
+    });
+    if (!response.ok) return null;
+    return response.json();
+  } catch (error) {
+    return null;
+  }
+}
+
 document.addEventListener("click", (event) => {
   const addButton = event.target.closest("[data-add]");
   const incButton = event.target.closest("[data-inc]");
@@ -469,6 +659,7 @@ document.addEventListener("click", (event) => {
   const openButton = event.target.closest(".cart-button, .nav-cart");
   const closeButton = event.target.closest("[data-close-cart]");
   const closeProductButton = event.target.closest("[data-close-product]");
+  const closeFallbackButton = event.target.closest("[data-close-fallback]");
   const filterButton = event.target.closest("[data-filter]");
   const productCard = event.target.closest("[data-product]");
 
@@ -481,6 +672,7 @@ document.addEventListener("click", (event) => {
   if (openButton) openCart();
   if (closeButton) closeCart();
   if (closeProductButton) closeProduct();
+  if (closeFallbackButton) whatsappFallback.classList.remove("open");
   if (productCard && !event.target.closest("button")) {
     openProduct(productCard.dataset.product);
   }
@@ -515,7 +707,7 @@ langToggle.addEventListener("click", () => {
   setLanguage(currentLang === "ar" ? "fr" : "ar");
 });
 
-checkoutForm.addEventListener("submit", (event) => {
+checkoutForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const { count } = cartSummary();
@@ -525,8 +717,18 @@ checkoutForm.addEventListener("submit", (event) => {
   }
 
   const formData = new FormData(checkoutForm);
-  const message = encodeURIComponent(buildWhatsAppMessage(formData));
-  window.location.href = `https://wa.me/${whatsappNumber}?text=${message}`;
+  trackEvent("checkout_submit", { itemCount: cartSummary().count, total: cartSummary().total });
+  await saveOrder(formData);
+  const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(buildWhatsAppMessage(formData))}`;
+  trackEvent("whatsapp_redirect", { itemCount: cartSummary().count, total: cartSummary().total });
+  showWhatsAppFallback(url);
+  window.location.href = url;
 });
 
-setLanguage(localStorage.getItem("storeLanguage") || "ar");
+async function initStorefront() {
+  await loadBackendStore();
+  restoreCart();
+  setLanguage(localStorage.getItem("storeLanguage") || "ar");
+}
+
+initStorefront();

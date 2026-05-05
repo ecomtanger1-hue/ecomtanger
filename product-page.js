@@ -1,4 +1,4 @@
-const whatsappNumber = "212708012888";
+let whatsappNumber = "212708012888";
 
 const translations = {
   ar: {
@@ -14,6 +14,17 @@ const translations = {
     namePlaceholder: "اسمك",
     addressPlaceholder: "مثال: مالاباطا، طنجة",
     qtyLabel: "الكمية",
+    variantLabel: "الخيار",
+    outOfStock: "غير متوفر حاليا",
+    lowStock: "باقي عدد محدود",
+    orderedThisWeek: "تم طلبه {count} مرة هذا الأسبوع",
+    whatsInBox: "ماذا يوجد في العلبة",
+    deliveryReturns: "التوصيل والاستبدال",
+    howToOrder: "كيف تطلب",
+    relatedProducts: "منتجات مشابهة",
+    boxDefault: "المنتج، التغليف، وأي ملحقات موضحة في الصور.",
+    deliveryReturnsText: "التوصيل في طنجة خلال 24-48 ساعة. الدفع عند الاستلام متاح، ونراجع أي مشكل عبر واتساب.",
+    howToOrderText: "اختر الكمية أو الخيار المناسب، املأ معلوماتك، ثم أكد الطلب عبر واتساب.",
     sendWhatsapp: "أكد الطلب عبر واتساب",
     note: "الدفع عند الاستلام متاح. سنؤكد معك التفاصيل قبل الإرسال.",
     missing: "لم نجد هذا المنتج.",
@@ -23,6 +34,11 @@ const translations = {
     name: "الاسم",
     phone: "الهاتف",
     address: "العنوان",
+    variant: "الخيار",
+    whatsappFallbackTitle: "لم يفتح واتساب؟",
+    whatsappFallbackText: "اضغط الزر مرة أخرى لإرسال الطلب.",
+    whatsappFallbackButton: "فتح واتساب",
+    continueShopping: "متابعة التسوق",
   },
   fr: {
     backAria: "Retour aux produits",
@@ -37,6 +53,17 @@ const translations = {
     namePlaceholder: "Votre nom",
     addressPlaceholder: "Ex: Malabata, Tanger",
     qtyLabel: "Quantite",
+    variantLabel: "Option",
+    outOfStock: "Indisponible",
+    lowStock: "Stock limite",
+    orderedThisWeek: "Commande {count} fois cette semaine",
+    whatsInBox: "Dans la boite",
+    deliveryReturns: "Livraison et retours",
+    howToOrder: "Comment commander",
+    relatedProducts: "Produits similaires",
+    boxDefault: "Le produit, son emballage, et les accessoires visibles sur les photos.",
+    deliveryReturnsText: "Livraison a Tanger sous 24-48h. Paiement a la livraison disponible, probleme traite sur WhatsApp.",
+    howToOrderText: "Choisissez la quantite ou l'option, renseignez vos infos, puis confirmez via WhatsApp.",
     sendWhatsapp: "Confirmer via WhatsApp",
     note: "Le paiement a la livraison est disponible. On confirme les details avant l'envoi.",
     missing: "Produit introuvable.",
@@ -46,10 +73,15 @@ const translations = {
     name: "Nom",
     phone: "Telephone",
     address: "Adresse",
+    variant: "Option",
+    whatsappFallbackTitle: "WhatsApp ne s'est pas ouvert ?",
+    whatsappFallbackText: "Appuyez encore une fois pour envoyer la commande.",
+    whatsappFallbackButton: "Ouvrir WhatsApp",
+    continueShopping: "Continuer mes achats",
   },
 };
 
-const products = [
+let products = [
   {
     id: 1,
     category: { ar: "مطبخ", fr: "Cuisine" },
@@ -167,12 +199,35 @@ const products = [
 ];
 
 let currentLang = localStorage.getItem("storeLanguage") || "ar";
+let storeSettings = {};
 const page = document.querySelector("[data-product-page]");
 const langToggle = document.querySelector("[data-lang-toggle]");
 const currentLangLabel = document.querySelector("[data-current-lang]");
+const whatsappFallback = document.querySelector("[data-whatsapp-fallback]");
+const whatsappRetry = document.querySelector("[data-whatsapp-retry]");
 
 function t(key) {
   return translations[currentLang][key] || key;
+}
+
+function interpolate(template, values) {
+  return Object.entries(values).reduce((text, [key, value]) => text.replaceAll(`{${key}}`, value), template);
+}
+
+function socialCount(product) {
+  return Number(product.ordersThisWeek || product.socialProof || 24 + Number(product.id || 1) * 7);
+}
+
+function trackEvent(event, payload = {}) {
+  const record = { event, ...payload, createdAt: new Date().toISOString() };
+  const localEvents = JSON.parse(localStorage.getItem("storeAnalytics") || "[]");
+  localEvents.unshift(record);
+  localStorage.setItem("storeAnalytics", JSON.stringify(localEvents.slice(0, 200)));
+  fetch("/api/analytics", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ event, productId: payload.productId || null, meta: payload }),
+  }).catch(() => {});
 }
 
 function money(value) {
@@ -184,7 +239,32 @@ function productId() {
 }
 
 function localText(value) {
+  if (typeof value === "string") return value;
   return value[currentLang];
+}
+
+function categoryText(product) {
+  if (typeof product.category !== "string") return localText(product.category);
+  const labels = {
+    Cuisine: { ar: "مطبخ", fr: "Cuisine" },
+    Maison: { ar: "المنزل", fr: "Maison" },
+    Tech: { ar: "تقنية", fr: "Tech" },
+    Beaute: { ar: "جمال", fr: "Beaute" },
+  };
+  return labels[product.category]?.[currentLang] || product.category;
+}
+
+async function loadBackendStore() {
+  try {
+    const response = await fetch("/api/store");
+    if (!response.ok) return;
+    const store = await response.json();
+    products = (store.products || []).filter((product) => product.active !== false);
+    storeSettings = store.settings || {};
+    whatsappNumber = storeSettings.whatsappNumber || whatsappNumber;
+  } catch (error) {
+    // File previews and GitHub Pages use the bundled fallback products.
+  }
 }
 
 function setLanguage(lang) {
@@ -198,20 +278,70 @@ function setLanguage(lang) {
   document.querySelectorAll("[data-i18n-aria]").forEach((node) => {
     node.setAttribute("aria-label", t(node.dataset.i18nAria));
   });
+  document.querySelector("[data-fallback-title]").textContent = t("whatsappFallbackTitle");
+  document.querySelector("[data-fallback-text]").textContent = t("whatsappFallbackText");
+  document.querySelector("[data-fallback-button]").textContent = t("whatsappFallbackButton");
+  document.querySelector("[data-close-fallback]").textContent = t("continueShopping");
   render();
 }
 
 function buildProductMessage(product, formData) {
   const qty = Number(formData.get("qty")) || 1;
+  const variantId = formData.get("variant");
+  const selectedVariant = (product.variants || []).find((variant) => variant.id === variantId);
+  const variantLine = selectedVariant ? [`${t("variant")}: ${localText(selectedVariant.name)}`] : [];
+  const unitPrice = product.price + Number(selectedVariant?.extraPrice || 0);
   return [
     t("messageIntro"),
-    `- ${localText(product.title)} x${qty}: ${money(product.price * qty)}`,
-    `${t("total")}: ${money(product.price * qty)}`,
+    `- ${localText(product.title)} x${qty}: ${money(unitPrice * qty)}`,
+    ...variantLine,
+    `${t("total")}: ${money(unitPrice * qty)}`,
     "",
     `${t("name")}: ${formData.get("name")}`,
     `${t("phone")}: ${formData.get("phone")}`,
     `${t("address")}: ${formData.get("address")}`,
   ].join("\n");
+}
+
+async function saveProductOrder(product, formData) {
+  const qty = Number(formData.get("qty")) || 1;
+  const variantId = formData.get("variant");
+  const selectedVariant = (product.variants || []).find((variant) => variant.id === variantId);
+  const unitPrice = product.price + Number(selectedVariant?.extraPrice || 0);
+  try {
+    const response = await fetch("/api/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        customer: {
+          name: formData.get("name"),
+          phone: formData.get("phone"),
+          address: formData.get("address"),
+        },
+        items: [
+          {
+            id: product.id,
+            sku: product.sku,
+            title: product.title,
+            variant: selectedVariant || null,
+            qty,
+            price: unitPrice,
+          },
+        ],
+        total: unitPrice * qty,
+        source: "product_page_whatsapp",
+      }),
+    });
+    if (!response.ok) return null;
+    return response.json();
+  } catch (error) {
+    return null;
+  }
+}
+
+function showWhatsAppFallback(url) {
+  whatsappRetry.href = url;
+  whatsappFallback.classList.add("open");
 }
 
 function renderMissing() {
@@ -223,6 +353,21 @@ function renderMissing() {
   `;
 }
 
+function relatedCard(product) {
+  return `
+    <article class="product-card compact-card" data-related-product="${product.id}">
+      <div class="product-image">
+        <img src="${product.images?.[0] || ""}" alt="${localText(product.title)}" loading="lazy" />
+        <span class="badge">${money(product.price)}</span>
+      </div>
+      <div class="product-info">
+        <h3 class="product-title">${localText(product.title)}</h3>
+        <div class="social-proof">${interpolate(t("orderedThisWeek"), { count: socialCount(product) })}</div>
+      </div>
+    </article>
+  `;
+}
+
 function render() {
   const product = products.find((item) => item.id === productId());
   if (!product) {
@@ -230,6 +375,13 @@ function render() {
     return;
   }
 
+  const soldOut = Number(product.stock || 0) <= 0;
+  const lowStock = !soldOut && Number(product.stock || 0) <= 5;
+  const variants = product.variants || [];
+  const related = products
+    .filter((item) => item.id !== product.id && item.active !== false && (item.category === product.category || categoryText(item) === categoryText(product)))
+    .slice(0, 4);
+  trackEvent("product_view", { productId: product.id });
   document.title = `${localText(product.title)} | CasaTanja Deals`;
   page.innerHTML = `
     <section class="product-page">
@@ -243,12 +395,13 @@ function render() {
       </div>
 
       <div class="detail-body page-detail-body">
-        <span class="eyebrow">${localText(product.category)} · ${t("delivery")}</span>
+        <span class="eyebrow">${categoryText(product)} · ${t("delivery")}</span>
         <h1>${localText(product.title)}</h1>
         <strong class="detail-price">${money(product.price)}</strong>
+        <div class="social-proof product-social">${interpolate(t("orderedThisWeek"), { count: socialCount(product) })}</div>
         <div class="product-trust-row">
           <span>${t("cod")}</span>
-          <span>${t("delivery")}</span>
+          <span>${soldOut ? t("outOfStock") : lowStock ? t("lowStock") : t("delivery")}</span>
         </div>
         <section>
           <h2>${t("description")}</h2>
@@ -259,6 +412,20 @@ function render() {
           <ul>
             ${product.highlights[currentLang].map((item) => `<li>${item}</li>`).join("")}
           </ul>
+        </section>
+        <section class="product-info-blocks">
+          <article>
+            <h2>${t("whatsInBox")}</h2>
+            <p>${product.box?.[currentLang] || t("boxDefault")}</p>
+          </article>
+          <article>
+            <h2>${t("deliveryReturns")}</h2>
+            <p>${t("deliveryReturnsText")}</p>
+          </article>
+          <article>
+            <h2>${t("howToOrder")}</h2>
+            <p>${t("howToOrderText")}</p>
+          </article>
         </section>
       </div>
 
@@ -276,13 +443,41 @@ function render() {
           <span>${t("addressLabel")}</span>
           <input name="address" type="text" placeholder="${t("addressPlaceholder")}" required />
         </label>
+        ${
+          variants.length
+            ? `<label>
+                <span>${t("variantLabel")}</span>
+                <select name="variant">
+                  ${variants
+                    .map(
+                      (variant) =>
+                        `<option value="${variant.id}" ${Number(variant.stock || 0) <= 0 ? "disabled" : ""}>${localText(variant.name)}${variant.extraPrice ? ` (+${money(variant.extraPrice)})` : ""}${Number(variant.stock || 0) <= 0 ? ` - ${t("outOfStock")}` : ""}</option>`,
+                    )
+                    .join("")}
+                </select>
+              </label>`
+            : ""
+        }
         <label>
           <span>${t("qtyLabel")}</span>
-          <input name="qty" type="number" min="1" value="1" required />
+          <input name="qty" type="number" min="1" max="${Math.max(1, Number(product.stock || 0))}" value="1" required />
         </label>
-        <button class="whatsapp-checkout" type="submit">${t("sendWhatsapp")}</button>
+        <button class="whatsapp-checkout" type="submit" ${soldOut ? "disabled" : ""}>${soldOut ? t("outOfStock") : t("sendWhatsapp")}</button>
         <p class="checkout-note">${t("note")}</p>
       </form>
+      ${
+        related.length
+          ? `<section class="related-products">
+              <div class="section-heading">
+                <div>
+                  <span class="eyebrow">${t("relatedProducts")}</span>
+                  <h2>${t("relatedProducts")}</h2>
+                </div>
+              </div>
+              <div class="product-grid category-grid">${related.map(relatedCard).join("")}</div>
+            </section>`
+          : ""
+      }
     </section>
   `;
 }
@@ -292,20 +487,41 @@ document.addEventListener("click", (event) => {
   if (thumb) {
     document.querySelector(".detail-main-image").src = thumb.dataset.thumb;
   }
+  const relatedProduct = event.target.closest("[data-related-product]");
+  if (relatedProduct) {
+    trackEvent("related_product_click", { productId: Number(relatedProduct.dataset.relatedProduct), fromProductId: productId() });
+    window.location.href = `product.html?id=${relatedProduct.dataset.relatedProduct}`;
+  }
 });
 
-document.addEventListener("submit", (event) => {
+document.addEventListener("submit", async (event) => {
   const form = event.target.closest("[data-product-order]");
   if (!form) return;
   event.preventDefault();
 
   const product = products.find((item) => item.id === productId());
-  const message = encodeURIComponent(buildProductMessage(product, new FormData(form)));
-  window.location.href = `https://wa.me/${whatsappNumber}?text=${message}`;
+  const formData = new FormData(form);
+  trackEvent("checkout_submit", { productId: product.id, source: "product_page" });
+  await saveProductOrder(product, formData);
+  const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(buildProductMessage(product, formData))}`;
+  trackEvent("whatsapp_redirect", { productId: product.id, source: "product_page" });
+  showWhatsAppFallback(url);
+  window.location.href = url;
+});
+
+document.addEventListener("click", (event) => {
+  if (event.target.closest("[data-close-fallback]")) {
+    whatsappFallback.classList.remove("open");
+  }
 });
 
 langToggle.addEventListener("click", () => {
   setLanguage(currentLang === "ar" ? "fr" : "ar");
 });
 
-setLanguage(currentLang);
+async function initProductPage() {
+  await loadBackendStore();
+  setLanguage(currentLang);
+}
+
+initProductPage();

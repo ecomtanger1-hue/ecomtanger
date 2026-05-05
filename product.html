@@ -27,6 +27,17 @@
       <main data-product-page></main>
     </div>
 
+    <aside class="whatsapp-fallback" data-whatsapp-fallback>
+      <div class="drawer-backdrop"></div>
+      <div class="confirmation-card">
+        <span class="eyebrow">WhatsApp</span>
+        <h2 data-fallback-title>WhatsApp did not open?</h2>
+        <p data-fallback-text>Tap the button again to send the order.</p>
+        <a class="primary-action" href="#" data-whatsapp-retry target="_blank" rel="noreferrer" data-fallback-button>Open WhatsApp</a>
+        <button class="ghost-admin-button" type="button" data-close-fallback>Continue shopping</button>
+      </div>
+    </aside>
+
     <script src="product-page.js"></script>
   </body>
 </html>

@@ -103,6 +103,8 @@
           <div class="product-grid" data-products></div>
         </section>
 
+        <section class="category-sections" data-category-sections aria-label="Category sections"></section>
+
         <section class="faq-section" aria-label="FAQ">
           <div class="section-heading">
             <div>
@@ -187,6 +189,17 @@
           <button class="whatsapp-checkout" type="submit" data-i18n="sendWhatsapp">أكد الطلب عبر واتساب</button>
           <p class="checkout-note" data-i18n="checkoutNote">الدفع عند الاستلام متاح. سنؤكد معك التفاصيل قبل الإرسال.</p>
         </form>
+      </div>
+    </aside>
+
+    <aside class="whatsapp-fallback" data-whatsapp-fallback>
+      <div class="drawer-backdrop"></div>
+      <div class="confirmation-card">
+        <span class="eyebrow">WhatsApp</span>
+        <h2 data-i18n="whatsappFallbackTitle">لم يفتح واتساب؟</h2>
+        <p data-i18n="whatsappFallbackText">اضغط الزر مرة أخرى لإرسال الطلب.</p>
+        <a class="primary-action" href="#" data-whatsapp-retry target="_blank" rel="noreferrer" data-i18n="whatsappFallbackButton">فتح واتساب</a>
+        <button class="ghost-admin-button" type="button" data-close-fallback data-i18n="continueShopping">متابعة التسوق</button>
       </div>
     </aside>
 

@@ -1,0 +1,344 @@
+{
+  "settings": {
+    "storeName": "CasaTanja",
+    "whatsappNumber": "212708012888",
+    "featuredProductId": 7,
+    "deliveryText": {
+      "ar": "طنجة 24-48 ساعة",
+      "fr": "Tanger 24-48h"
+    }
+  },
+  "products": [
+    {
+      "id": 1,
+      "sku": "CT-BLENDER-001",
+      "category": "Cuisine",
+      "price": 189,
+      "oldPrice": 249,
+      "stock": 18,
+      "active": true,
+      "featured": false,
+      "title": {
+        "ar": "خلاط صغير محمول",
+        "fr": "Mini blender portable"
+      },
+      "description": {
+        "ar": "خلاط عملي للعصائر السريعة في البيت، العمل أو السفر. سهل الشحن والتنظيف ومناسب للاستعمال اليومي.",
+        "fr": "Un blender pratique pour les jus rapides a la maison, au bureau ou en deplacement. Rechargeable, compact et facile a nettoyer."
+      },
+      "highlights": {
+        "ar": [
+          "بطارية قابلة للشحن",
+          "حجم خفيف للحمل",
+          "كوب مدمج للشرب"
+        ],
+        "fr": [
+          "Batterie rechargeable",
+          "Format leger",
+          "Gobelet integre"
+        ]
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1570222094114-d054a817e56b?auto=format&fit=crop&w=900&q=80",
+        "https://images.unsplash.com/photo-1622484211148-0eeabf46dc09?auto=format&fit=crop&w=900&q=80",
+        "https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=900&q=80"
+      ],
+      "variants": [
+        {
+          "id": "v1",
+          "name": {
+            "ar": "أبيض",
+            "fr": "Blanc"
+          },
+          "extraPrice": 0,
+          "stock": 10
+        },
+        {
+          "id": "v2",
+          "name": {
+            "ar": "أسود",
+            "fr": "Noir"
+          },
+          "extraPrice": 0,
+          "stock": 8
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "sku": "CT-HOME-002",
+      "category": "Maison",
+      "price": 129,
+      "oldPrice": null,
+      "stock": 24,
+      "active": true,
+      "featured": false,
+      "title": {
+        "ar": "منظم منزلي قابل للطي",
+        "fr": "Organiseur maison pliable"
+      },
+      "description": {
+        "ar": "حل بسيط لترتيب الملابس، الإكسسوارات أو أدوات المنزل بدون أخذ مساحة كبيرة.",
+        "fr": "Une solution simple pour organiser vetements, accessoires ou produits de maison sans prendre trop d'espace."
+      },
+      "highlights": {
+        "ar": [
+          "قابل للطي",
+          "مناسب للخزانة والرفوف",
+          "سهل التنظيف"
+        ],
+        "fr": [
+          "Pliable",
+          "Ideal pour placards et etageres",
+          "Facile a nettoyer"
+        ]
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&w=900&q=80",
+        "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=900&q=80",
+        "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=900&q=80"
+      ]
+    },
+    {
+      "id": 3,
+      "sku": "CT-TECH-003",
+      "category": "Tech",
+      "price": 159,
+      "oldPrice": null,
+      "stock": 12,
+      "active": true,
+      "featured": false,
+      "title": {
+        "ar": "سماعات بلوتوث صغيرة",
+        "fr": "Ecouteurs Bluetooth compact"
+      },
+      "description": {
+        "ar": "سماعات لاسلكية للاستعمال اليومي مع علبة شحن صغيرة وصوت واضح للمكالمات والموسيقى.",
+        "fr": "Des ecouteurs sans fil pour le quotidien, avec boitier compact et son clair pour appels et musique."
+      },
+      "highlights": {
+        "ar": [
+          "علبة شحن",
+          "مناسبة للمكالمات",
+          "تصميم خفيف"
+        ],
+        "fr": [
+          "Boitier de charge",
+          "Appels clairs",
+          "Design leger"
+        ]
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?auto=format&fit=crop&w=900&q=80",
+        "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=900&q=80",
+        "https://images.unsplash.com/photo-1608156639585-b3a032ef9689?auto=format&fit=crop&w=900&q=80"
+      ]
+    },
+    {
+      "id": 4,
+      "sku": "CT-BEAUTY-004",
+      "category": "Beaute",
+      "price": 249,
+      "oldPrice": null,
+      "stock": 9,
+      "active": true,
+      "featured": false,
+      "title": {
+        "ar": "فرشاة تصفيف 3 في 1",
+        "fr": "Brosse coiffante 3 en 1"
+      },
+      "description": {
+        "ar": "فرشاة عملية لتجفيف وتصفيف الشعر بسرعة، مناسبة للاستعمال في البيت قبل الخروج.",
+        "fr": "Une brosse pratique pour secher et coiffer rapidement les cheveux a la maison."
+      },
+      "highlights": {
+        "ar": [
+          "تصفيف سريع",
+          "ثلاث وظائف",
+          "مقبض مريح"
+        ],
+        "fr": [
+          "Coiffage rapide",
+          "Trois fonctions",
+          "Poignee confortable"
+        ]
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1522338242992-e1a54906a8da?auto=format&fit=crop&w=900&q=80",
+        "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=900&q=80",
+        "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=900&q=80"
+      ]
+    },
+    {
+      "id": 5,
+      "sku": "CT-HOME-005",
+      "category": "Maison",
+      "price": 99,
+      "oldPrice": null,
+      "stock": 31,
+      "active": true,
+      "featured": false,
+      "title": {
+        "ar": "مصباح LED قابل للشحن",
+        "fr": "Lampe LED rechargeable"
+      },
+      "description": {
+        "ar": "مصباح خفيف للقراءة، المكتب أو غرفة النوم، يشتغل بالشحن ويعطي إضاءة ناعمة.",
+        "fr": "Une lampe legere pour la lecture, le bureau ou la chambre, rechargeable avec lumiere douce."
+      },
+      "highlights": {
+        "ar": [
+          "إضاءة ناعمة",
+          "قابل للشحن",
+          "مناسب للمكتب"
+        ],
+        "fr": [
+          "Lumiere douce",
+          "Rechargeable",
+          "Ideal bureau"
+        ]
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=900&q=80",
+        "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&w=900&q=80",
+        "https://images.unsplash.com/photo-1543198126-a8ad8e47fb22?auto=format&fit=crop&w=900&q=80"
+      ]
+    },
+    {
+      "id": 6,
+      "sku": "CT-TECH-006",
+      "category": "Tech",
+      "price": 89,
+      "oldPrice": null,
+      "stock": 16,
+      "active": true,
+      "featured": false,
+      "title": {
+        "ar": "حامل هاتف للسيارة",
+        "fr": "Support telephone voiture"
+      },
+      "description": {
+        "ar": "حامل ثابت للهاتف داخل السيارة، يساعدك في استعمال الخرائط والمكالمات بدون إزعاج.",
+        "fr": "Un support stable pour utiliser le GPS et les appels en voiture plus confortablement."
+      },
+      "highlights": {
+        "ar": [
+          "ثبات جيد",
+          "دوران مرن",
+          "مناسب لمعظم الهواتف"
+        ],
+        "fr": [
+          "Bonne stabilite",
+          "Rotation flexible",
+          "Compatible avec la plupart des telephones"
+        ]
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80",
+        "https://images.unsplash.com/photo-1586953208448-b95a79798f07?auto=format&fit=crop&w=900&q=80",
+        "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=900&q=80"
+      ]
+    },
+    {
+      "id": 7,
+      "sku": "",
+      "category": "Tech",
+      "price": 1000,
+      "oldPrice": null,
+      "stock": 100,
+      "active": true,
+      "featured": true,
+      "title": {
+        "ar": "شاحن سريع",
+        "fr": "fast charger"
+      },
+      "description": {
+        "ar": "شاحن سريع للغاية، مزود بميزات أمان مدمجة، رخيص الثمن، عملي",
+        "fr": "really fast charger, built in safety features, cheap, practical"
+      },
+      "highlights": {
+        "ar": [],
+        "fr": []
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1636015856875-00ce4b89433d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZmFzdCUyMGNoYXJnZXJ8ZW58MHx8MHx8fDA%3D"
+      ]
+    }
+  ],
+  "orders": [
+    {
+      "id": 1,
+      "status": "delivered",
+      "createdAt": "2026-05-05T10:49:04.031Z",
+      "customer": {
+        "name": "said tchiche",
+        "phone": "069834983",
+        "address": "Maroc/Fes-Meknes/ Taza/ Oued Amlil"
+      },
+      "items": [
+        {
+          "id": 7,
+          "sku": "",
+          "title": {
+            "ar": "شاحن سريع",
+            "fr": "fast charger"
+          },
+          "qty": 1,
+          "price": 1000
+        }
+      ],
+      "total": 1000,
+      "source": "product_page_whatsapp",
+      "notes": "",
+      "updatedAt": "2026-05-05T10:49:45.024Z"
+    }
+  ],
+  "analytics": [
+    {
+      "id": 1777982768430,
+      "event": "product_view",
+      "productId": 4,
+      "meta": {
+        "productId": 4
+      },
+      "createdAt": "2026-05-05T12:06:08.430Z"
+    },
+    {
+      "id": 1777982768156,
+      "event": "product_click",
+      "productId": 4,
+      "meta": {
+        "productId": 4
+      },
+      "createdAt": "2026-05-05T12:06:08.156Z"
+    },
+    {
+      "id": 1777982332655,
+      "event": "add_to_cart",
+      "productId": 3,
+      "meta": {
+        "productId": 3,
+        "qty": 1
+      },
+      "createdAt": "2026-05-05T11:58:52.655Z"
+    },
+    {
+      "id": 1777982312667,
+      "event": "product_view",
+      "productId": 1,
+      "meta": {
+        "productId": 1
+      },
+      "createdAt": "2026-05-05T11:58:32.667Z"
+    },
+    {
+      "id": 1777982311993,
+      "event": "product_click",
+      "productId": 1,
+      "meta": {
+        "productId": 1
+      },
+      "createdAt": "2026-05-05T11:58:31.993Z"
+    }
+  ]
+}
