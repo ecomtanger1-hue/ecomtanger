@@ -1,5 +1,5 @@
 window.CASATANJA_SUPABASE = {
-  url: "YOUR_SUPABASE_PROJECT_URL",
-  anonKey: "YOUR_SUPABASE_ANON_KEY",
+  url: "https://qfpirjwleirsjoveqthn.supabase.co",
+  anonKey: "sb_publishable_eYEHgdyO8JPYp7JGEnblHw_Cy24hiDj",
   storageBucket: "product-images",
 };
