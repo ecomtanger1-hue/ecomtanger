@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Product | CasaTanja Admin</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body class="admin-body product-create-body">
+    <div class="create-page">
+      <header class="create-topbar">
+        <a class="brand admin-brand" href="admin.html">
+          <span class="brand-mark">CT</span>
+          <span>CasaTanja Admin</span>
+        </a>
+        <nav class="create-tabs" aria-label="Admin navigation">
+          <a href="admin.html">Dashboard</a>
+          <a class="active" href="product-create.html">Products</a>
+        </nav>
+        <div class="create-topbar-actions">
+          <button class="ghost-admin-button" type="button" data-save-draft>Save draft</button>
+          <button class="primary-action" type="submit" form="product-create-form">Publish</button>
+        </div>
+      </header>
+
+      <main class="create-main">
+        <section class="create-hero">
+          <div>
+            <span class="eyebrow">New product</span>
+            <h1>Create product</h1>
+            <p>Write one clear Arabic product listing now. Translation can come later.</p>
+          </div>
+          <div class="create-status" aria-live="polite" data-form-status>Draft not saved</div>
+        </section>
+
+        <form id="product-create-form" class="product-create-grid" data-create-product-form>
+          <aside class="create-progress-panel" aria-label="Product setup">
+            <h2>Product setup</h2>
+            <div class="setup-step active">
+              <span>1</span>
+              <div>
+                <strong>Basic details</strong>
+                <small>Name, category, and images</small>
+              </div>
+            </div>
+            <div class="setup-step active">
+              <span>2</span>
+              <div>
+                <strong>Description</strong>
+                <small>Arabic copy and selling points</small>
+              </div>
+            </div>
+            <div class="setup-step">
+              <span>3</span>
+              <div>
+                <strong>Price and stock</strong>
+                <small>COD-ready product data</small>
+              </div>
+            </div>
+            <div class="setup-step">
+              <span>4</span>
+              <div>
+                <strong>Variants optional</strong>
+                <small>Size, color, material, pack</small>
+              </div>
+            </div>
+
+            <div class="completion-card">
+              <div>
+                <strong>Completion</strong>
+                <span data-completion-label>0%</span>
+              </div>
+              <div class="completion-track">
+                <span data-completion-bar></span>
+              </div>
+              <p data-completion-help>Add a product name, price, image, and description.</p>
+            </div>
+          </aside>
+
+          <section class="create-form-panel">
+            <div class="panel-title-row">
+              <div>
+                <h2>Basic details</h2>
+                <p>Keep the essentials visible so product entry stays fast on desktop.</p>
+              </div>
+            </div>
+
+            <div class="create-field-grid">
+              <label>
+                Product name
+                <input name="title" dir="rtl" required placeholder="جلابة صيفية خفيفة" />
+              </label>
+              <label>
+                SKU
+                <input name="sku" placeholder="CT-PRODUCT-001" />
+              </label>
+              <label>
+                Category
+                <select name="category">
+                  <option value="Maison">Maison</option>
+                  <option value="Cuisine">Cuisine</option>
+                  <option value="Tech">Tech</option>
+                  <option value="Beaute">Beaute</option>
+                  <option value="Clothing">Clothing</option>
+                </select>
+              </label>
+              <label>
+                Product status
+                <select name="status">
+                  <option value="active">Active</option>
+                  <option value="draft">Draft</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="media-dropzone">
+              <div>
+                <h3>Product images</h3>
+                <p>Upload files or paste image URLs. The first image becomes the storefront cover.</p>
+              </div>
+              <label class="upload-button">
+                Upload image
+                <input name="imageUpload" type="file" accept="image/*" />
+              </label>
+              <label class="full-field">
+                Image URLs
+                <textarea name="images" rows="3" placeholder="https://example.com/product.jpg"></textarea>
+              </label>
+              <div class="create-image-list" data-create-image-list></div>
+            </div>
+
+            <div class="panel-title-row description-heading">
+              <div>
+                <h2>Write the product description</h2>
+                <p>Start with one Arabic description, then fill the blocks customers scan before ordering.</p>
+              </div>
+            </div>
+
+            <section class="rich-description-field" aria-label="Arabic description editor">
+              <div class="rich-editor-toolbar" aria-label="Description formatting tools">
+                <button type="button" data-editor-command="fullscreen" title="Fullscreen" aria-label="Fullscreen">
+                  <svg viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M21 16v5h-5"/></svg>
+                </button>
+                <button type="button" data-editor-command="bold" title="Bold"><strong>B</strong></button>
+                <button type="button" data-editor-command="italic" title="Italic"><em>i</em></button>
+                <button type="button" data-editor-command="underline" title="Underline"><u>U</u></button>
+                <button type="button" data-editor-command="strikeThrough" title="Strikethrough"><s>S</s></button>
+                <select data-editor-format="fontSize" title="Font size">
+                  <option value="2">12</option>
+                  <option value="3" selected>14</option>
+                  <option value="4">16</option>
+                  <option value="5">18</option>
+                  <option value="6">24</option>
+                </select>
+                <input type="color" value="#241e19" data-editor-format="foreColor" title="Text color" />
+                <input type="color" value="#fff2a8" data-editor-format="backColor" title="Highlight color" />
+                <button type="button" data-editor-command="removeFormat" title="Clear formatting" aria-label="Clear formatting">
+                  <svg viewBox="0 0 24 24"><path d="m4 16 8-8 6 6-5 5H7l-3-3Z"/><path d="M14 6h7"/></svg>
+                </button>
+                <select data-editor-block title="Paragraph style">
+                  <option value="P">Paragraph</option>
+                  <option value="H2">Heading</option>
+                  <option value="H3">Subheading</option>
+                </select>
+                <button type="button" data-editor-command="justifyLeft" title="Align left" aria-label="Align left">
+                  <svg viewBox="0 0 24 24"><path d="M4 6h15M4 10h10M4 14h15M4 18h10"/></svg>
+                </button>
+                <button type="button" data-editor-command="justifyCenter" title="Align center" aria-label="Align center">
+                  <svg viewBox="0 0 24 24"><path d="M5 6h14M8 10h8M5 14h14M8 18h8"/></svg>
+                </button>
+                <button type="button" data-editor-command="justifyRight" title="Align right" aria-label="Align right">
+                  <svg viewBox="0 0 24 24"><path d="M5 6h15M10 10h10M5 14h15M10 18h10"/></svg>
+                </button>
+                <button type="button" data-editor-command="directionRtl" title="Right to left" aria-label="Right to left">
+                  <svg viewBox="0 0 24 24"><path d="M20 6H7a4 4 0 0 0 0 8h1"/><path d="M12 4v16"/><path d="m5 18-3-3 3-3"/></svg>
+                </button>
+                <button type="button" data-editor-command="directionLtr" title="Left to right" aria-label="Left to right">
+                  <svg viewBox="0 0 24 24"><path d="M4 6h13a4 4 0 0 1 0 8h-1"/><path d="M12 4v16"/><path d="m19 18 3-3-3-3"/></svg>
+                </button>
+                <button type="button" data-editor-command="insertOrderedList" title="Numbered list" aria-label="Numbered list">
+                  <svg viewBox="0 0 24 24"><path d="M10 6h10M10 12h10M10 18h10"/><path d="M4 6h1v4M4 10h2M4 14h2l-2 3h2"/></svg>
+                </button>
+                <button type="button" data-editor-command="insertUnorderedList" title="Bullet list" aria-label="Bullet list">
+                  <svg viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg>
+                </button>
+                <button type="button" data-editor-command="outdent" title="Outdent" aria-label="Outdent">
+                  <svg viewBox="0 0 24 24"><path d="M13 6h8M13 12h8M13 18h8"/><path d="m8 8-4 4 4 4"/><path d="M4 12h6"/></svg>
+                </button>
+                <button type="button" data-editor-command="indent" title="Indent" aria-label="Indent">
+                  <svg viewBox="0 0 24 24"><path d="M13 6h8M13 12h8M13 18h8"/><path d="m4 8 4 4-4 4"/><path d="M4 12h6"/></svg>
+                </button>
+                <button type="button" data-editor-command="createLink" title="Link" aria-label="Link">
+                  <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/></svg>
+                </button>
+                <button type="button" data-editor-command="insertTable" title="Table" aria-label="Table">
+                  <svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="1"/><path d="M4 10h16M4 15h16M10 5v14M16 5v14"/></svg>
+                </button>
+                <button type="button" data-editor-command="emoji" title="Emoji" aria-label="Emoji">
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 10h.01M16 10h.01M8 15a5 5 0 0 0 8 0"/></svg>
+                </button>
+                <button type="button" data-editor-command="symbol" title="Symbol">Ω</button>
+                <button type="button" data-editor-command="insertHorizontalRule" title="Horizontal line" aria-label="Horizontal line">
+                  <svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg>
+                </button>
+                <button type="button" data-editor-command="spacer" title="Spacer" aria-label="Spacer">
+                  <svg viewBox="0 0 24 24"><path d="M7 4h10M7 20h10M12 7v10"/><path d="m9 10 3-3 3 3M9 14l3 3 3-3"/></svg>
+                </button>
+                <button type="button" data-editor-command="code" title="Code" aria-label="Code">
+                  <svg viewBox="0 0 24 24"><path d="m8 9-4 3 4 3M16 9l4 3-4 3"/></svg>
+                </button>
+                <button type="button" data-editor-command="undo" title="Undo" aria-label="Undo">
+                  <svg viewBox="0 0 24 24"><path d="M9 7 4 12l5 5"/><path d="M4 12h11a5 5 0 0 1 5 5v1"/></svg>
+                </button>
+                <button type="button" data-editor-command="redo" title="Redo" aria-label="Redo">
+                  <svg viewBox="0 0 24 24"><path d="m15 7 5 5-5 5"/><path d="M20 12H9a5 5 0 0 0-5 5v1"/></svg>
+                </button>
+                <button type="button" data-editor-command="image" title="Image" aria-label="Image">
+                  <svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="m4 16 4-4 4 4 3-3 5 5"/><circle cx="9" cy="10" r="1"/></svg>
+                </button>
+                <button type="button" data-editor-command="video" title="Video" aria-label="Video">
+                  <svg viewBox="0 0 24 24"><rect x="4" y="7" width="11" height="10" rx="2"/><path d="m15 11 5-3v8l-5-3z"/></svg>
+                </button>
+              </div>
+              <div class="editor-popover" data-editor-popover hidden></div>
+              <input class="editor-file-input" data-editor-image-upload type="file" accept="image/*" />
+              <div class="rich-editor-surface" data-rich-editor dir="rtl" contenteditable="true" aria-label="Arabic description" data-placeholder="اكتب وصف المنتج هنا..."></div>
+              <textarea name="description" data-description-value hidden></textarea>
+            </section>
+          </section>
+
+          <aside class="create-side-panel">
+            <section>
+              <h2>Price and stock</h2>
+              <div class="side-grid">
+                <label>
+                  Price MAD
+                  <input name="price" type="number" min="0" required />
+                </label>
+                <label>
+                  Old price MAD
+                  <input name="oldPrice" type="number" min="0" />
+                </label>
+                <label>
+                  Stock
+                  <input name="stock" type="number" min="0" placeholder="Optional" />
+                </label>
+              </div>
+              <label class="check-row">
+                <input name="featured" type="checkbox" />
+                Deal of the day
+              </label>
+            </section>
+
+            <section class="variant-section">
+              <div class="variant-heading">
+                <div>
+                  <h2>Optional variants</h2>
+                  <p>Keep off for simple products. Choose a preset when needed.</p>
+                </div>
+                <label class="switch-label">
+                  <input name="hasVariants" type="checkbox" />
+                  <span></span>
+                </label>
+              </div>
+
+              <div class="variant-controls" data-variant-controls hidden>
+                <label>
+                  Preset variant type
+                  <select name="variantPreset">
+                    <option value="Size">Size</option>
+                    <option value="Color">Color</option>
+                    <option value="Material">Material</option>
+                    <option value="Pack">Pack</option>
+                    <option value="Scent">Scent</option>
+                    <option value="Capacity">Capacity</option>
+                  </select>
+                </label>
+                <div class="preset-chip-grid" data-preset-chip-grid></div>
+                <div class="custom-variant-row">
+                  <input name="customVariant" type="text" placeholder="Add another value, e.g. بني or Brown" />
+                  <button type="button" data-add-custom-variant>Add</button>
+                </div>
+                <div class="variant-table" data-variant-table></div>
+              </div>
+            </section>
+
+            <section class="publishing-card">
+              <h2>Publishing</h2>
+              <p>The product will be created with Arabic and French values matching for now, so the storefront remains stable until translation is added.</p>
+              <button class="primary-action full-width-action" type="submit">Save product</button>
+              <a class="ghost-admin-button full-width-action" href="admin.html">Back to dashboard</a>
+            </section>
+          </aside>
+        </form>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="supabase-service.js"></script>
+    <script src="product-create.js?v=7"></script>
+  </body>
+</html>

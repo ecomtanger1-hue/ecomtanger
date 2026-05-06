@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1000" viewBox="0 0 1440 1000">
+  <rect width="1440" height="1000" fill="#f4f7f8"/>
+  <rect x="0" y="0" width="76" height="1000" fill="#1f2930"/>
+  <rect x="18" y="22" width="40" height="40" rx="10" fill="#e05d3f"/>
+  <text x="27" y="49" font-family="Inter, Segoe UI, Arial" font-size="17" font-weight="800" fill="#ffffff">CT</text>
+  <rect x="18" y="114" width="40" height="40" rx="9" fill="#35424a"/>
+  <text x="31" y="139" font-family="Inter, Segoe UI, Arial" font-size="15" fill="#c7d1d5">⌂</text>
+  <rect x="18" y="172" width="40" height="40" rx="9" fill="#ffffff"/>
+  <text x="29" y="197" font-family="Inter, Segoe UI, Arial" font-size="15" fill="#1f2930">□</text>
+  <rect x="18" y="230" width="40" height="40" rx="9" fill="#35424a"/>
+  <text x="31" y="255" font-family="Inter, Segoe UI, Arial" font-size="15" fill="#c7d1d5">≡</text>
+
+  <rect x="76" y="0" width="1364" height="64" fill="#ffffff"/>
+  <rect x="76" y="63" width="1364" height="1" fill="#d7e0e2"/>
+  <text x="108" y="40" font-family="Inter, Segoe UI, Arial" font-size="22" font-weight="800" fill="#1d2a30">Product workspace</text>
+  <text x="318" y="40" font-family="Inter, Segoe UI, Arial" font-size="13" fill="#6b7880">Option 3: dense desktop editor with description workspace and variant builder.</text>
+  <rect x="1116" y="15" width="82" height="36" rx="7" fill="#ffffff" stroke="#c8d3d6"/>
+  <text x="1144" y="38" font-family="Inter, Segoe UI, Arial" font-size="13" font-weight="700" fill="#334148">Draft</text>
+  <rect x="1208" y="15" width="88" height="36" rx="7" fill="#ffffff" stroke="#c8d3d6"/>
+  <text x="1232" y="38" font-family="Inter, Segoe UI, Arial" font-size="13" font-weight="700" fill="#334148">Preview</text>
+  <rect x="1306" y="15" width="102" height="36" rx="7" fill="#e05d3f"/>
+  <text x="1336" y="38" font-family="Inter, Segoe UI, Arial" font-size="13" font-weight="800" fill="#ffffff">Save</text>
+
+  <rect x="108" y="92" width="397" height="858" rx="8" fill="#ffffff" stroke="#d7e0e2"/>
+  <text x="136" y="130" font-family="Inter, Segoe UI, Arial" font-size="18" font-weight="800" fill="#1d2a30">Core product</text>
+  <text x="136" y="166" font-family="Inter, Segoe UI, Arial" font-size="12" font-weight="700" fill="#66757d">Product name</text>
+  <rect x="136" y="178" width="341" height="42" rx="6" fill="#fbfcfc" stroke="#c8d3d6"/>
+  <text x="152" y="205" font-family="Inter, Segoe UI, Arial" font-size="14" fill="#1d2a30">جلابة صيفية خفيفة</text>
+  <text x="136" y="254" font-family="Inter, Segoe UI, Arial" font-size="12" font-weight="700" fill="#66757d">Category</text>
+  <rect x="136" y="266" width="160" height="42" rx="6" fill="#fbfcfc" stroke="#c8d3d6"/>
+  <text x="152" y="293" font-family="Inter, Segoe UI, Arial" font-size="14" fill="#1d2a30">Clothing</text>
+  <text x="274" y="292" font-family="Inter, Segoe UI, Arial" font-size="16" fill="#66757d">⌄</text>
+  <text x="317" y="254" font-family="Inter, Segoe UI, Arial" font-size="12" font-weight="700" fill="#66757d">Vendor</text>
+  <rect x="317" y="266" width="160" height="42" rx="6" fill="#fbfcfc" stroke="#c8d3d6"/>
+  <text x="333" y="293" font-family="Inter, Segoe UI, Arial" font-size="14" fill="#1d2a30">CasaTanja</text>
+  <text x="136" y="342" font-family="Inter, Segoe UI, Arial" font-size="12" font-weight="700" fill="#66757d">Images</text>
+  <rect x="136" y="354" width="341" height="210" rx="8" fill="#e9eef0" stroke="#c8d3d6"/>
+  <rect x="174" y="390" width="265" height="138" rx="8" fill="#ffffff" stroke="#d7e0e2"/>
+  <path d="M175 528 L247 468 L290 501 L332 476 L439 528 Z" fill="#80a7ac"/>
+  <circle cx="226" cy="430" r="20" fill="#e0b45f"/>
+  <rect x="136" y="584" width="72" height="56" rx="7" fill="#fbfcfc" stroke="#c8d3d6"/>
+  <rect x="218" y="584" width="72" height="56" rx="7" fill="#fbfcfc" stroke="#c8d3d6"/>
+  <rect x="300" y="584" width="72" height="56" rx="7" fill="#fbfcfc" stroke="#c8d3d6"/>
+  <rect x="382" y="584" width="95" height="56" rx="7" fill="#f7f0ed" stroke="#e7b8aa"/>
+  <text x="411" y="617" font-family="Inter, Segoe UI, Arial" font-size="13" font-weight="750" fill="#a44229">Add</text>
+  <rect x="136" y="684" width="341" height="1" fill="#e3e9eb"/>
+  <text x="136" y="726" font-family="Inter, Segoe UI, Arial" font-size="18" font-weight="800" fill="#1d2a30">Price and inventory</text>
+  <text x="136" y="762" font-family="Inter, Segoe UI, Arial" font-size="12" font-weight="700" fill="#66757d">Price</text>
+  <rect x="136" y="774" width="160" height="42" rx="6" fill="#fbfcfc" stroke="#c8d3d6"/>
+  <text x="152" y="801" font-family="Inter, Segoe UI, Arial" font-size="14" fill="#1d2a30">199 MAD</text>
+  <text x="317" y="762" font-family="Inter, Segoe UI, Arial" font-size="12" font-weight="700" fill="#66757d">Stock</text>
+  <rect x="317" y="774" width="160" height="42" rx="6" fill="#fbfcfc" stroke="#c8d3d6"/>
+  <text x="333" y="801" font-family="Inter, Segoe UI, Arial" font-size="14" fill="#1d2a30">24</text>
+
+  <rect x="529" y="92" width="556" height="858" rx="8" fill="#ffffff" stroke="#d7e0e2"/>
+  <text x="561" y="130" font-family="Inter, Segoe UI, Arial" font-size="20" font-weight="850" fill="#1d2a30">Description workspace</text>
+  <text x="561" y="154" font-family="Inter, Segoe UI, Arial" font-size="13" fill="#6b7880">One rich Arabic field, with reusable product-info blocks below it.</text>
+  <rect x="561" y="184" width="492" height="42" rx="7" fill="#f2f5f6" stroke="#d7e0e2"/>
+  <rect x="568" y="191" width="116" height="28" rx="6" fill="#1f2930"/>
+  <text x="594" y="210" font-family="Inter, Segoe UI, Arial" font-size="12" font-weight="800" fill="#ffffff">Editor</text>
+  <text x="714" y="210" font-family="Inter, Segoe UI, Arial" font-size="12" font-weight="700" fill="#50616a">Preview</text>
+  <text x="806" y="210" font-family="Inter, Segoe UI, Arial" font-size="12" font-weight="700" fill="#50616a">SEO snippet</text>
+  <text x="930" y="210" font-family="Inter, Segoe UI, Arial" font-size="12" font-weight="700" fill="#50616a">Templates</text>
+  <rect x="561" y="252" width="492" height="300" rx="7" fill="#fbfcfc" stroke="#c8d3d6"/>
+  <text x="589" y="292" font-family="Inter, Segoe UI, Arial" font-size="15" fill="#1d2a30">جلابة صيفية خفيفة مصممة للاستعمال اليومي، بقماش ناعم ومريح</text>
+  <text x="589" y="324" font-family="Inter, Segoe UI, Arial" font-size="15" fill="#1d2a30">في الحرارة. القصة واسعة قليلا وتعطي حرية في الحركة، مع شكل</text>
+  <text x="589" y="356" font-family="Inter, Segoe UI, Arial" font-size="15" fill="#1d2a30">أنيق يناسب الخروج والزيارات.</text>
+  <text x="589" y="416" font-family="Inter, Segoe UI, Arial" font-size="15" fill="#1d2a30">• قماش خفيف ومناسب للصيف</text>
+  <text x="589" y="448" font-family="Inter, Segoe UI, Arial" font-size="15" fill="#1d2a30">• دفع عند الاستلام وتأكيد عبر الهاتف</text>
+  <text x="965" y="526" font-family="Inter, Segoe UI, Arial" font-size="12" fill="#7a878e">364 chars</text>
+  <text x="561" y="592" font-family="Inter, Segoe UI, Arial" font-size="12" font-weight="800" fill="#66757d">Quick blocks</text>
+  <rect x="561" y="612" width="232" height="80" rx="7" fill="#f7f0ed" stroke="#e7b8aa"/>
+  <text x="583" y="642" font-family="Inter, Segoe UI, Arial" font-size="13" font-weight="800" fill="#a44229">Hook</text>
+  <text x="583" y="668" font-family="Inter, Segoe UI, Arial" font-size="13" fill="#563b33">Why this product is worth buying</text>
+  <rect x="821" y="612" width="232" height="80" rx="7" fill="#edf3f5" stroke="#bfd2d8"/>
+  <text x="843" y="642" font-family="Inter, Segoe UI, Arial" font-size="13" font-weight="800" fill="#2b6370">Specs</text>
+  <text x="843" y="668" font-family="Inter, Segoe UI, Arial" font-size="13" fill="#354b52">Material, dimensions, fit, contents</text>
+  <rect x="561" y="712" width="232" height="80" rx="7" fill="#f3f5ee" stroke="#cfdabf"/>
+  <text x="583" y="742" font-family="Inter, Segoe UI, Arial" font-size="13" font-weight="800" fill="#52692e">Care</text>
+  <text x="583" y="768" font-family="Inter, Segoe UI, Arial" font-size="13" fill="#465137">Washing and storage notes</text>
+  <rect x="821" y="712" width="232" height="80" rx="7" fill="#f7f3eb" stroke="#e0d6c7"/>
+  <text x="843" y="742" font-family="Inter, Segoe UI, Arial" font-size="13" font-weight="800" fill="#82602d">Trust</text>
+  <text x="843" y="768" font-family="Inter, Segoe UI, Arial" font-size="13" fill="#594936">COD, returns, confirmation call</text>
+  <rect x="561" y="834" width="492" height="58" rx="7" fill="#f2f5f6" stroke="#d7e0e2"/>
+  <text x="585" y="858" font-family="Inter, Segoe UI, Arial" font-size="12" font-weight="800" fill="#50616a">Readability check</text>
+  <text x="585" y="878" font-family="Inter, Segoe UI, Arial" font-size="13" fill="#50616a">Good length, has benefits, needs one more material detail.</text>
+
+  <rect x="1109" y="92" width="299" height="858" rx="8" fill="#ffffff" stroke="#d7e0e2"/>
+  <text x="1137" y="130" font-family="Inter, Segoe UI, Arial" font-size="18" font-weight="850" fill="#1d2a30">Variants</text>
+  <text x="1137" y="154" font-family="Inter, Segoe UI, Arial" font-size="13" fill="#6b7880">Optional. Presets create a clean table.</text>
+  <rect x="1137" y="187" width="44" height="24" rx="12" fill="#e05d3f"/>
+  <circle cx="1168" cy="199" r="9" fill="#ffffff"/>
+  <text x="1193" y="204" font-family="Inter, Segoe UI, Arial" font-size="14" fill="#334148">Enabled</text>
+  <text x="1137" y="252" font-family="Inter, Segoe UI, Arial" font-size="12" font-weight="800" fill="#66757d">Preset</text>
+  <rect x="1137" y="264" width="243" height="42" rx="6" fill="#fbfcfc" stroke="#c8d3d6"/>
+  <text x="1153" y="291" font-family="Inter, Segoe UI, Arial" font-size="14" fill="#1d2a30">Size</text>
+  <text x="1358" y="290" font-family="Inter, Segoe UI, Arial" font-size="16" fill="#66757d">⌄</text>
+  <rect x="1137" y="328" width="58" height="30" rx="15" fill="#edf3f5"/>
+  <text x="1160" y="348" font-family="Inter, Segoe UI, Arial" font-size="12" font-weight="800" fill="#2b6370">S</text>
+  <rect x="1203" y="328" width="58" height="30" rx="15" fill="#edf3f5"/>
+  <text x="1225" y="348" font-family="Inter, Segoe UI, Arial" font-size="12" font-weight="800" fill="#2b6370">M</text>
+  <rect x="1269" y="328" width="58" height="30" rx="15" fill="#edf3f5"/>
+  <text x="1292" y="348" font-family="Inter, Segoe UI, Arial" font-size="12" font-weight="800" fill="#2b6370">L</text>
+  <rect x="1335" y="328" width="45" height="30" rx="15" fill="#f7f0ed"/>
+  <text x="1350" y="348" font-family="Inter, Segoe UI, Arial" font-size="12" font-weight="800" fill="#a44229">+</text>
+  <rect x="1137" y="394" width="243" height="1" fill="#e3e9eb"/>
+  <text x="1137" y="432" font-family="Inter, Segoe UI, Arial" font-size="13" font-weight="800" fill="#334148">Variant table</text>
+  <rect x="1137" y="456" width="243" height="42" rx="6" fill="#f2f5f6"/>
+  <text x="1155" y="482" font-family="Inter, Segoe UI, Arial" font-size="12" font-weight="800" fill="#50616a">Option</text>
+  <text x="1236" y="482" font-family="Inter, Segoe UI, Arial" font-size="12" font-weight="800" fill="#50616a">Price</text>
+  <text x="1314" y="482" font-family="Inter, Segoe UI, Arial" font-size="12" font-weight="800" fill="#50616a">Qty</text>
+  <text x="1155" y="532" font-family="Inter, Segoe UI, Arial" font-size="13" fill="#1d2a30">S</text>
+  <text x="1236" y="532" font-family="Inter, Segoe UI, Arial" font-size="13" fill="#1d2a30">199</text>
+  <text x="1320" y="532" font-family="Inter, Segoe UI, Arial" font-size="13" fill="#1d2a30">8</text>
+  <rect x="1137" y="548" width="243" height="1" fill="#e3e9eb"/>
+  <text x="1155" y="584" font-family="Inter, Segoe UI, Arial" font-size="13" fill="#1d2a30">M</text>
+  <text x="1236" y="584" font-family="Inter, Segoe UI, Arial" font-size="13" fill="#1d2a30">199</text>
+  <text x="1320" y="584" font-family="Inter, Segoe UI, Arial" font-size="13" fill="#1d2a30">10</text>
+  <rect x="1137" y="600" width="243" height="1" fill="#e3e9eb"/>
+  <text x="1155" y="636" font-family="Inter, Segoe UI, Arial" font-size="13" fill="#1d2a30">L</text>
+  <text x="1236" y="636" font-family="Inter, Segoe UI, Arial" font-size="13" fill="#1d2a30">199</text>
+  <text x="1320" y="636" font-family="Inter, Segoe UI, Arial" font-size="13" fill="#1d2a30">6</text>
+  <rect x="1137" y="696" width="243" height="58" rx="7" fill="#f7f0ed" stroke="#e7b8aa"/>
+  <text x="1157" y="722" font-family="Inter, Segoe UI, Arial" font-size="12" font-weight="800" fill="#a44229">Other presets</text>
+  <text x="1157" y="742" font-family="Inter, Segoe UI, Arial" font-size="13" fill="#563b33">Color, material, pack, scent</text>
+  <rect x="1137" y="800" width="243" height="50" rx="7" fill="#1f2930"/>
+  <text x="1219" y="831" font-family="Inter, Segoe UI, Arial" font-size="14" font-weight="800" fill="#ffffff">Save product</text>
+</svg>
