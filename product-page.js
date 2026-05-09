@@ -17,7 +17,6 @@ const translations = {
     variantLabel: "الخيار",
     outOfStock: "غير متوفر حاليا",
     lowStock: "باقي عدد محدود",
-    orderedThisWeek: "تم طلبه {count} مرة هذا الأسبوع",
     whatsInBox: "ماذا يوجد في العلبة",
     deliveryReturns: "التوصيل والاستبدال",
     howToOrder: "كيف تطلب",
@@ -68,7 +67,6 @@ const translations = {
     variantLabel: "Option",
     outOfStock: "Indisponible",
     lowStock: "Stock limite",
-    orderedThisWeek: "Commande {count} fois cette semaine",
     whatsInBox: "Dans la boite",
     deliveryReturns: "Livraison et retours",
     howToOrder: "Comment commander",
@@ -224,6 +222,7 @@ let products = [
 
 let currentLang = localStorage.getItem("storeLanguage") || "ar";
 let storeSettings = {};
+const publicStoreCacheKey = "casatanjaPublicStoreCache";
 const page = document.querySelector("[data-product-page]");
 const langToggle = document.querySelector("[data-lang-toggle]");
 const currentLangLabel = document.querySelector("[data-current-lang]");
@@ -347,14 +346,42 @@ function categoryText(product) {
   return labels[product.category]?.[currentLang] || product.category;
 }
 
+function applyStore(store) {
+  if (!store) return;
+  if (Array.isArray(store.products) && store.products.length) {
+    products = (store.products || []).filter((product) => product.active !== false);
+  }
+  storeSettings = store.settings || storeSettings || {};
+  whatsappNumber = storeSettings.whatsappNumber || whatsappNumber;
+}
+
+function readCachedPublicStore() {
+  try {
+    const cached = JSON.parse(localStorage.getItem(publicStoreCacheKey) || "null");
+    return cached?.store || null;
+  } catch (error) {
+    localStorage.removeItem(publicStoreCacheKey);
+    return null;
+  }
+}
+
+function cachePublicStore(store) {
+  try {
+    localStorage.setItem(publicStoreCacheKey, JSON.stringify({ savedAt: Date.now(), store }));
+  } catch (error) {
+    // Storage can fail in private browsing; the live store still works.
+  }
+}
+
 async function loadBackendStore() {
   try {
     const store = await StoreBackend.getPublicStore();
-    products = (store.products || []).filter((product) => product.active !== false);
-    storeSettings = store.settings || {};
-    whatsappNumber = storeSettings.whatsappNumber || whatsappNumber;
+    applyStore(store);
+    cachePublicStore(store);
+    return true;
   } catch (error) {
     // File previews and GitHub Pages use the bundled fallback products.
+    return false;
   }
 }
 
@@ -438,7 +465,6 @@ function relatedCard(product) {
       </div>
       <div class="product-info">
         <h3 class="product-title">${localText(product.title)}</h3>
-        <div class="social-proof">${interpolate(t("orderedThisWeek"), { count: socialCount(product) })}</div>
       </div>
     </article>
   `;
@@ -449,8 +475,42 @@ function discountPercent(product) {
   return Math.round(((Number(product.oldPrice) - Number(product.price)) / Number(product.oldPrice)) * 100);
 }
 
+function stockText(product, soldOut, lowStock) {
+  if (!productHasManagedStock(product)) return t("cod");
+  if (soldOut) return t("outOfStock");
+  return lowStock ? t("lowStock") : t("cod");
+}
+
+function productGallery(product, discount) {
+  const images = (product.images || []).filter(Boolean);
+  if (!images.length) {
+    return `
+      <div class="detail-gallery page-gallery landing-gallery empty-gallery">
+        <div class="detail-main-image missing-image">${localText(product.title)}</div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="detail-gallery page-gallery landing-gallery">
+      ${discount ? `<span class="discount-ribbon">-${discount}%</span>` : ""}
+      <img class="detail-main-image" src="${images[0]}" alt="${localText(product.title)}" />
+      ${
+        images.length > 1
+          ? `<div class="detail-thumbs">
+              ${images
+                .map((image, index) => `<button class="${index === 0 ? "active" : ""}" type="button" data-thumb="${image}" aria-label="${localText(product.title)} ${index + 1}"><img src="${image}" alt="${localText(product.title)} ${index + 1}" /></button>`)
+                .join("")}
+            </div>`
+          : ""
+      }
+    </div>
+  `;
+}
+
 function orderForm(product, variants, soldOut) {
   const maxQty = productHasManagedStock(product) && Number(product.stock) > 0 ? ` max="${Number(product.stock)}"` : "";
+  const firstAvailableVariant = variants.find((variant) => Number(variant.stock || 0) > 0) || variants[0];
   return `
     <form class="checkout-form product-order-form landing-order-form" data-product-order>
       <span class="eyebrow">${t("orderSummary")}</span>
@@ -469,26 +529,64 @@ function orderForm(product, variants, soldOut) {
       </label>
       ${
         variants.length
-          ? `<label>
-              <span>${t("variantLabel")}</span>
-              <select name="variant">
+          ? `<fieldset class="variant-choice-group">
+              <legend>${t("variantLabel")}</legend>
+              <div class="variant-choice-list">
                 ${variants
                   .map(
-                    (variant) =>
-                      `<option value="${variant.id}" ${Number(variant.stock || 0) <= 0 ? "disabled" : ""}>${localText(variant.name)}${variant.extraPrice ? ` (+${money(variant.extraPrice)})` : ""}${Number(variant.stock || 0) <= 0 ? ` - ${t("outOfStock")}` : ""}</option>`,
+                    (variant) => {
+                      const unavailable = Number(variant.stock || 0) <= 0;
+                      return `
+                        <label class="variant-choice ${unavailable ? "is-disabled" : ""}">
+                          <input name="variant" type="radio" value="${variant.id}" ${firstAvailableVariant?.id === variant.id ? "checked" : ""} ${unavailable ? "disabled" : ""} />
+                          <span>${localText(variant.name)}${variant.extraPrice ? ` +${money(variant.extraPrice)}` : ""}</span>
+                        </label>
+                      `;
+                    },
                   )
                   .join("")}
-              </select>
-            </label>`
+              </div>
+            </fieldset>`
           : ""
       }
-      <label>
+      <label class="quantity-field">
         <span>${t("qtyLabel")}</span>
-        <input name="qty" type="number" min="1"${maxQty} value="1" required />
+        <div class="product-qty-stepper">
+          <button type="button" data-qty-step="-1" aria-label="-">-</button>
+          <input name="qty" type="number" min="1"${maxQty} value="1" required />
+          <button type="button" data-qty-step="1" aria-label="+">+</button>
+        </div>
       </label>
       <button class="whatsapp-checkout" type="submit" ${soldOut ? "disabled" : ""}>${soldOut ? t("outOfStock") : t("sendWhatsapp")}</button>
       <p class="checkout-note">${t("note")}</p>
     </form>
+  `;
+}
+
+function productFaq(product) {
+  return `
+    <section class="product-faq-section">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">${t("howToOrder")}</span>
+          <h2>${t("deliveryReturns")}</h2>
+        </div>
+      </div>
+      <div class="faq-list">
+        <details open>
+          <summary>${t("howToOrder")}</summary>
+          <p>${t("howToOrderText")}</p>
+        </details>
+        <details>
+          <summary>${t("deliveryReturns")}</summary>
+          <p>${t("deliveryReturnsText")}</p>
+        </details>
+        <details>
+          <summary>${t("whatsInBox")}</summary>
+          <p>${product.box?.[currentLang] || t("boxDefault")}</p>
+        </details>
+      </div>
+    </section>
   `;
 }
 
@@ -513,15 +611,7 @@ function render() {
   page.innerHTML = `
     <section class="product-page">
       <section class="product-landing-hero">
-        <div class="detail-gallery page-gallery landing-gallery">
-          ${discount ? `<span class="discount-ribbon">-${discount}%</span>` : ""}
-          <img class="detail-main-image" src="${product.images[0]}" alt="${localText(product.title)}" />
-          <div class="detail-thumbs">
-            ${product.images
-              .map((image, index) => `<button type="button" data-thumb="${image}"><img src="${image}" alt="${localText(product.title)} ${index + 1}" /></button>`)
-              .join("")}
-          </div>
-        </div>
+        ${productGallery(product, discount)}
 
         <div class="detail-body page-detail-body landing-summary">
           <span class="eyebrow">${categoryText(product)} · ${t("limitedOffer")}</span>
@@ -530,7 +620,10 @@ function render() {
             ${product.oldPrice ? `<span>${money(product.oldPrice)}</span>` : ""}
             <strong>${money(product.price)}</strong>
           </div>
-          <div class="social-proof product-social">${interpolate(t("orderedThisWeek"), { count: socialCount(product) })}</div>
+          <div class="product-status-row">
+            <span>${stockText(product, soldOut, lowStock)}</span>
+            <span>${t("delivery")}</span>
+          </div>
           <a class="primary-action landing-scroll-cta" href="#order-form">${t("sendWhatsapp")}</a>
         </div>
 
@@ -568,6 +661,7 @@ function render() {
         </div>
         <a class="primary-action" href="#order-form">${t("sendWhatsapp")}</a>
       </section>
+      ${productFaq(product)}
       ${
         related.length
           ? `<section class="related-products">
@@ -600,8 +694,19 @@ function render() {
 
 document.addEventListener("click", (event) => {
   const thumb = event.target.closest("[data-thumb]");
+  const qtyStep = event.target.closest("[data-qty-step]");
   if (thumb) {
     document.querySelector(".detail-main-image").src = thumb.dataset.thumb;
+    document.querySelectorAll("[data-thumb]").forEach((button) => button.classList.toggle("active", button === thumb));
+  }
+  if (qtyStep) {
+    const form = qtyStep.closest("[data-product-order]");
+    const input = form?.elements.qty;
+    if (!input) return;
+    const min = Number(input.min || 1);
+    const max = input.max ? Number(input.max) : Infinity;
+    const next = Math.min(max, Math.max(min, Number(input.value || min) + Number(qtyStep.dataset.qtyStep)));
+    input.value = next;
   }
   const relatedProduct = event.target.closest("[data-related-product]");
   if (relatedProduct) {
@@ -629,8 +734,12 @@ langToggle.addEventListener("click", () => {
 });
 
 async function initProductPage() {
-  await loadBackendStore();
+  applyStore(readCachedPublicStore());
   setLanguage(currentLang);
+  const loaded = await loadBackendStore();
+  if (loaded) {
+    setLanguage(currentLang);
+  }
 }
 
 initProductPage();

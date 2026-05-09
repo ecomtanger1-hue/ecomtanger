@@ -289,6 +289,7 @@ let currentFilter = "all";
 let currentSearch = "";
 let currentLang = "ar";
 let storeSettings = {};
+const publicStoreCacheKey = "casatanjaPublicStoreCache";
 
 const productGrid = document.querySelector("[data-products]");
 const cartDrawer = document.querySelector("[data-cart-drawer]");
@@ -301,14 +302,42 @@ const langToggle = document.querySelector("[data-lang-toggle]");
 const currentLangLabel = document.querySelector("[data-current-lang]");
 const categorySections = document.querySelector("[data-category-sections]");
 
+function applyStore(store) {
+  if (!store) return;
+  if (Array.isArray(store.products) && store.products.length) {
+    products = (store.products || []).filter((product) => product.active !== false);
+  }
+  storeSettings = store.settings || storeSettings || {};
+  whatsappNumber = storeSettings.whatsappNumber || whatsappNumber;
+}
+
+function readCachedPublicStore() {
+  try {
+    const cached = JSON.parse(localStorage.getItem(publicStoreCacheKey) || "null");
+    return cached?.store || null;
+  } catch (error) {
+    localStorage.removeItem(publicStoreCacheKey);
+    return null;
+  }
+}
+
+function cachePublicStore(store) {
+  try {
+    localStorage.setItem(publicStoreCacheKey, JSON.stringify({ savedAt: Date.now(), store }));
+  } catch (error) {
+    // Storage can fail in private browsing; the live store still works.
+  }
+}
+
 async function loadBackendStore() {
   try {
     const store = await StoreBackend.getPublicStore();
-    products = (store.products || []).filter((product) => product.active !== false);
-    storeSettings = store.settings || {};
-    whatsappNumber = storeSettings.whatsappNumber || whatsappNumber;
+    applyStore(store);
+    cachePublicStore(store);
+    return true;
   } catch (error) {
     // File previews and GitHub Pages use the bundled fallback products.
+    return false;
   }
 }
 
@@ -348,6 +377,18 @@ function categoryLabel(category) {
     Beaute: { ar: "جمال", fr: "Beaute" },
   };
   return labels[category]?.[currentLang] || category;
+}
+
+function firstProductImage(product) {
+  return Array.isArray(product.images) ? product.images.find(Boolean) : "";
+}
+
+function productImageMarkup(product) {
+  const image = firstProductImage(product);
+  if (!image) {
+    return `<div class="product-image-placeholder">${localText(product.title)}</div>`;
+  }
+  return `<img src="${image}" alt="${localText(product.title)}" loading="lazy" />`;
 }
 
 function setLanguage(lang) {
@@ -394,7 +435,8 @@ function renderFeaturedDeal() {
   if (orderButton) orderButton.dataset.add = product.id;
   if (detailsLink) detailsLink.href = `product.html?id=${product.id}`;
   if (bgLink) bgLink.href = `product.html?id=${product.id}`;
-  if (dealBand && product.images?.[0]) dealBand.style.backgroundImage = `url("${product.images[0]}")`;
+  const dealImage = firstProductImage(product);
+  if (dealBand && dealImage) dealBand.style.backgroundImage = `url("${dealImage}")`;
   if (priceRow) {
     priceRow.innerHTML = `<strong>${money(product.price)}</strong>${product.oldPrice ? `<span>${money(product.oldPrice)}</span>` : ""}`;
   }
@@ -419,7 +461,7 @@ function renderProducts() {
       return `
         <article class="product-card" data-product="${product.id}" tabindex="0" role="button" aria-label="${localText(product.title)}">
           <div class="product-image">
-            <img src="${product.images[0]}" alt="${localText(product.title)}" loading="lazy" />
+            ${productImageMarkup(product)}
             <span class="badge">${soldOut ? t("outOfStock") : limited ? t("lowStock") : t("cod")}</span>
             <button class="wishlist" type="button" aria-label="Wishlist">
               <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -453,7 +495,7 @@ function productCard(product) {
   return `
     <article class="product-card compact-card" data-product="${product.id}" tabindex="0" role="button" aria-label="${localText(product.title)}">
       <div class="product-image">
-        <img src="${product.images[0]}" alt="${localText(product.title)}" loading="lazy" />
+        ${productImageMarkup(product)}
         <span class="badge">${soldOut ? t("outOfStock") : limited ? t("lowStock") : t("cod")}</span>
       </div>
       <div class="product-info">
@@ -520,7 +562,7 @@ function renderCart() {
     .map(
       (item) => `
         <article class="cart-item">
-          <img src="${item.images[0]}" alt="${localText(item.title)}" />
+          ${productImageMarkup(item)}
           <div>
             <h3>${localText(item.title)}</h3>
             <span>${money(item.price)} x ${item.qty}</span>
@@ -708,9 +750,13 @@ checkoutForm.addEventListener("submit", async (event) => {
 });
 
 async function initStorefront() {
-  await loadBackendStore();
   restoreCart();
+  applyStore(readCachedPublicStore());
   setLanguage(localStorage.getItem("storeLanguage") || "ar");
+  const loaded = await loadBackendStore();
+  if (loaded) {
+    setLanguage(currentLang);
+  }
 }
 
 initStorefront();
