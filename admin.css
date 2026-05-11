@@ -1066,7 +1066,9 @@
   padding: 18px;
   border: 1px solid #ded8ce;
   border-radius: 8px;
-  background: #fbfaf8;
+  background:
+    linear-gradient(135deg, rgba(18, 140, 85, 0.1), rgba(240, 101, 67, 0.08)),
+    #fbfaf8;
 }
 
 .compact-title-row {
@@ -1391,6 +1393,11 @@
 
 .publishing-card {
   background: #fff;
+}
+
+.preview-card {
+  background:
+    linear-gradient(180deg, #fff, #fbfaf8);
 }
 
 .product-facts-card {

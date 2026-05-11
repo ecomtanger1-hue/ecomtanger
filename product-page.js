@@ -349,6 +349,21 @@ function plainDescription(product) {
   return text.length > 210 ? `${text.slice(0, 207).trim()}...` : text;
 }
 
+function productSummary(product) {
+  const summary = localText(product.box?.summary);
+  return summary || plainDescription(product);
+}
+
+function productBoxText(product) {
+  return localText(product.box) || t("boxDefault");
+}
+
+function productSpecs(product) {
+  return Array.isArray(product.box?.specs)
+    ? product.box.specs.filter((spec) => spec?.label || spec?.value)
+    : [];
+}
+
 function productHasManagedStock(product) {
   return product.stock !== undefined && product.stock !== null && product.stock !== "";
 }
@@ -558,7 +573,7 @@ function orderForm(product, variants, soldOut) {
   const managedStock = productHasManagedStock(product);
   const lowStock = managedStock && !soldOut && Number(product.stock || 0) <= 5;
   const discount = discountPercent(product);
-  const intro = plainDescription(product);
+  const intro = productSummary(product);
   const facts = productDecisionFacts(product, soldOut, lowStock);
   return `
     <form class="checkout-form product-order-form landing-order-form" data-product-order data-base-price="${Number(product.price || 0)}">
@@ -664,7 +679,7 @@ function productFaq(product) {
         </details>
         <details>
           <summary>${t("whatsInBox")}</summary>
-          <p>${product.box?.[currentLang] || t("boxDefault")}</p>
+          <p>${productBoxText(product)}</p>
         </details>
       </div>
     </section>
@@ -697,6 +712,7 @@ function render() {
     .slice(0, 4);
   const bestOffers = products.filter((item) => item.id !== product.id && item.active !== false).slice(0, 4);
   const discount = discountPercent(product);
+  const specs = productSpecs(product);
   trackEvent("product_view", { productId: product.id });
   document.title = `${localText(product.title)} | CasaTanja Deals`;
   page.innerHTML = `
@@ -732,7 +748,8 @@ function render() {
           <div><dt>${t("specCategory")}</dt><dd>${categoryText(product)}</dd></div>
           <div><dt>${t("specStock")}</dt><dd>${managedStock ? (soldOut ? t("outOfStock") : `${product.stock} ${lowStock ? `· ${t("lowStock")}` : ""}`) : t("cod")}</dd></div>
           <div><dt>${t("specDelivery")}</dt><dd>${t("delivery")}</dd></div>
-          <div><dt>${t("whatsInBox")}</dt><dd>${product.box?.[currentLang] || t("boxDefault")}</dd></div>
+          ${specs.map((spec) => `<div><dt>${escapeHtml(spec.label)}</dt><dd>${escapeHtml(spec.value)}</dd></div>`).join("")}
+          <div><dt>${t("whatsInBox")}</dt><dd>${productBoxText(product)}</dd></div>
         </dl>
       </section>
 

@@ -11,6 +11,8 @@ const richEditor = document.querySelector("[data-rich-editor]");
 const descriptionValue = document.querySelector("[data-description-value]");
 const editorPopover = document.querySelector("[data-editor-popover]");
 const editorImageUpload = document.querySelector("[data-editor-image-upload]");
+const publishChecklist = document.querySelector("[data-publish-checklist]");
+const productPreview = document.querySelector("[data-product-preview]");
 const editingProductId = Number(new URLSearchParams(window.location.search).get("id")) || null;
 
 const defaultCategories = ["Maison", "Cuisine", "Tech", "Beaute", "Clothing"];
@@ -98,6 +100,36 @@ function lines(value) {
     .split("\n")
     .map((item) => item.trim())
     .filter(Boolean);
+}
+
+function specsFromText(value) {
+  return lines(value).map((line) => {
+    const separator = line.includes(":") ? ":" : line.includes("：") ? "：" : null;
+    if (!separator) return { label: line, value: "" };
+    const [label, ...rest] = line.split(separator);
+    return {
+      label: label.trim(),
+      value: rest.join(separator).trim(),
+    };
+  }).filter((spec) => spec.label || spec.value);
+}
+
+function specsToText(specs = []) {
+  return specs
+    .map((spec) => [spec.label, spec.value].filter(Boolean).join(": "))
+    .filter(Boolean)
+    .join("\n");
+}
+
+function productBoxPayload() {
+  const included = form.box.value.trim();
+  const summary = form.summary.value.trim();
+  return {
+    ar: included,
+    fr: included,
+    summary: { ar: summary, fr: summary },
+    specs: specsFromText(form.specs.value),
+  };
 }
 
 function currentImages() {
@@ -273,17 +305,55 @@ function setEditorDirection(direction) {
 }
 
 function updateCompletion() {
-  const requiredChecks = [
-    Boolean(form.title.value.trim()),
-    Boolean(plainDescription()),
-    Boolean(form.price.value),
-    currentImages().length > 0,
+  const checks = [
+    { key: "title", label: "Product name", done: Boolean(form.title.value.trim()), required: true },
+    { key: "price", label: "Price", done: Boolean(form.price.value), required: true },
+    { key: "images", label: "At least one image", done: currentImages().length > 0, required: true },
+    { key: "description", label: "Rich description", done: Boolean(plainDescription()), required: true },
+    { key: "summary", label: "Short selling summary", done: Boolean(form.summary.value.trim()), required: false },
+    { key: "benefits", label: "Quick benefits", done: lines(form.highlights.value).length >= 3, required: false },
+    { key: "specs", label: "Structured specs", done: specsFromText(form.specs.value).length > 0, required: false },
   ];
-  const done = requiredChecks.filter(Boolean).length;
-  const percent = Math.round((done / requiredChecks.length) * 100);
+  const done = checks.filter((check) => check.done).length;
+  const percent = Math.round((done / checks.length) * 100);
   completionLabel.textContent = `${percent}%`;
   completionBar.style.width = `${percent}%`;
-  completionHelp.textContent = percent === 100 ? "Ready to save." : "Add a product name, price, image, and description.";
+  const missingRequired = checks.filter((check) => check.required && !check.done);
+  completionHelp.textContent = missingRequired.length ? `Required: ${missingRequired.map((check) => check.label).join(", ")}.` : "Ready to save. Optional improvements can still make the product page stronger.";
+  renderPublishChecklist(checks);
+  renderProductPreview();
+}
+
+function renderPublishChecklist(checks) {
+  if (!publishChecklist) return;
+  publishChecklist.innerHTML = `
+    <strong>Publishing checklist</strong>
+    ${checks
+      .map(
+        (check) => `
+          <span class="${check.done ? "done" : ""}">
+            ${check.done ? "✓" : "•"} ${check.label}${check.required ? "" : " (recommended)"}
+          </span>
+        `,
+      )
+      .join("")}
+  `;
+}
+
+function renderProductPreview() {
+  if (!productPreview) return;
+  const title = form.title.value.trim() || "Product preview";
+  const price = form.price.value ? `MAD ${Number(form.price.value)}` : "MAD --";
+  const image = currentImages()[0];
+  const summary = form.summary.value.trim() || plainDescription() || "Add a short summary to preview the product decision area.";
+  productPreview.innerHTML = `
+    ${image ? `<img src="${image}" alt="" />` : `<div class="mini-product-placeholder">Image</div>`}
+    <div>
+      <strong>${title}</strong>
+      <span>${price}</span>
+      <p>${summary}</p>
+    </div>
+  `;
 }
 
 function productPayload() {
@@ -301,8 +371,8 @@ function productPayload() {
     featured: form.featured.checked,
     title: { ar: title, fr: title },
     description: { ar: description, fr: description },
-    highlights: { ar: [], fr: [] },
-    box: { ar: "", fr: "" },
+    highlights: { ar: lines(form.highlights.value), fr: lines(form.highlights.value) },
+    box: productBoxPayload(),
     images: currentImages(),
     variants: form.hasVariants.checked
       ? selectedVariantValues.map((value, index) => ({
@@ -340,6 +410,10 @@ function fillProductForm(product) {
   form.stock.value = product.stock ?? "";
   form.featured.checked = Boolean(product.featured);
   richEditor.innerHTML = product.description?.ar || product.description?.fr || "";
+  form.summary.value = product.box?.summary?.ar || product.box?.summary?.fr || "";
+  form.highlights.value = (product.highlights?.ar || product.highlights?.fr || []).join("\n");
+  form.box.value = product.box?.ar || product.box?.fr || "";
+  form.specs.value = specsToText(product.box?.specs || []);
 
   selectedVariantValues = [];
   customVariantValues = [];

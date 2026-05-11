@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Create Product | CasaTanja Admin</title>
     <link rel="stylesheet" href="styles.css" />
-    <link rel="stylesheet" href="admin.css?v=4" />
+    <link rel="stylesheet" href="admin.css?v=5" />
   </head>
   <body class="admin-body product-create-body">
     <div class="create-page">
@@ -113,6 +113,25 @@
                 </select>
               </label>
             </div>
+
+            <section class="selling-summary-panel">
+              <div class="panel-title-row compact-title-row">
+                <div>
+                  <h2>Product page decision area</h2>
+                  <p>This summary feeds the first customer-facing section: title, price, CTA, and quick reasons to buy.</p>
+                </div>
+              </div>
+              <div class="summary-grid">
+                <label>
+                  Short summary
+                  <textarea name="summary" dir="rtl" rows="3" maxlength="240" placeholder="مثال: حقيبة عملية لتنظيم الضروريات اليومية، مناسبة للسفر والعمل والاستعمال اليومي."></textarea>
+                </label>
+                <label>
+                  Quick benefits, one per line
+                  <textarea name="highlights" dir="rtl" rows="5" placeholder="تصميم عملي للاستعمال اليومي&#10;جيوب داخلية متعددة&#10;حجم مناسب للحمل باليد&#10;الدفع عند الاستلام"></textarea>
+                </label>
+              </div>
+            </section>
 
             <div class="media-dropzone">
               <div>
@@ -230,6 +249,13 @@
           </section>
 
           <aside class="create-side-panel">
+            <section class="preview-card">
+              <h2>Product page preview</h2>
+              <p>Live snapshot of what customers see first.</p>
+              <div class="mini-product-preview" data-product-preview></div>
+              <div class="publish-checklist" data-publish-checklist></div>
+            </section>
+
             <section>
               <h2>Price and stock</h2>
               <div class="side-grid">
@@ -285,6 +311,19 @@
               </div>
             </section>
 
+            <section class="product-facts-card">
+              <h2>Product facts</h2>
+              <p>Structured facts appear in the product information section. Keep them short and practical.</p>
+              <label>
+                What is included
+                <textarea name="box" dir="rtl" rows="3" placeholder="المنتج، التغليف، وأي ملحقات موضحة في الصور."></textarea>
+              </label>
+              <label>
+                Specs, one per line as label: value
+                <textarea name="specs" dir="rtl" rows="5" placeholder="المادة: قماش مقاوم للرذاذ&#10;الألوان: أسود، بني، رمادي&#10;الاستخدام: سفر، عمل، ترتيب يومي"></textarea>
+              </label>
+            </section>
+
             <section class="publishing-card">
               <h2>Publishing</h2>
               <p>The product will be created with Arabic and French values matching for now, so the storefront remains stable until translation is added.</p>
@@ -299,6 +338,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     <script src="supabase-service.js"></script>
-    <script src="product-create.js?v=10"></script>
+    <script src="product-create.js?v=11"></script>
   </body>
 </html>

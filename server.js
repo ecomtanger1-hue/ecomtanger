@@ -130,6 +130,11 @@ function normalizeProduct(input, fallback = {}) {
     box: {
       ar: String(box.ar ?? fallback.box?.ar ?? "").trim(),
       fr: String(box.fr ?? fallback.box?.fr ?? "").trim(),
+      summary: {
+        ar: String(box.summary?.ar ?? fallback.box?.summary?.ar ?? "").trim(),
+        fr: String(box.summary?.fr ?? fallback.box?.summary?.fr ?? "").trim(),
+      },
+      specs: Array.isArray(box.specs) ? box.specs : fallback.box?.specs || [],
     },
     images,
     variants: variants.map((variant, index) => ({
