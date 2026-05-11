@@ -24,6 +24,11 @@ const translations = {
     bestOffers: "أفضل العروض",
     discountBadge: "تخفيض",
     orderSummary: "طلب سريع",
+    estimatedTotal: "المجموع التقريبي",
+    totalNote: "بدون مصاريف مخفية. نؤكد التفاصيل عبر واتساب قبل الإرسال.",
+    deliveryPromise: "توصيل طنجة 24-48 ساعة",
+    paymentPromise: "الدفع عند الاستلام",
+    supportPromise: "تأكيد ومتابعة عبر واتساب",
     limitedOffer: "عرض محدود مع الدفع عند الاستلام",
     deliveryCityTitle: "توصيل داخل طنجة",
     deliveryCityText: "توصيل سريع وآمن إلى العنوان المحدد.",
@@ -74,6 +79,11 @@ const translations = {
     bestOffers: "Meilleures offres",
     discountBadge: "Promo",
     orderSummary: "Commande rapide",
+    estimatedTotal: "Total estime",
+    totalNote: "Sans frais caches. On confirme les details sur WhatsApp avant l'envoi.",
+    deliveryPromise: "Livraison Tanger 24-48h",
+    paymentPromise: "Paiement a la livraison",
+    supportPromise: "Confirmation et suivi WhatsApp",
     limitedOffer: "Offre limitee avec paiement a la livraison",
     deliveryCityTitle: "Livraison a Tanger",
     deliveryCityText: "Livraison rapide et securisee a l'adresse indiquee.",
@@ -223,6 +233,7 @@ let products = [
 let currentLang = localStorage.getItem("storeLanguage") || "ar";
 let storeSettings = {};
 const publicStoreCacheKey = "casatanjaPublicStoreCache";
+const publicStoreCacheMaxAgeMs = 10 * 60 * 1000;
 const page = document.querySelector("[data-product-page]");
 const langToggle = document.querySelector("[data-lang-toggle]");
 const currentLangLabel = document.querySelector("[data-current-lang]");
@@ -331,6 +342,13 @@ function richDescriptionMarkup(product) {
   return sanitizeRichHtml(localText(product.description));
 }
 
+function plainDescription(product) {
+  const doc = new DOMParser().parseFromString(localText(product.description), "text/html");
+  const text = (doc.body.textContent || localText(product.description) || "").replace(/\s+/g, " ").trim();
+  if (!text) return "";
+  return text.length > 210 ? `${text.slice(0, 207).trim()}...` : text;
+}
+
 function productHasManagedStock(product) {
   return product.stock !== undefined && product.stock !== null && product.stock !== "";
 }
@@ -358,6 +376,10 @@ function applyStore(store) {
 function readCachedPublicStore() {
   try {
     const cached = JSON.parse(localStorage.getItem(publicStoreCacheKey) || "null");
+    if (!cached?.savedAt || Date.now() - Number(cached.savedAt) > publicStoreCacheMaxAgeMs) {
+      localStorage.removeItem(publicStoreCacheKey);
+      return null;
+    }
     return cached?.store || null;
   } catch (error) {
     localStorage.removeItem(publicStoreCacheKey);
@@ -457,10 +479,11 @@ function renderMissing() {
 }
 
 function relatedCard(product) {
+  const image = (product.images || []).find(Boolean);
   return `
     <article class="product-card compact-card" data-related-product="${product.id}">
       <div class="product-image">
-        <img src="${product.images?.[0] || ""}" alt="${localText(product.title)}" loading="lazy" />
+        ${image ? `<img src="${image}" alt="${localText(product.title)}" loading="lazy" />` : `<div class="product-image-placeholder">${localText(product.title)}</div>`}
         <span class="badge">${money(product.price)}</span>
       </div>
       <div class="product-info">
@@ -492,9 +515,9 @@ function productGallery(product, discount) {
   }
 
   return `
-    <div class="detail-gallery page-gallery landing-gallery">
+    <div class="detail-gallery page-gallery landing-gallery ${images.length > 1 ? "has-thumbs" : ""}">
       ${discount ? `<span class="discount-ribbon">-${discount}%</span>` : ""}
-      <img class="detail-main-image" src="${images[0]}" alt="${localText(product.title)}" />
+      <img class="detail-main-image" src="${images[0]}" alt="${localText(product.title)}" loading="eager" fetchpriority="high" />
       ${
         images.length > 1
           ? `<div class="detail-thumbs">
@@ -511,8 +534,9 @@ function productGallery(product, discount) {
 function orderForm(product, variants, soldOut) {
   const maxQty = productHasManagedStock(product) && Number(product.stock) > 0 ? ` max="${Number(product.stock)}"` : "";
   const firstAvailableVariant = variants.find((variant) => Number(variant.stock || 0) > 0) || variants[0];
+  const firstExtraPrice = Number(firstAvailableVariant?.extraPrice || 0);
   return `
-    <form class="checkout-form product-order-form landing-order-form" data-product-order>
+    <form class="checkout-form product-order-form landing-order-form" data-product-order data-base-price="${Number(product.price || 0)}">
       <span class="eyebrow">${t("orderSummary")}</span>
       <h2>${t("orderTitle")}</h2>
       <label>
@@ -538,7 +562,7 @@ function orderForm(product, variants, soldOut) {
                       const unavailable = Number(variant.stock || 0) <= 0;
                       return `
                         <label class="variant-choice ${unavailable ? "is-disabled" : ""}">
-                          <input name="variant" type="radio" value="${variant.id}" ${firstAvailableVariant?.id === variant.id ? "checked" : ""} ${unavailable ? "disabled" : ""} />
+                          <input name="variant" type="radio" value="${variant.id}" data-extra-price="${Number(variant.extraPrice || 0)}" ${firstAvailableVariant?.id === variant.id ? "checked" : ""} ${unavailable ? "disabled" : ""} />
                           <span>${localText(variant.name)}${variant.extraPrice ? ` +${money(variant.extraPrice)}` : ""}</span>
                         </label>
                       `;
@@ -557,7 +581,17 @@ function orderForm(product, variants, soldOut) {
           <button type="button" data-qty-step="1" aria-label="+">+</button>
         </div>
       </label>
+      <div class="order-cost-preview">
+        <span>${t("estimatedTotal")}</span>
+        <strong data-order-total>${money(Number(product.price || 0) + firstExtraPrice)}</strong>
+        <small>${t("totalNote")}</small>
+      </div>
       <button class="whatsapp-checkout" type="submit" ${soldOut ? "disabled" : ""}>${soldOut ? t("outOfStock") : t("sendWhatsapp")}</button>
+      <div class="buy-box-assurance" aria-label="Order reassurance">
+        <span>${t("deliveryPromise")}</span>
+        <span>${t("paymentPromise")}</span>
+        <span>${t("supportPromise")}</span>
+      </div>
       <p class="checkout-note">${t("note")}</p>
     </form>
   `;
@@ -590,6 +624,16 @@ function productFaq(product) {
   `;
 }
 
+function updateOrderTotal(form) {
+  const totalNode = form?.querySelector("[data-order-total]");
+  if (!form || !totalNode) return;
+  const basePrice = Number(form.dataset.basePrice || 0);
+  const qty = Math.max(1, Number(form.elements.qty?.value || 1));
+  const selectedVariant = form.querySelector('input[name="variant"]:checked');
+  const extraPrice = Number(selectedVariant?.dataset.extraPrice || 0);
+  totalNode.textContent = money((basePrice + extraPrice) * qty);
+}
+
 function render() {
   const product = products.find((item) => item.id === productId());
   if (!product) {
@@ -616,6 +660,7 @@ function render() {
         <div class="detail-body page-detail-body landing-summary">
           <span class="eyebrow">${categoryText(product)} · ${t("limitedOffer")}</span>
           <h1>${localText(product.title)}</h1>
+          ${plainDescription(product) ? `<p class="desktop-product-intro">${plainDescription(product)}</p>` : ""}
           <div class="landing-price-row">
             ${product.oldPrice ? `<span>${money(product.oldPrice)}</span>` : ""}
             <strong>${money(product.price)}</strong>
@@ -632,6 +677,7 @@ function render() {
         </div>
       </section>
 
+      <section class="product-detail-layout">
       <section class="landing-story">
         <div>
           <span class="eyebrow">${t("description")}</span>
@@ -651,6 +697,8 @@ function render() {
           <div><dt>${t("specDelivery")}</dt><dd>${t("delivery")}</dd></div>
           <div><dt>${t("whatsInBox")}</dt><dd>${product.box?.[currentLang] || t("boxDefault")}</dd></div>
         </dl>
+      </section>
+
       </section>
 
       <section class="landing-repeat-cta">
@@ -707,12 +755,25 @@ document.addEventListener("click", (event) => {
     const max = input.max ? Number(input.max) : Infinity;
     const next = Math.min(max, Math.max(min, Number(input.value || min) + Number(qtyStep.dataset.qtyStep)));
     input.value = next;
+    updateOrderTotal(form);
   }
   const relatedProduct = event.target.closest("[data-related-product]");
   if (relatedProduct) {
     trackEvent("related_product_click", { productId: Number(relatedProduct.dataset.relatedProduct), fromProductId: productId() });
     window.location.href = `product.html?id=${relatedProduct.dataset.relatedProduct}`;
   }
+});
+
+document.addEventListener("input", (event) => {
+  const input = event.target.closest('input[name="qty"]');
+  if (!input) return;
+  updateOrderTotal(input.closest("[data-product-order]"));
+});
+
+document.addEventListener("change", (event) => {
+  const variant = event.target.closest('input[name="variant"]');
+  if (!variant) return;
+  updateOrderTotal(variant.closest("[data-product-order]"));
 });
 
 document.addEventListener("submit", async (event) => {

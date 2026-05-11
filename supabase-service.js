@@ -77,6 +77,28 @@
     };
   }
 
+  function normalizeCategory(row) {
+    return {
+      id: row.id || "",
+      title: textRecord(row.title || row.id),
+      imageUrl: row.image_url || "",
+      active: row.active !== false,
+      sortOrder: Number(row.sort_order || 100),
+      createdAt: row.created_at,
+      updatedAt: row.updated_at,
+    };
+  }
+
+  function categoryRow(category) {
+    return {
+      id: category.id,
+      title: textRecord(category.title || category.id),
+      image_url: category.imageUrl || null,
+      active: category.active !== false,
+      sort_order: Number(category.sortOrder || 100),
+    };
+  }
+
   function normalizeOrder(row) {
     return {
       id: Number(row.id),
@@ -105,6 +127,14 @@
       window.location.href = `admin-login.html?next=${next}`;
       throw new Error("Admin login required");
     }
+    const { data: isAdmin, error } = await client.rpc("is_admin");
+    if (error) throw error;
+    if (!isAdmin) {
+      await client.auth.signOut();
+      const next = encodeURIComponent(`${window.location.pathname}${window.location.search}`);
+      window.location.href = `admin-login.html?next=${next}`;
+      throw new Error("Admin access required");
+    }
     return session;
   }
 
@@ -115,6 +145,12 @@
     });
     const { data, error } = await client.auth.signInWithPassword({ email, password });
     if (error) throw error;
+    const { data: isAdmin, error: adminError } = await client.rpc("is_admin");
+    if (adminError) throw adminError;
+    if (!isAdmin) {
+      await client.auth.signOut();
+      throw new Error("Admin access required");
+    }
     return data;
   }
 
@@ -133,13 +169,16 @@
 
   async function getPublicStore() {
     if (!enabled()) return localApi("/api/store");
-    const [{ data: products, error: productsError }, settings] = await Promise.all([
+    const [{ data: products, error: productsError }, { data: categories, error: categoriesError }, settings] = await Promise.all([
       client.from("products").select("*").eq("active", true).order("created_at", { ascending: false }),
+      client.from("categories").select("*").eq("active", true).order("sort_order", { ascending: true }),
       getSettings(),
     ]);
     if (productsError) throw productsError;
+    if (categoriesError) throw categoriesError;
     return {
       products: (products || []).map(normalizeProduct),
+      categories: (categories || []).map(normalizeCategory),
       settings,
       orders: [],
       analytics: [],
@@ -149,18 +188,21 @@
   async function getAdminStore() {
     if (!enabled()) return localApi("/api/admin/store");
     await requireAdmin();
-    const [productsResult, ordersResult, settingsResult, analyticsResult] = await Promise.all([
+    const [productsResult, categoriesResult, ordersResult, settingsResult, analyticsResult] = await Promise.all([
       client.from("products").select("*").order("created_at", { ascending: false }),
+      client.from("categories").select("*").order("sort_order", { ascending: true }),
       client.from("orders").select("*").order("created_at", { ascending: false }),
       client.from("settings").select("*").eq("id", "main").maybeSingle(),
       client.from("analytics").select("*").order("created_at", { ascending: false }).limit(200),
     ]);
     if (productsResult.error) throw productsResult.error;
+    if (categoriesResult.error) throw categoriesResult.error;
     if (ordersResult.error) throw ordersResult.error;
     if (settingsResult.error) throw settingsResult.error;
     if (analyticsResult.error) throw analyticsResult.error;
     return {
       products: (productsResult.data || []).map(normalizeProduct),
+      categories: (categoriesResult.data || []).map(normalizeCategory),
       orders: (ordersResult.data || []).map(normalizeOrder),
       settings: normalizeSettings(settingsResult.data),
       analytics: analyticsResult.data || [],
@@ -181,6 +223,18 @@
     const { data, error } = await query;
     if (error) throw error;
     return normalizeProduct(data);
+  }
+
+  async function saveCategory(category) {
+    if (!enabled()) return category;
+    await requireAdmin();
+    const { data, error } = await client
+      .from("categories")
+      .upsert(categoryRow(category), { onConflict: "id" })
+      .select("*")
+      .single();
+    if (error) throw error;
+    return normalizeCategory(data);
   }
 
   async function saveSettings(settings) {
@@ -286,6 +340,7 @@
     getPublicStore,
     getAdminStore,
     saveProduct,
+    saveCategory,
     saveSettings,
     updateOrderStatus,
     createOrder,

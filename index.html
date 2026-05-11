@@ -9,7 +9,7 @@
       content="Boutique mobile-first pour commander a Tanger avec WhatsApp et paiement a la livraison."
     />
     <link rel="preconnect" href="https://images.unsplash.com" />
-    <link rel="stylesheet" href="styles.css?v=2" />
+    <link rel="stylesheet" href="styles.css?v=6" />
   </head>
   <body>
     <div class="app-shell">
@@ -59,40 +59,17 @@
           </div>
         </section>
 
-        <section class="trust-strip" aria-label="Trust guarantees">
-          <article>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4.5 6v5.4c0 4.6 3 7.8 7.5 9.6 4.5-1.8 7.5-5 7.5-9.6V6L12 3Z" /><path d="m8.7 12.2 2.1 2.1 4.6-5" /></svg>
-            <strong data-i18n="trustCodTitle">الدفع عند الاستلام</strong>
-            <span data-i18n="trustCodText">ادفع فقط بعد وصول الطلب.</span>
-          </article>
-          <article>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 17h11V7H5v10Z" /><path d="M16 10h3l2 3v4h-5v-7Z" /><circle cx="8" cy="19" r="1.6" /><circle cx="18" cy="19" r="1.6" /></svg>
-            <strong data-i18n="trustDeliveryTitle">توصيل طنجة</strong>
-            <span data-i18n="trustDeliveryText">24-48 ساعة داخل المدينة.</span>
-          </article>
-          <article>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 20l1.7-4.7A7.5 7.5 0 1 1 20 11.5Z" /><path d="M9.2 8.6c.2 3 2 5 5 5.8l1.2-1.2" /></svg>
-            <strong data-i18n="trustConfirmTitle">تأكيد سريع</strong>
-            <span data-i18n="trustConfirmText">نراجع الطلب معك على واتساب.</span>
-          </article>
-        </section>
-
-        <section class="tabs" aria-label="Categories">
+        <section class="tabs" aria-label="Categories" hidden>
           <button class="tab active" data-filter="all" data-i18n="tabAll" type="button">الأكثر طلبا</button>
           <button class="tab" data-filter="Maison" data-i18n="tabHome" type="button">المنزل</button>
+          <button class="tab" data-filter="Cuisine" data-i18n="tabKitchen" type="button">مطبخ</button>
           <button class="tab" data-filter="Tech" data-i18n="tabTech" type="button">تقنية</button>
           <button class="tab" data-filter="Beaute" data-i18n="tabBeauty" type="button">جمال</button>
         </section>
 
-        <section id="products" class="product-section" aria-label="Produits">
-          <div class="section-heading">
-            <div>
-              <span class="eyebrow" data-i18n="newProducts">منتجات جديدة</span>
-              <h2 data-i18n="tangierDeals">عروض طنجة</h2>
-            </div>
-            <button class="text-button" type="button" data-i18n="view">عرض</button>
-          </div>
+        <section class="category-showcase" data-category-showcase aria-label="Shop by category"></section>
 
+        <section id="products" class="product-section" aria-label="Produits">
           <div class="product-grid" data-products></div>
         </section>
 
@@ -188,6 +165,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     <script src="supabase-service.js"></script>
-    <script src="script.js?v=6"></script>
+    <script src="script.js?v=10"></script>
   </body>
 </html>

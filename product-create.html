@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Create Product | CasaTanja Admin</title>
     <link rel="stylesheet" href="styles.css" />
-    <link rel="stylesheet" href="admin.css" />
+    <link rel="stylesheet" href="admin.css?v=3" />
   </head>
   <body class="admin-body product-create-body">
     <div class="create-page">
@@ -103,8 +103,28 @@
                   <option value="Tech">Tech</option>
                   <option value="Beaute">Beaute</option>
                   <option value="Clothing">Clothing</option>
+                  <option value="__custom">+ New category</option>
                 </select>
               </label>
+              <label data-custom-category-field hidden>
+                New category
+                <input name="customCategory" list="category-suggestions" placeholder="Example: Bags, Kids, Decor" />
+                <datalist id="category-suggestions"></datalist>
+              </label>
+              <div class="category-image-field" data-category-image-field hidden>
+                <div>
+                  <strong>Category image</strong>
+                  <small>Shown in the storefront circular category rail.</small>
+                </div>
+                <label class="upload-button">
+                  Upload category image
+                  <input name="customCategoryImageUpload" type="file" accept="image/*" />
+                </label>
+                <label>
+                  Or paste image URL
+                  <input name="customCategoryImageUrl" placeholder="https://example.com/category.jpg" />
+                </label>
+              </div>
               <label>
                 Product status
                 <select name="status">
@@ -299,6 +319,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     <script src="supabase-service.js"></script>
-    <script src="product-create.js?v=7"></script>
+    <script src="product-create.js?v=9"></script>
   </body>
 </html>

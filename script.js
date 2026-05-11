@@ -1,4 +1,4 @@
-let whatsappNumber = "212708012888";
+﻿let whatsappNumber = "212708012888";
 
 const translations = {
   ar: {
@@ -26,6 +26,7 @@ const translations = {
     trustConfirmText: "نراجع الطلب معك على واتساب.",
     tabAll: "الأكثر طلبا",
     tabHome: "المنزل",
+    tabKitchen: "مطبخ",
     tabTech: "تقنية",
     tabBeauty: "جمال",
     newProducts: "منتجات جديدة",
@@ -52,7 +53,6 @@ const translations = {
     noProducts: "لم نجد أي منتج مطابق للبحث.",
     outOfStock: "غير متوفر حاليا",
     lowStock: "باقي عدد محدود",
-    orderedThisWeek: "تم طلبه {count} مرة هذا الأسبوع",
     bestSellers: "الأكثر طلبا",
     homeSection: "منتجات المنزل",
     techSection: "تقنية واكسسوارات",
@@ -108,6 +108,7 @@ const translations = {
     trustConfirmText: "On verifie la commande sur WhatsApp.",
     tabAll: "Best sellers",
     tabHome: "Maison",
+    tabKitchen: "Cuisine",
     tabTech: "Tech",
     tabBeauty: "Beaute",
     newProducts: "Nouveautes",
@@ -134,7 +135,6 @@ const translations = {
     noProducts: "Aucun produit trouve pour cette recherche.",
     outOfStock: "Indisponible",
     lowStock: "Stock limite",
-    orderedThisWeek: "Commande {count} fois cette semaine",
     bestSellers: "Best sellers",
     homeSection: "Maison",
     techSection: "Tech et accessoires",
@@ -289,6 +289,7 @@ let currentFilter = "all";
 let currentSearch = "";
 let currentLang = "ar";
 let storeSettings = {};
+let storeCategories = [];
 const publicStoreCacheKey = "casatanjaPublicStoreCache";
 
 const productGrid = document.querySelector("[data-products]");
@@ -301,12 +302,27 @@ const searchInput = document.querySelector("#productSearch");
 const langToggle = document.querySelector("[data-lang-toggle]");
 const currentLangLabel = document.querySelector("[data-current-lang]");
 const categorySections = document.querySelector("[data-category-sections]");
+const categoryShowcase = document.querySelector("[data-category-showcase]");
+const publicStoreCacheMaxAgeMs = 10 * 60 * 1000;
+
+const searchAliases = [
+  ["حقيبة", "حقيبه", "شنطة", "شنطه", "bag", "sac"],
+  ["خلاط", "blender", "mixer", "mixeur"],
+  ["منظم", "ترتيب", "organizer", "organiseur", "rangement"],
+  ["سماعات", "سماعة", "ecouteurs", "earbuds", "bluetooth"],
+  ["مصباح", "لامبة", "lamp", "lampe", "led"],
+  ["مطبخ", "cuisine", "kitchen"],
+  ["منزل", "maison", "home"],
+  ["تقنية", "tech", "accessoires"],
+  ["جمال", "beaute", "beauty", "soin"],
+];
 
 function applyStore(store) {
   if (!store) return;
   if (Array.isArray(store.products) && store.products.length) {
     products = (store.products || []).filter((product) => product.active !== false);
   }
+  storeCategories = Array.isArray(store.categories) ? store.categories.filter((category) => category.active !== false) : storeCategories;
   storeSettings = store.settings || storeSettings || {};
   whatsappNumber = storeSettings.whatsappNumber || whatsappNumber;
 }
@@ -314,6 +330,10 @@ function applyStore(store) {
 function readCachedPublicStore() {
   try {
     const cached = JSON.parse(localStorage.getItem(publicStoreCacheKey) || "null");
+    if (!cached?.savedAt || Date.now() - Number(cached.savedAt) > publicStoreCacheMaxAgeMs) {
+      localStorage.removeItem(publicStoreCacheKey);
+      return null;
+    }
     return cached?.store || null;
   } catch (error) {
     localStorage.removeItem(publicStoreCacheKey);
@@ -345,14 +365,6 @@ function t(key) {
   return translations[currentLang][key] || key;
 }
 
-function interpolate(template, values) {
-  return Object.entries(values).reduce((text, [key, value]) => text.replaceAll(`{${key}}`, value), template);
-}
-
-function socialCount(product) {
-  return Number(product.ordersThisWeek || product.socialProof || 24 + Number(product.id || 1) * 7);
-}
-
 function trackEvent(event, payload = {}) {
   const record = { event, ...payload, createdAt: new Date().toISOString() };
   const localEvents = JSON.parse(localStorage.getItem("storeAnalytics") || "[]");
@@ -366,10 +378,60 @@ function money(value) {
 }
 
 function localText(value) {
-  return typeof value === "string" ? value : value[currentLang];
+  return typeof value === "string" ? value : value?.[currentLang] || value?.ar || value?.fr || "";
+}
+
+function normalizeSearchText(value) {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/[إأآ]/g, "ا")
+    .replace(/ى/g, "ي")
+    .replace(/ة/g, "ه")
+    .replace(/[ؤ]/g, "و")
+    .replace(/[ئ]/g, "ي")
+    .replace(/[ًٌٍَُِّْـ]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function textValues(value) {
+  if (!value) return [];
+  if (typeof value === "string") return [value];
+  if (Array.isArray(value)) return value.flatMap(textValues);
+  if (typeof value === "object") return Object.values(value).flatMap(textValues);
+  return [String(value)];
+}
+
+function expandedSearchTerms(query) {
+  const normalized = normalizeSearchText(query);
+  if (!normalized) return [];
+  const terms = new Set([normalized]);
+  searchAliases.forEach((group) => {
+    const normalizedGroup = group.map(normalizeSearchText);
+    if (normalizedGroup.some((term) => term.includes(normalized) || normalized.includes(term))) {
+      normalizedGroup.forEach((term) => terms.add(term));
+    }
+  });
+  return [...terms].filter(Boolean);
+}
+
+function searchableProductText(product) {
+  return normalizeSearchText(
+    [
+      ...textValues(product.title),
+      ...textValues(product.description),
+      ...textValues(product.highlights),
+      ...textValues(product.box),
+      product.sku,
+      product.category,
+      categoryLabel(product.category),
+    ].join(" "),
+  );
 }
 
 function categoryLabel(category) {
+  const storedCategory = storeCategories.find((item) => item.id === category);
+  if (storedCategory) return localText(storedCategory.title) || storedCategory.id;
   const labels = {
     Cuisine: { ar: "مطبخ", fr: "Cuisine" },
     Maison: { ar: "المنزل", fr: "Maison" },
@@ -377,6 +439,10 @@ function categoryLabel(category) {
     Beaute: { ar: "جمال", fr: "Beaute" },
   };
   return labels[category]?.[currentLang] || category;
+}
+
+function categoryImage(category) {
+  return storeCategories.find((item) => item.id === category)?.imageUrl || "";
 }
 
 function firstProductImage(product) {
@@ -410,6 +476,8 @@ function setLanguage(lang) {
     node.setAttribute("aria-label", t(node.dataset.i18nAria));
   });
   renderFeaturedDeal();
+  renderCategoryShowcase();
+  updateFilterControls();
   renderProducts();
   renderCategorySections();
   renderCart();
@@ -443,11 +511,51 @@ function renderFeaturedDeal() {
 }
 
 function visibleProducts() {
+  const terms = expandedSearchTerms(currentSearch);
   return products.filter((product) => {
     if (product.active === false) return false;
     const matchesFilter = currentFilter === "all" || product.category === currentFilter;
-    const searchText = `${product.title.ar} ${product.title.fr} ${categoryLabel(product.category)}`.toLowerCase();
-    return matchesFilter && searchText.includes(currentSearch);
+    const searchText = searchableProductText(product);
+    const matchesSearch = !terms.length || terms.some((term) => searchText.includes(term));
+    return matchesFilter && matchesSearch;
+  });
+}
+
+function renderCategoryShowcase() {
+  if (!categoryShowcase) return;
+  const activeProducts = products.filter((product) => product.active !== false);
+  const categoryNames = [
+    ...storeCategories.map((category) => category.id),
+    ...activeProducts.map((product) => product.category).filter(Boolean),
+  ].filter((category, index, list) => category && list.indexOf(category) === index);
+  const categories = [
+    { category: "all", product: activeProducts[0], count: activeProducts.length, label: t("tabAll") },
+    ...categoryNames
+    .map((category) => {
+      const items = products.filter((product) => product.active !== false && product.category === category);
+      if (!items.length && !categoryImage(category)) return null;
+      return { category, product: items[0], count: items.length, label: categoryLabel(category) };
+    })
+    .filter(Boolean),
+  ].filter((item) => item.product);
+
+  categoryShowcase.innerHTML = categories
+    .map(({ category, product, count, label }) => {
+      const image = categoryImage(category) || firstProductImage(product || {});
+      return `
+        <button class="category-card" type="button" data-filter="${category}">
+          <span class="category-card-image">${image ? `<img src="${image}" alt="${label}" loading="lazy" />` : ""}</span>
+          <strong>${label}</strong>
+          <small>${count} ${currentLang === "ar" ? "منتج" : "produits"}</small>
+        </button>
+      `;
+    })
+    .join("");
+}
+
+function updateFilterControls() {
+  document.querySelectorAll("[data-filter]").forEach((button) => {
+    button.classList.toggle("active", button.dataset.filter === currentFilter);
   });
 }
 
@@ -463,11 +571,6 @@ function renderProducts() {
           <div class="product-image">
             ${productImageMarkup(product)}
             <span class="badge">${soldOut ? t("outOfStock") : limited ? t("lowStock") : t("cod")}</span>
-            <button class="wishlist" type="button" aria-label="Wishlist">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M20.8 8.8c0 5.2-8.8 10-8.8 10s-8.8-4.8-8.8-10A4.8 4.8 0 0 1 12 5.5a4.8 4.8 0 0 1 8.8 3.3Z" />
-              </svg>
-            </button>
           </div>
           <div class="product-info">
             <h3 class="product-title">${localText(product.title)}</h3>
@@ -476,7 +579,6 @@ function renderProducts() {
               <span class="category">${categoryLabel(product.category)}</span>
             </div>
             <div class="delivery-note">${t("delivery")}</div>
-            <div class="social-proof">${interpolate(t("orderedThisWeek"), { count: socialCount(product) })}</div>
             <button class="add-button" type="button" data-add="${product.id}" ${soldOut ? "disabled" : ""}>${soldOut ? t("outOfStock") : t("addPay")}</button>
           </div>
         </article>
@@ -504,18 +606,20 @@ function productCard(product) {
           <strong class="price">${money(product.price)}</strong>
           <span class="category">${categoryLabel(product.category)}</span>
         </div>
-        <div class="social-proof">${interpolate(t("orderedThisWeek"), { count: socialCount(product) })}</div>
       </div>
     </article>
   `;
 }
 
 function renderCategorySections() {
+  const activeProducts = products.filter((product) => product.active !== false);
+  const categoryNames = [
+    ...storeCategories.map((category) => category.id),
+    ...activeProducts.map((product) => product.category).filter(Boolean),
+  ].filter((category, index, list) => category && list.indexOf(category) === index);
   const sections = [
-    { key: "bestSellers", items: products.filter((product) => product.active !== false && Number(product.stock || 0) > 0).slice(0, 4) },
-    { key: "homeSection", category: "Maison" },
-    { key: "techSection", category: "Tech" },
-    { key: "beautySection", category: "Beaute" },
+    { title: t("tabAll"), items: activeProducts.filter((product) => Number(product.stock || 0) > 0).slice(0, 4) },
+    ...categoryNames.map((category) => ({ title: categoryLabel(category), category })),
   ];
 
   categorySections.innerHTML = sections
@@ -526,8 +630,8 @@ function renderCategorySections() {
         <section class="category-block">
           <div class="section-heading">
             <div>
-              <span class="eyebrow">${t(section.key)}</span>
-              <h2>${t(section.key)}</h2>
+              <span class="eyebrow">${section.title}</span>
+              <h2>${section.title}</h2>
             </div>
           </div>
           <div class="product-grid category-grid">${items.map(productCard).join("")}</div>
@@ -704,9 +808,7 @@ document.addEventListener("click", (event) => {
 
   if (filterButton) {
     currentFilter = filterButton.dataset.filter;
-    document.querySelectorAll("[data-filter]").forEach((button) => {
-      button.classList.toggle("active", button === filterButton);
-    });
+    updateFilterControls();
     renderProducts();
   }
 });
@@ -724,7 +826,7 @@ document.addEventListener("keydown", (event) => {
 });
 
 searchInput.addEventListener("input", (event) => {
-  currentSearch = event.target.value.trim().toLowerCase();
+  currentSearch = event.target.value;
   renderProducts();
 });
 
@@ -753,10 +855,13 @@ async function initStorefront() {
   restoreCart();
   applyStore(readCachedPublicStore());
   setLanguage(localStorage.getItem("storeLanguage") || "ar");
+  updateFilterControls();
   const loaded = await loadBackendStore();
   if (loaded) {
     setLanguage(currentLang);
+    updateFilterControls();
   }
 }
 
 initStorefront();
+

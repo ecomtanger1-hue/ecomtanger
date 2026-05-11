@@ -11,8 +11,12 @@ form.addEventListener("submit", async (event) => {
     const next = new URLSearchParams(window.location.search).get("next") || "admin.html";
     window.location.href = next;
   } catch (error) {
-    message.textContent = StoreBackend.enabled()
-      ? "Login failed. Check email and password."
-      : "Login failed. Add Supabase credentials or start the local server for fallback mode.";
+    if (!StoreBackend.enabled()) {
+      message.textContent = "Login failed. Add Supabase credentials or start the local server for fallback mode.";
+      return;
+    }
+    message.textContent = error.message === "Admin access required"
+      ? "Login failed. This user is not approved as an admin."
+      : "Login failed. Check email and password.";
   }
 });

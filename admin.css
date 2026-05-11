@@ -860,6 +860,38 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.create-field-grid [data-custom-category-field] {
+  grid-column: 1 / -1;
+}
+
+.category-image-field {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 12px;
+  align-items: end;
+  padding: 12px;
+  border: 1px solid #dfd7cc;
+  border-radius: 8px;
+  background: #fffdf9;
+}
+
+.category-image-field[hidden] {
+  display: none;
+}
+
+.category-image-field strong,
+.category-image-field small {
+  display: block;
+}
+
+.category-image-field small {
+  margin-top: 4px;
+  color: #776d63;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
 .create-form-panel label,
 .create-side-panel label,
 .media-dropzone label {
