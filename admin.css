@@ -1060,6 +1060,25 @@
   border-top: 1px solid #e4ded5;
 }
 
+.selling-summary-panel {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid #ded8ce;
+  border-radius: 8px;
+  background: #fbfaf8;
+}
+
+.compact-title-row {
+  display: block;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 14px;
+}
+
 .rich-description-field {
   position: relative;
   display: grid;
@@ -1374,6 +1393,86 @@
   background: #fff;
 }
 
+.product-facts-card {
+  background: #fff;
+}
+
+.publish-checklist {
+  display: grid;
+  gap: 7px;
+  padding: 12px;
+  border: 1px solid #ded8ce;
+  border-radius: 8px;
+  background: #fbfaf8;
+}
+
+.publish-checklist strong {
+  margin-bottom: 2px;
+  font-size: 0.84rem;
+}
+
+.publish-checklist span {
+  color: #776d63;
+  font-size: 0.78rem;
+  font-weight: 820;
+  line-height: 1.35;
+}
+
+.publish-checklist span.done {
+  color: #137a4a;
+}
+
+.mini-product-preview {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ded8ce;
+  border-radius: 8px;
+  background: #fbfaf8;
+}
+
+.mini-product-preview img,
+.mini-product-placeholder {
+  width: 72px;
+  height: 72px;
+  border-radius: 7px;
+  object-fit: cover;
+  background: #f2ede4;
+}
+
+.mini-product-placeholder {
+  display: grid;
+  place-items: center;
+  color: #9a9188;
+  font-size: 0.74rem;
+  font-weight: 900;
+}
+
+.mini-product-preview strong,
+.mini-product-preview span,
+.mini-product-preview p {
+  display: block;
+  margin: 0;
+}
+
+.mini-product-preview strong {
+  font-size: 0.86rem;
+}
+
+.mini-product-preview span {
+  margin-top: 4px;
+  font-weight: 950;
+}
+
+.mini-product-preview p {
+  margin-top: 4px;
+  color: #776d63;
+  font-size: 0.74rem;
+  line-height: 1.35;
+}
+
 .full-width-action {
   width: 100%;
   min-height: 44px;
@@ -1402,7 +1501,8 @@ a.full-width-action {
   .admin-layout,
   .admin-stats,
   .product-dashboard-tools,
-  .form-grid {
+  .form-grid,
+  .summary-grid {
     grid-template-columns: 1fr;
   }
 
