@@ -504,6 +504,25 @@ function stockText(product, soldOut, lowStock) {
   return lowStock ? t("lowStock") : t("cod");
 }
 
+function productHighlights(product) {
+  const highlights = product.highlights?.[currentLang] || product.highlights?.ar || product.highlights?.fr || [];
+  if (Array.isArray(highlights)) return highlights.filter(Boolean);
+  return String(highlights || "")
+    .split("\n")
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function productDecisionFacts(product, soldOut, lowStock) {
+  const facts = [
+    ...productHighlights(product),
+    stockText(product, soldOut, lowStock),
+    t("deliveryPromise"),
+    t("paymentPromise"),
+  ];
+  return [...new Set(facts.filter(Boolean))].slice(0, 5);
+}
+
 function productGallery(product, discount) {
   const images = (product.images || []).filter(Boolean);
   if (!images.length) {
@@ -533,24 +552,37 @@ function productGallery(product, discount) {
 
 function orderForm(product, variants, soldOut) {
   const maxQty = productHasManagedStock(product) && Number(product.stock) > 0 ? ` max="${Number(product.stock)}"` : "";
-  const firstAvailableVariant = variants.find((variant) => Number(variant.stock || 0) > 0) || variants[0];
+  const firstAvailableVariant =
+    variants.find((variant) => variant.stock === undefined || variant.stock === null || variant.stock === "" || Number(variant.stock) > 0) || variants[0];
   const firstExtraPrice = Number(firstAvailableVariant?.extraPrice || 0);
+  const managedStock = productHasManagedStock(product);
+  const lowStock = managedStock && !soldOut && Number(product.stock || 0) <= 5;
+  const discount = discountPercent(product);
+  const intro = plainDescription(product);
+  const facts = productDecisionFacts(product, soldOut, lowStock);
   return `
     <form class="checkout-form product-order-form landing-order-form" data-product-order data-base-price="${Number(product.price || 0)}">
-      <span class="eyebrow">${t("orderSummary")}</span>
-      <h2>${t("orderTitle")}</h2>
-      <label>
-        <span>${t("nameLabel")}</span>
-        <input name="name" type="text" placeholder="${t("namePlaceholder")}" required />
-      </label>
-      <label>
-        <span>${t("phoneLabel")}</span>
-        <input name="phone" type="tel" placeholder="06 00 00 00 00" required />
-      </label>
-      <label>
-        <span>${t("addressLabel")}</span>
-        <input name="address" type="text" placeholder="${t("addressPlaceholder")}" required />
-      </label>
+      <div class="buy-box-header">
+        <span class="eyebrow">${categoryText(product)} · ${t("limitedOffer")}</span>
+        <h1>${localText(product.title)}</h1>
+        ${intro ? `<p class="buy-box-intro">${intro}</p>` : ""}
+        <div class="landing-price-row">
+          ${product.oldPrice ? `<span>${money(product.oldPrice)}</span>` : ""}
+          <strong>${money(product.price)}</strong>
+          ${discount ? `<em>-${discount}%</em>` : ""}
+        </div>
+        <div class="product-status-row">
+          <span>${stockText(product, soldOut, lowStock)}</span>
+          <span>${t("delivery")}</span>
+        </div>
+        ${
+          facts.length
+            ? `<ul class="quick-fact-list">
+                ${facts.map((fact) => `<li>${escapeHtml(fact)}</li>`).join("")}
+              </ul>`
+            : ""
+        }
+      </div>
       ${
         variants.length
           ? `<fieldset class="variant-choice-group">
@@ -559,7 +591,8 @@ function orderForm(product, variants, soldOut) {
                 ${variants
                   .map(
                     (variant) => {
-                      const unavailable = Number(variant.stock || 0) <= 0;
+                      const variantHasManagedStock = variant.stock !== undefined && variant.stock !== null && variant.stock !== "";
+                      const unavailable = variantHasManagedStock && Number(variant.stock) <= 0;
                       return `
                         <label class="variant-choice ${unavailable ? "is-disabled" : ""}">
                           <input name="variant" type="radio" value="${variant.id}" data-extra-price="${Number(variant.extraPrice || 0)}" ${firstAvailableVariant?.id === variant.id ? "checked" : ""} ${unavailable ? "disabled" : ""} />
@@ -581,6 +614,20 @@ function orderForm(product, variants, soldOut) {
           <button type="button" data-qty-step="1" aria-label="+">+</button>
         </div>
       </label>
+      <div class="order-contact-fields">
+        <label>
+          <span>${t("nameLabel")}</span>
+          <input name="name" type="text" placeholder="${t("namePlaceholder")}" required />
+        </label>
+        <label>
+          <span>${t("phoneLabel")}</span>
+          <input name="phone" type="tel" placeholder="06 00 00 00 00" required />
+        </label>
+        <label>
+          <span>${t("addressLabel")}</span>
+          <input name="address" type="text" placeholder="${t("addressPlaceholder")}" required />
+        </label>
+      </div>
       <div class="order-cost-preview">
         <span>${t("estimatedTotal")}</span>
         <strong data-order-total>${money(Number(product.price || 0) + firstExtraPrice)}</strong>
@@ -657,25 +704,15 @@ function render() {
       <section class="product-landing-hero">
         ${productGallery(product, discount)}
 
-        <div class="detail-body page-detail-body landing-summary">
-          <span class="eyebrow">${categoryText(product)} · ${t("limitedOffer")}</span>
-          <h1>${localText(product.title)}</h1>
-          ${plainDescription(product) ? `<p class="desktop-product-intro">${plainDescription(product)}</p>` : ""}
-          <div class="landing-price-row">
-            ${product.oldPrice ? `<span>${money(product.oldPrice)}</span>` : ""}
-            <strong>${money(product.price)}</strong>
-          </div>
-          <div class="product-status-row">
-            <span>${stockText(product, soldOut, lowStock)}</span>
-            <span>${t("delivery")}</span>
-          </div>
-          <a class="primary-action landing-scroll-cta" href="#order-form">${t("sendWhatsapp")}</a>
-        </div>
-
         <div id="order-form" class="landing-order-wrap">
           ${orderForm(product, variants, soldOut)}
         </div>
       </section>
+
+      <a class="mobile-sticky-pdp-cta" href="#order-form">
+        <span>${money(product.price)}</span>
+        <strong>${soldOut ? t("outOfStock") : t("sendWhatsapp")}</strong>
+      </a>
 
       <section class="product-detail-layout">
       <section class="landing-story">
