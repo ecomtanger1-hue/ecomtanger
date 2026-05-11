@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CasaTanja Admin</title>
     <link rel="stylesheet" href="styles.css" />
-    <link rel="stylesheet" href="admin.css" />
+    <link rel="stylesheet" href="admin.css?v=4" />
   </head>
   <body class="admin-body">
     <div class="admin-shell">
@@ -40,6 +40,7 @@
         </nav>
         <div class="side-quick-actions">
           <a class="primary-action" href="product-create.html">New product</a>
+          <button class="ghost-admin-button" type="button" data-open-category-modal>New category</button>
           <a class="admin-store-link" href="index.html">View storefront</a>
         </div>
         <div class="side-footer-card">
@@ -56,7 +57,10 @@
             <h1>Store operations</h1>
             <p>Manage products, orders, and store settings from one focused workspace.</p>
           </div>
-          <a class="primary-action" href="product-create.html">New product</a>
+          <div class="dashboard-hero-actions">
+            <a class="primary-action" href="product-create.html">New product</a>
+            <button class="ghost-admin-button" type="button" data-open-category-modal>New category</button>
+          </div>
         </header>
 
         <section class="admin-stats" aria-label="Store stats">
@@ -84,7 +88,10 @@
               <h2>Products</h2>
               <p>Open product landing pages, monitor status, and edit listings in the full-page editor.</p>
             </div>
-            <a class="primary-action" href="product-create.html">Create product</a>
+            <div class="dashboard-hero-actions">
+              <a class="primary-action" href="product-create.html">Create product</a>
+              <button class="ghost-admin-button" type="button" data-open-category-modal>New category</button>
+            </div>
           </div>
           <div class="product-dashboard-tools">
             <label class="admin-search product-admin-search">
@@ -140,9 +147,49 @@
       </main>
     </div>
 
+    <div class="admin-modal" data-category-modal hidden>
+      <div class="admin-modal-card" role="dialog" aria-modal="true" aria-labelledby="category-modal-title">
+        <div class="admin-modal-heading">
+          <div>
+            <span class="eyebrow">Catalog category</span>
+            <h2 id="category-modal-title">New category</h2>
+            <p>Add a category name and the circular image used on the storefront.</p>
+          </div>
+          <button class="ghost-admin-button icon-admin-button" type="button" data-close-category-modal aria-label="Close">X</button>
+        </div>
+        <form class="admin-form category-form" data-category-form>
+          <label>
+            Category name
+            <input name="categoryName" placeholder="Example: Bags, Beauty, Kitchen" required />
+          </label>
+          <label>
+            Image URL
+            <input name="categoryImageUrl" placeholder="https://example.com/category.jpg" />
+          </label>
+          <label>
+            Or upload image
+            <input name="categoryImageUpload" type="file" accept="image/*" />
+          </label>
+          <label>
+            Sort order
+            <input name="categorySortOrder" type="number" min="0" value="100" />
+          </label>
+          <label class="check-row">
+            <input name="categoryActive" type="checkbox" checked />
+            Show on storefront
+          </label>
+          <p class="form-note" data-category-status></p>
+          <div class="admin-actions">
+            <button class="primary-action" type="submit">Save category</button>
+            <button class="ghost-admin-button" type="button" data-close-category-modal>Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     <script src="supabase-service.js"></script>
-    <script src="admin.js?v=5"></script>
+    <script src="admin.js?v=6"></script>
   </body>
 </html>

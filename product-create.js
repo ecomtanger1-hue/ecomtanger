@@ -11,13 +11,9 @@ const richEditor = document.querySelector("[data-rich-editor]");
 const descriptionValue = document.querySelector("[data-description-value]");
 const editorPopover = document.querySelector("[data-editor-popover]");
 const editorImageUpload = document.querySelector("[data-editor-image-upload]");
-const customCategoryField = document.querySelector("[data-custom-category-field]");
-const categoryImageField = document.querySelector("[data-category-image-field]");
-const categorySuggestions = document.querySelector("#category-suggestions");
 const editingProductId = Number(new URLSearchParams(window.location.search).get("id")) || null;
 
 const defaultCategories = ["Maison", "Cuisine", "Tech", "Beaute", "Clothing"];
-let knownCategories = [];
 
 const variantPresets = {
   Size: ["S", "M", "L", "XL"],
@@ -33,59 +29,27 @@ let customVariantValues = [];
 let variantDrafts = {};
 let savedEditorRange = null;
 
-function updateCustomCategoryVisibility() {
-  const isCustom = form.category.value === "__custom";
-  customCategoryField.hidden = !isCustom;
-  categoryImageField.hidden = !isCustom;
-  if (isCustom) form.customCategory.focus();
+function categoryTitle(category) {
+  if (typeof category?.title === "string") return category.title;
+  return category?.title?.ar || category?.title?.fr || category?.id || "";
 }
 
-function currentCategoryValue() {
-  if (form.category.value !== "__custom") return form.category.value;
-  return form.customCategory.value.trim();
-}
-
-function addCategoryOption(category) {
-  if (!category || category === "__custom") return;
-  if ([...form.category.options].some((option) => option.value === category)) return;
-  const customOption = form.category.querySelector('option[value="__custom"]');
+function addCategoryOption(category, label = category) {
+  if (!category) return;
+  const existing = [...form.category.options].find((option) => option.value === category);
+  if (existing) {
+    existing.textContent = label || category;
+    return;
+  }
   const option = new Option(category, category);
-  form.category.add(option, customOption || null);
+  option.textContent = label || category;
+  form.category.add(option);
 }
 
 function renderCategorySuggestions(products = [], categoriesFromStore = []) {
-  knownCategories = categoriesFromStore;
-  const categories = [...new Set([...defaultCategories, ...categoriesFromStore.map((category) => category.id), ...products.map((product) => product.category).filter(Boolean)])];
-  categories.forEach(addCategoryOption);
-  if (categorySuggestions) {
-    categorySuggestions.innerHTML = categories.map((category) => `<option value="${category}"></option>`).join("");
-  }
-}
-
-async function categoryImageSource(file) {
-  if (StoreBackend.enabled()) return StoreBackend.uploadImage(file, "categories");
-  return imageToCompressedDataUrl(file, 700, 0.82);
-}
-
-function existingCategoryImage(categoryId) {
-  return knownCategories.find((category) => category.id === categoryId)?.imageUrl || "";
-}
-
-async function saveCustomCategoryIfNeeded(product) {
-  if (form.category.value !== "__custom") return;
-  const categoryId = product.category;
-  const pastedImage = form.customCategoryImageUrl.value.trim();
-  const uploadedFile = form.customCategoryImageUpload.files?.[0];
-  const imageUrl = uploadedFile ? await categoryImageSource(uploadedFile) : pastedImage || existingCategoryImage(categoryId);
-  if (!imageUrl) {
-    throw new Error("Add a category image before saving this new category.");
-  }
-  await StoreBackend.saveCategory({
-    id: categoryId,
-    title: { ar: categoryId, fr: categoryId },
-    imageUrl,
-    active: true,
-  });
+  defaultCategories.forEach((category) => addCategoryOption(category));
+  categoriesFromStore.forEach((category) => addCategoryOption(category.id, categoryTitle(category)));
+  products.map((product) => product.category).filter(Boolean).forEach((category) => addCategoryOption(category));
 }
 
 function fileToDataUrl(file) {
@@ -329,7 +293,7 @@ function productPayload() {
 
   return {
     sku: form.sku.value.trim(),
-    category: currentCategoryValue() || "Maison",
+    category: form.category.value || "Maison",
     price: Number(form.price.value || 0),
     oldPrice: form.oldPrice.value ? Number(form.oldPrice.value) : null,
     stock: form.stock.value === "" ? "" : Number(form.stock.value),
@@ -369,8 +333,6 @@ function fillProductForm(product) {
   form.sku.value = product.sku || "";
   addCategoryOption(product.category);
   form.category.value = product.category || "Maison";
-  form.customCategory.value = "";
-  updateCustomCategoryVisibility();
   form.status.value = product.active === false ? "draft" : "active";
   form.images.value = (product.images || []).join("\n");
   form.price.value = product.price ?? "";
@@ -526,11 +488,6 @@ form.addEventListener("change", async (event) => {
     renderPresetChips();
   }
 
-  if (event.target === form.category) {
-    updateCustomCategoryVisibility();
-    updateCompletion();
-  }
-
   if (event.target === form.variantPreset) {
     selectedVariantValues = [];
     customVariantValues = [];
@@ -572,7 +529,6 @@ form.addEventListener("submit", async (event) => {
   statusMessage.textContent = "Saving...";
   try {
     const payload = productPayload();
-    await saveCustomCategoryIfNeeded(payload);
     const product = await StoreBackend.saveProduct(payload, editingProductId);
     statusMessage.textContent = editingProductId ? `Product #${product.id} updated` : `Product #${product.id} saved`;
     setTimeout(() => {
@@ -587,7 +543,6 @@ form.addEventListener("submit", async (event) => {
 renderImages();
 renderPresetChips();
 renderCategorySuggestions([], []);
-updateCustomCategoryVisibility();
 updateCompletion();
 StoreBackend.requireAdmin()
   .then(loadEditableProduct)

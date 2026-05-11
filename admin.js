@@ -1,4 +1,4 @@
-let store = { products: [], orders: [], settings: {} };
+let store = { products: [], categories: [], orders: [], settings: {} };
 let currentProductFilter = "all";
 
 const productsList = document.querySelector("[data-admin-products]");
@@ -6,6 +6,9 @@ const ordersList = document.querySelector("[data-admin-orders]");
 const settingsForm = document.querySelector("[data-settings-form]");
 const orderSearch = document.querySelector("[data-order-search]");
 const productSearch = document.querySelector("[data-product-search]");
+const categoryModal = document.querySelector("[data-category-modal]");
+const categoryForm = document.querySelector("[data-category-form]");
+const categoryStatus = document.querySelector("[data-category-status]");
 
 function money(value) {
   return `${Number(value || 0)} MAD`;
@@ -24,6 +27,35 @@ function productStockLabel(product) {
 function productStatus(product) {
   if (product.featured) return "Featured";
   return product.active === false ? "Draft" : "Live";
+}
+
+function categoryIdFromName(name) {
+  return name
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^\p{L}\p{N}-]/gu, "")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+async function uploadedCategoryImage() {
+  const file = categoryForm.categoryImageUpload.files?.[0];
+  if (!file) return "";
+  if (!StoreBackend.enabled()) throw new Error("Image upload needs Supabase. Paste an image URL instead for local fallback mode.");
+  return StoreBackend.uploadImage(file, "categories");
+}
+
+function openCategoryModal() {
+  categoryForm.reset();
+  categoryForm.categoryActive.checked = true;
+  categoryForm.categorySortOrder.value = "100";
+  categoryStatus.textContent = "";
+  categoryModal.hidden = false;
+  categoryForm.categoryName.focus();
+}
+
+function closeCategoryModal() {
+  categoryModal.hidden = true;
 }
 
 async function loadStore() {
@@ -160,6 +192,14 @@ document.addEventListener("click", async (event) => {
   const productFilter = event.target.closest("[data-product-filter]");
   const editProduct = event.target.closest("[data-edit-product]");
 
+  if (event.target.closest("[data-open-category-modal]")) {
+    openCategoryModal();
+  }
+
+  if (event.target.closest("[data-close-category-modal]") || event.target === categoryModal) {
+    closeCategoryModal();
+  }
+
   if (tab) {
     document.querySelectorAll("[data-admin-tab]").forEach((button) => button.classList.toggle("active", button === tab));
     document.querySelectorAll("[data-panel]").forEach((panel) => panel.classList.toggle("active", panel.dataset.panel === tab.dataset.adminTab));
@@ -199,6 +239,39 @@ settingsForm.addEventListener("submit", async (event) => {
     featuredProductId: Number(settingsForm.featuredProductId.value) || null,
   });
   await loadStore();
+});
+
+categoryForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const name = categoryForm.categoryName.value.trim();
+  const id = categoryIdFromName(name);
+  const pastedImage = categoryForm.categoryImageUrl.value.trim();
+
+  if (!id) {
+    categoryStatus.textContent = "Add a clear category name.";
+    return;
+  }
+
+  categoryStatus.textContent = "Saving category...";
+  try {
+    const imageUrl = await uploadedCategoryImage() || pastedImage;
+    if (!imageUrl) {
+      categoryStatus.textContent = "Add a category image before saving.";
+      return;
+    }
+    await StoreBackend.saveCategory({
+      id,
+      title: { ar: name, fr: name },
+      imageUrl,
+      active: categoryForm.categoryActive.checked,
+      sortOrder: Number(categoryForm.categorySortOrder.value || 100),
+    });
+    await loadStore();
+    categoryStatus.textContent = "Category saved.";
+    setTimeout(closeCategoryModal, 350);
+  } catch (error) {
+    categoryStatus.textContent = error.message || "Could not save category.";
+  }
 });
 
 loadStore().catch((error) => {

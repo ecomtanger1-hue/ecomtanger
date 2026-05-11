@@ -120,7 +120,13 @@
   }
 
   async function requireAdmin() {
-    if (!enabled()) return true;
+    if (!enabled()) {
+      const session = await localApi("/api/session");
+      if (session.authenticated) return session;
+      const next = encodeURIComponent(`${window.location.pathname}${window.location.search}`);
+      window.location.href = `admin-login.html?next=${next}`;
+      throw new Error("Admin login required");
+    }
     const session = await getSession();
     if (!session) {
       const next = encodeURIComponent(`${window.location.pathname}${window.location.search}`);

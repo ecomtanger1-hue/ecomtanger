@@ -330,11 +330,6 @@ async function handleApi(request, response, url) {
 
 function serveStatic(request, response, url) {
   const pathname = decodeURIComponent(url.pathname);
-  if (["/admin.html", "/admin.js", "/product-create.html", "/product-create.js"].includes(pathname) && !isAdmin(request)) {
-    redirect(response, `/admin-login.html?next=${encodeURIComponent(pathname)}`);
-    return;
-  }
-
   const target = pathname === "/" ? "/index.html" : pathname;
   const filePath = path.normalize(path.join(root, target));
 
