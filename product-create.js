@@ -8,6 +8,7 @@ const variantControls = document.querySelector("[data-variant-controls]");
 const presetChipGrid = document.querySelector("[data-preset-chip-grid]");
 const variantTable = document.querySelector("[data-variant-table]");
 const richEditor = document.querySelector("[data-rich-editor]");
+const htmlSourceEditor = document.querySelector("[data-rich-editor-source]");
 const descriptionValue = document.querySelector("[data-description-value]");
 const editorPopover = document.querySelector("[data-editor-popover]");
 const editorImageUpload = document.querySelector("[data-editor-image-upload]");
@@ -30,6 +31,7 @@ let selectedVariantValues = [];
 let customVariantValues = [];
 let variantDrafts = {};
 let savedEditorRange = null;
+let sourceMode = false;
 
 function categoryTitle(category) {
   if (typeof category?.title === "string") return category.title;
@@ -210,8 +212,27 @@ function renderVariantTable() {
   `;
 }
 
+function sanitizeDescriptionHtml(html) {
+  const template = document.createElement("template");
+  template.innerHTML = html || "";
+  template.content.querySelectorAll("script, style, iframe, object, embed, link, meta").forEach((node) => node.remove());
+  template.content.querySelectorAll("*").forEach((node) => {
+    [...node.attributes].forEach((attribute) => {
+      const name = attribute.name.toLowerCase();
+      const value = attribute.value.trim().toLowerCase();
+      if (name.startsWith("on")) node.removeAttribute(attribute.name);
+      if ((name === "href" || name === "src") && value.startsWith("javascript:")) node.removeAttribute(attribute.name);
+    });
+  });
+  return template.innerHTML.trim();
+}
+
+function currentDescriptionHtml() {
+  return sourceMode ? htmlSourceEditor.value.trim() : richEditor.innerHTML.trim();
+}
+
 function syncDescriptionValue() {
-  descriptionValue.value = richEditor.innerHTML.trim();
+  descriptionValue.value = sanitizeDescriptionHtml(currentDescriptionHtml());
   updateCompletion();
 }
 
@@ -239,7 +260,10 @@ function restoreEditorSelection() {
 }
 
 function plainDescription() {
-  return richEditor.innerText.trim();
+  if (!sourceMode) return richEditor.innerText.trim();
+  const template = document.createElement("template");
+  template.innerHTML = htmlSourceEditor.value;
+  return template.content.textContent.trim();
 }
 
 function focusEditor() {
@@ -295,7 +319,31 @@ function insertSpacer() {
 
 function toggleFullscreenEditor() {
   document.body.classList.toggle("rich-editor-fullscreen");
-  focusEditor();
+  if (sourceMode) htmlSourceEditor.focus();
+  else focusEditor();
+}
+
+function toggleSourceMode() {
+  const sourceButton = document.querySelector("[data-editor-command='sourceMode']");
+  if (sourceMode) {
+    const cleanHtml = sanitizeDescriptionHtml(htmlSourceEditor.value);
+    richEditor.innerHTML = cleanHtml;
+    htmlSourceEditor.value = cleanHtml;
+    htmlSourceEditor.hidden = true;
+    richEditor.hidden = false;
+    sourceMode = false;
+    sourceButton?.classList.remove("is-active");
+    syncDescriptionValue();
+    focusEditor();
+    return;
+  }
+  syncDescriptionValue();
+  htmlSourceEditor.value = descriptionValue.value;
+  richEditor.hidden = true;
+  htmlSourceEditor.hidden = false;
+  sourceMode = true;
+  sourceButton?.classList.add("is-active");
+  htmlSourceEditor.focus();
 }
 
 function setEditorDirection(direction) {
@@ -482,7 +530,9 @@ document.addEventListener("click", (event) => {
   if (editorButton) {
     saveEditorSelection();
     const command = editorButton.dataset.editorCommand;
-    if (command === "fullscreen") toggleFullscreenEditor();
+    if (command === "sourceMode") toggleSourceMode();
+    else if (command === "fullscreen") toggleFullscreenEditor();
+    else if (sourceMode) return;
     else if (command === "directionRtl") setEditorDirection("rtl");
     else if (command === "directionLtr") setEditorDirection("ltr");
     else if (command === "createLink") insertLink();
@@ -550,6 +600,8 @@ richEditor.addEventListener("blur", () => {
   saveEditorSelection();
   syncDescriptionValue();
 });
+
+htmlSourceEditor.addEventListener("input", syncDescriptionValue);
 
 document.addEventListener("change", (event) => {
   const format = event.target.closest("[data-editor-format]");

@@ -1133,6 +1133,11 @@
   background: #f2ede4;
 }
 
+.rich-editor-toolbar button.is-active {
+  background: #17191c;
+  color: #fff;
+}
+
 .rich-editor-toolbar select {
   width: auto;
   min-width: 56px;
@@ -1182,6 +1187,23 @@
   line-height: 1.75;
   outline: none;
   text-align: right;
+}
+
+.rich-editor-source {
+  width: 100%;
+  min-height: 340px;
+  padding: 18px;
+  border: 0;
+  color: #241e19;
+  background: #111315;
+  color: #f6f1e9;
+  font-family: Consolas, "Liberation Mono", monospace;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  outline: none;
+  resize: vertical;
+  direction: ltr;
+  text-align: left;
 }
 
 .rich-editor-surface:empty::before {
@@ -1250,6 +1272,10 @@
 }
 
 .rich-editor-fullscreen .rich-editor-surface {
+  min-height: calc(100vh - 138px);
+}
+
+.rich-editor-fullscreen .rich-editor-source {
   min-height: calc(100vh - 138px);
 }
 

@@ -118,6 +118,9 @@
                 <button type="button" data-editor-command="fullscreen" title="Fullscreen" aria-label="Fullscreen">
                   <svg viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M21 16v5h-5"/></svg>
                 </button>
+                <button type="button" data-editor-command="sourceMode" title="HTML source" aria-label="HTML source">
+                  <svg viewBox="0 0 24 24"><path d="m8 9-4 3 4 3"/><path d="m16 9 4 3-4 3"/><path d="m14 5-4 14"/></svg>
+                </button>
                 <button type="button" data-editor-command="bold" title="Bold"><strong>B</strong></button>
                 <button type="button" data-editor-command="italic" title="Italic"><em>i</em></button>
                 <button type="button" data-editor-command="underline" title="Underline"><u>U</u></button>
@@ -201,6 +204,7 @@
               <div class="editor-popover" data-editor-popover hidden></div>
               <input class="editor-file-input" data-editor-image-upload type="file" accept="image/*" />
               <div class="rich-editor-surface" data-rich-editor dir="rtl" contenteditable="true" aria-label="Arabic description" data-placeholder="اكتب وصف المنتج هنا..."></div>
+              <textarea class="rich-editor-source" data-rich-editor-source dir="ltr" spellcheck="false" hidden aria-label="HTML source"></textarea>
               <textarea name="description" data-description-value hidden></textarea>
             </section>
           </section>
@@ -288,6 +292,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     <script src="supabase-service.js"></script>
-    <script src="product-create.js?v=12"></script>
+    <script src="product-create.js?v=13"></script>
   </body>
 </html>
