@@ -45,6 +45,11 @@ const translations = {
     boxDefault: "المنتج، التغليف، وأي ملحقات موضحة في الصور.",
     deliveryReturnsText: "التوصيل في طنجة خلال 24-48 ساعة. الدفع عند الاستلام متاح، ونراجع أي مشكل عبر واتساب.",
     howToOrderText: "اختر الكمية أو الخيار المناسب، املأ معلوماتك، ثم أكد الطلب عبر واتساب.",
+    sectionDescription: "الوصف",
+    sectionSpecs: "المعلومات",
+    sectionDelivery: "التوصيل",
+    sectionRelated: "مشابهة",
+    fullscreenImage: "عرض الصورة",
     sendWhatsapp: "أكد الطلب عبر واتساب",
     note: "الدفع عند الاستلام متاح. سنؤكد معك التفاصيل قبل الإرسال.",
     missing: "لم نجد هذا المنتج.",
@@ -100,6 +105,11 @@ const translations = {
     boxDefault: "Le produit, son emballage, et les accessoires visibles sur les photos.",
     deliveryReturnsText: "Livraison a Tanger sous 24-48h. Paiement a la livraison disponible, probleme traite sur WhatsApp.",
     howToOrderText: "Choisissez la quantite ou l'option, renseignez vos infos, puis confirmez via WhatsApp.",
+    sectionDescription: "Description",
+    sectionSpecs: "Infos",
+    sectionDelivery: "Livraison",
+    sectionRelated: "Similaires",
+    fullscreenImage: "Voir l'image",
     sendWhatsapp: "Confirmer via WhatsApp",
     note: "Le paiement a la livraison est disponible. On confirme les details avant l'envoi.",
     missing: "Produit introuvable.",
@@ -364,6 +374,64 @@ function productSpecs(product) {
     : [];
 }
 
+function setMetaTag(selector, attrs) {
+  let node = document.head.querySelector(selector);
+  if (!node) {
+    node = document.createElement("meta");
+    Object.entries(attrs.key || {}).forEach(([name, value]) => node.setAttribute(name, value));
+    document.head.appendChild(node);
+  }
+  Object.entries(attrs.values || {}).forEach(([name, value]) => node.setAttribute(name, value));
+}
+
+function setLinkTag(selector, attrs) {
+  let node = document.head.querySelector(selector);
+  if (!node) {
+    node = document.createElement("link");
+    document.head.appendChild(node);
+  }
+  Object.entries(attrs).forEach(([name, value]) => node.setAttribute(name, value));
+}
+
+function updateProductMeta(product, soldOut) {
+  const title = `${localText(product.title)} | CasaTanja`;
+  const description = (productSummary(product) || plainDescription(product) || t("note")).slice(0, 155);
+  const image = (product.images || []).find(Boolean) || "";
+  const url = window.location.href;
+  document.title = title;
+  setMetaTag('meta[name="description"]', { key: { name: "description" }, values: { content: description } });
+  setMetaTag('meta[property="og:title"]', { key: { property: "og:title" }, values: { content: title } });
+  setMetaTag('meta[property="og:description"]', { key: { property: "og:description" }, values: { content: description } });
+  setMetaTag('meta[property="og:type"]', { key: { property: "og:type" }, values: { content: "product" } });
+  setMetaTag('meta[property="og:url"]', { key: { property: "og:url" }, values: { content: url } });
+  if (image) setMetaTag('meta[property="og:image"]', { key: { property: "og:image" }, values: { content: image } });
+  setLinkTag('link[rel="canonical"]', { rel: "canonical", href: url });
+
+  let schema = document.querySelector("#product-json-ld");
+  if (!schema) {
+    schema = document.createElement("script");
+    schema.id = "product-json-ld";
+    schema.type = "application/ld+json";
+    document.head.appendChild(schema);
+  }
+  schema.textContent = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: localText(product.title),
+    description,
+    image: product.images || [],
+    sku: product.sku || undefined,
+    category: categoryText(product),
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "MAD",
+      price: Number(product.price || 0),
+      availability: soldOut ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
+      url,
+    },
+  });
+}
+
 function productHasManagedStock(product) {
   return product.stock !== undefined && product.stock !== null && product.stock !== "";
 }
@@ -529,12 +597,7 @@ function productHighlights(product) {
 }
 
 function productDecisionFacts(product, soldOut, lowStock) {
-  const facts = [
-    ...productHighlights(product),
-    stockText(product, soldOut, lowStock),
-    t("deliveryPromise"),
-    t("paymentPromise"),
-  ];
+  const facts = productHighlights(product);
   return [...new Set(facts.filter(Boolean))].slice(0, 5);
 }
 
@@ -551,12 +614,15 @@ function productGallery(product, discount) {
   return `
     <div class="detail-gallery page-gallery landing-gallery ${images.length > 1 ? "has-thumbs" : ""}">
       ${discount ? `<span class="discount-ribbon">-${discount}%</span>` : ""}
+      <button class="gallery-zoom-button" type="button" data-open-gallery="${images[0]}" aria-label="${t("fullscreenImage")}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M21 16v5h-5"/></svg>
+      </button>
       <img class="detail-main-image" src="${images[0]}" alt="${localText(product.title)}" loading="eager" fetchpriority="high" />
       ${
         images.length > 1
           ? `<div class="detail-thumbs">
               ${images
-                .map((image, index) => `<button class="${index === 0 ? "active" : ""}" type="button" data-thumb="${image}" aria-label="${localText(product.title)} ${index + 1}"><img src="${image}" alt="${localText(product.title)} ${index + 1}" /></button>`)
+                .map((image, index) => `<button class="${index === 0 ? "active" : ""}" type="button" data-thumb="${image}" aria-label="${localText(product.title)} ${index + 1}"><img src="${image}" alt="${localText(product.title)} ${index + 1}" loading="lazy" /></button>`)
                 .join("")}
             </div>`
           : ""
@@ -649,11 +715,6 @@ function orderForm(product, variants, soldOut) {
         <small>${t("totalNote")}</small>
       </div>
       <button class="whatsapp-checkout" type="submit" ${soldOut ? "disabled" : ""}>${soldOut ? t("outOfStock") : t("sendWhatsapp")}</button>
-      <div class="buy-box-assurance" aria-label="Order reassurance">
-        <span>${t("deliveryPromise")}</span>
-        <span>${t("paymentPromise")}</span>
-        <span>${t("supportPromise")}</span>
-      </div>
       <p class="checkout-note">${t("note")}</p>
     </form>
   `;
@@ -696,6 +757,26 @@ function updateOrderTotal(form) {
   totalNode.textContent = money((basePrice + extraPrice) * qty);
 }
 
+function sectionNavigation(relatedCount) {
+  return `
+    <nav class="pdp-section-nav" aria-label="Product page sections">
+      <a href="#description-section">${t("sectionDescription")}</a>
+      <a href="#specs-section">${t("sectionSpecs")}</a>
+      <a href="#delivery-section">${t("sectionDelivery")}</a>
+      ${relatedCount ? `<a href="#related-section">${t("sectionRelated")}</a>` : ""}
+    </nav>
+  `;
+}
+
+function galleryLightbox() {
+  return `
+    <div class="gallery-lightbox" data-gallery-lightbox hidden>
+      <button class="gallery-lightbox-close" type="button" data-close-gallery aria-label="Close">×</button>
+      <img data-gallery-lightbox-image alt="" />
+    </div>
+  `;
+}
+
 function render() {
   const product = products.find((item) => item.id === productId());
   if (!product) {
@@ -714,7 +795,7 @@ function render() {
   const discount = discountPercent(product);
   const specs = productSpecs(product);
   trackEvent("product_view", { productId: product.id });
-  document.title = `${localText(product.title)} | CasaTanja Deals`;
+  updateProductMeta(product, soldOut);
   page.innerHTML = `
     <section class="product-page">
       <section class="product-landing-hero">
@@ -725,13 +806,15 @@ function render() {
         </div>
       </section>
 
+      ${sectionNavigation(related.length)}
+
       <a class="mobile-sticky-pdp-cta" href="#order-form">
         <span>${money(product.price)}</span>
         <strong>${soldOut ? t("outOfStock") : t("sendWhatsapp")}</strong>
       </a>
 
       <section class="product-detail-layout">
-      <section class="landing-story">
+      <section id="description-section" class="landing-story">
         <div>
           <span class="eyebrow">${t("description")}</span>
           <h2>${localText(product.title)}</h2>
@@ -739,7 +822,7 @@ function render() {
         </div>
       </section>
 
-      <section class="landing-specs">
+      <section id="specs-section" class="landing-specs">
         <div>
           <span class="eyebrow">${t("technicalSheet")}</span>
           <h2>${t("technicalSheet")}</h2>
@@ -763,10 +846,10 @@ function render() {
         </div>
         <a class="primary-action" href="#order-form">${t("sendWhatsapp")}</a>
       </section>
-      ${productFaq(product)}
+      <div id="delivery-section">${productFaq(product)}</div>
       ${
         related.length
-          ? `<section class="related-products">
+          ? `<section id="related-section" class="related-products">
               <div class="section-heading">
                 <div>
                   <span class="eyebrow">${t("relatedProducts")}</span>
@@ -790,6 +873,7 @@ function render() {
             </section>`
           : ""
       }
+      ${galleryLightbox()}
     </section>
   `;
 }
@@ -797,9 +881,30 @@ function render() {
 document.addEventListener("click", (event) => {
   const thumb = event.target.closest("[data-thumb]");
   const qtyStep = event.target.closest("[data-qty-step]");
+  const openGallery = event.target.closest("[data-open-gallery]");
+  const closeGallery = event.target.closest("[data-close-gallery]");
+  const lightbox = event.target.closest("[data-gallery-lightbox]");
   if (thumb) {
     document.querySelector(".detail-main-image").src = thumb.dataset.thumb;
+    document.querySelector("[data-open-gallery]")?.setAttribute("data-open-gallery", thumb.dataset.thumb);
     document.querySelectorAll("[data-thumb]").forEach((button) => button.classList.toggle("active", button === thumb));
+  }
+  if (openGallery) {
+    const modal = document.querySelector("[data-gallery-lightbox]");
+    const image = document.querySelector("[data-gallery-lightbox-image]");
+    if (modal && image) {
+      image.src = openGallery.dataset.openGallery;
+      image.alt = document.querySelector(".detail-main-image")?.alt || "";
+      modal.hidden = false;
+      document.body.classList.add("gallery-lightbox-open");
+    }
+  }
+  if (closeGallery || (lightbox && event.target === lightbox)) {
+    const modal = document.querySelector("[data-gallery-lightbox]");
+    if (modal) {
+      modal.hidden = true;
+      document.body.classList.remove("gallery-lightbox-open");
+    }
   }
   if (qtyStep) {
     const form = qtyStep.closest("[data-product-order]");
@@ -816,6 +921,14 @@ document.addEventListener("click", (event) => {
     trackEvent("related_product_click", { productId: Number(relatedProduct.dataset.relatedProduct), fromProductId: productId() });
     window.location.href = `product.html?id=${relatedProduct.dataset.relatedProduct}`;
   }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape") return;
+  const modal = document.querySelector("[data-gallery-lightbox]");
+  if (!modal || modal.hidden) return;
+  modal.hidden = true;
+  document.body.classList.remove("gallery-lightbox-open");
 });
 
 document.addEventListener("input", (event) => {

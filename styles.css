@@ -1355,6 +1355,79 @@ legend {
   box-shadow: 0 0 0 2px rgba(240, 101, 67, 0.14);
 }
 
+.gallery-zoom-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(21, 23, 26, 0.14);
+}
+
+.is-rtl .gallery-zoom-button {
+  right: auto;
+  left: 12px;
+}
+
+.gallery-zoom-button svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.gallery-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(12, 13, 14, 0.84);
+}
+
+.gallery-lightbox[hidden] {
+  display: none;
+}
+
+.gallery-lightbox img {
+  display: block;
+  width: min(100%, 980px);
+  max-height: calc(100vh - 88px);
+  object-fit: contain;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.gallery-lightbox-close {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+
+.gallery-lightbox-open {
+  overflow: hidden;
+}
+
 .page-detail-body {
   padding: 4px 0 0;
 }
@@ -1653,30 +1726,6 @@ legend {
   font-size: 0.76rem;
 }
 
-.buy-box-assurance {
-  display: grid;
-  gap: 7px;
-}
-
-.buy-box-assurance span {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 34px;
-  color: var(--ink);
-  font-size: 0.82rem;
-  font-weight: 850;
-}
-
-.buy-box-assurance span::before {
-  content: "";
-  flex: 0 0 auto;
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  background: var(--green);
-}
-
 .landing-benefits {
   display: grid;
   grid-template-columns: 1fr;
@@ -1686,6 +1735,33 @@ legend {
 .product-detail-layout {
   display: grid;
   gap: 18px;
+}
+
+.pdp-section-nav {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 0;
+  scrollbar-width: none;
+}
+
+.pdp-section-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.pdp-section-nav a {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 0.84rem;
+  font-weight: 900;
 }
 
 .desktop-product-intro {
@@ -2138,26 +2214,43 @@ legend {
   }
 
   .product-page {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 0.98fr) minmax(380px, 0.52fr);
     width: min(100%, 1360px);
     margin: 0 auto;
-    gap: 34px;
+    column-gap: clamp(28px, 4vw, 54px);
+    row-gap: 18px;
     align-items: start;
     padding-top: 30px;
   }
 
   .product-landing-hero {
-    grid-template-columns: minmax(0, 0.98fr) minmax(380px, 0.52fr);
-    gap: clamp(28px, 4vw, 54px);
-    align-items: start;
+    display: contents;
   }
 
   .mobile-sticky-pdp-cta {
     display: none;
   }
 
+  .pdp-section-nav {
+    position: sticky;
+    top: 0;
+    z-index: 8;
+    grid-column: 1;
+    grid-row: 2;
+    justify-content: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(229, 225, 217, 0.78);
+    background: rgba(251, 250, 247, 0.92);
+    backdrop-filter: blur(12px);
+  }
+
+  .pdp-section-nav a:hover {
+    border-color: var(--ink);
+  }
+
   .page-gallery {
     grid-column: 1;
+    grid-row: 1;
     display: block;
     gap: 14px;
     align-items: start;
@@ -2258,7 +2351,11 @@ legend {
 
   .landing-order-wrap {
     grid-column: 2;
-    grid-row: 1;
+    grid-row: 1 / span 3;
+    align-self: start;
+    min-height: 0;
+    height: 0;
+    overflow: visible;
   }
 
   .related-products {
@@ -2287,7 +2384,9 @@ legend {
   }
 
   .product-detail-layout {
-    grid-template-columns: minmax(0, 1fr) minmax(330px, 0.34fr);
+    grid-column: 1;
+    grid-row: 3;
+    grid-template-columns: 1fr;
     align-items: start;
     gap: 28px;
   }
@@ -2302,8 +2401,7 @@ legend {
   }
 
   .product-detail-layout .landing-specs {
-    position: sticky;
-    top: 92px;
+    position: static;
     padding: 22px;
   }
 
@@ -2322,6 +2420,7 @@ legend {
   }
 
   .product-faq-section {
+    grid-column: 1 / -1;
     width: min(100%, 960px);
     margin: 0 auto;
   }
@@ -2336,6 +2435,7 @@ legend {
   }
 
   .landing-repeat-cta {
+    grid-column: 1 / -1;
     grid-template-columns: 1fr auto;
     align-items: center;
     padding: 24px;
@@ -2385,6 +2485,9 @@ legend {
   .landing-order-wrap {
     grid-column: 2;
     grid-row: 1 / span 2;
+    min-height: 0;
+    height: 0;
+    overflow: visible;
   }
 
   .product-order-form {

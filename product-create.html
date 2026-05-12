@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Create Product | CasaTanja Admin</title>
     <link rel="stylesheet" href="styles.css" />
-    <link rel="stylesheet" href="admin.css?v=5" />
+    <link rel="stylesheet" href="admin.css?v=6" />
   </head>
   <body class="admin-body product-create-body">
     <div class="create-page">
@@ -35,49 +35,6 @@
         </section>
 
         <form id="product-create-form" class="product-create-grid" data-create-product-form>
-          <aside class="create-progress-panel" aria-label="Product setup">
-            <h2>Product setup</h2>
-            <div class="setup-step active">
-              <span>1</span>
-              <div>
-                <strong>Basic details</strong>
-                <small>Name, category, and images</small>
-              </div>
-            </div>
-            <div class="setup-step active">
-              <span>2</span>
-              <div>
-                <strong>Description</strong>
-                <small>Arabic copy and selling points</small>
-              </div>
-            </div>
-            <div class="setup-step">
-              <span>3</span>
-              <div>
-                <strong>Price and stock</strong>
-                <small>COD-ready product data</small>
-              </div>
-            </div>
-            <div class="setup-step">
-              <span>4</span>
-              <div>
-                <strong>Variants optional</strong>
-                <small>Size, color, material, pack</small>
-              </div>
-            </div>
-
-            <div class="completion-card">
-              <div>
-                <strong>Completion</strong>
-                <span data-completion-label>0%</span>
-              </div>
-              <div class="completion-track">
-                <span data-completion-bar></span>
-              </div>
-              <p data-completion-help>Add a product name, price, image, and description.</p>
-            </div>
-          </aside>
-
           <section class="create-form-panel">
             <div class="panel-title-row">
               <div>
@@ -249,13 +206,6 @@
           </section>
 
           <aside class="create-side-panel">
-            <section class="preview-card">
-              <h2>Product page preview</h2>
-              <p>Live snapshot of what customers see first.</p>
-              <div class="mini-product-preview" data-product-preview></div>
-              <div class="publish-checklist" data-publish-checklist></div>
-            </section>
-
             <section>
               <h2>Price and stock</h2>
               <div class="side-grid">
@@ -338,6 +288,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     <script src="supabase-service.js"></script>
-    <script src="product-create.js?v=11"></script>
+    <script src="product-create.js?v=12"></script>
   </body>
 </html>

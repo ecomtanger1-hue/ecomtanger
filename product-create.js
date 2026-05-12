@@ -316,10 +316,12 @@ function updateCompletion() {
   ];
   const done = checks.filter((check) => check.done).length;
   const percent = Math.round((done / checks.length) * 100);
-  completionLabel.textContent = `${percent}%`;
-  completionBar.style.width = `${percent}%`;
+  if (completionLabel) completionLabel.textContent = `${percent}%`;
+  if (completionBar) completionBar.style.width = `${percent}%`;
   const missingRequired = checks.filter((check) => check.required && !check.done);
-  completionHelp.textContent = missingRequired.length ? `Required: ${missingRequired.map((check) => check.label).join(", ")}.` : "Ready to save. Optional improvements can still make the product page stronger.";
+  if (completionHelp) {
+    completionHelp.textContent = missingRequired.length ? `Required: ${missingRequired.map((check) => check.label).join(", ")}.` : "Ready to save. Optional improvements can still make the product page stronger.";
+  }
   renderPublishChecklist(checks);
   renderProductPreview();
 }

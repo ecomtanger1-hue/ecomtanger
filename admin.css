@@ -777,7 +777,7 @@
 
 .product-create-grid {
   display: grid;
-  grid-template-columns: 274px minmax(580px, 1fr) 336px;
+  grid-template-columns: minmax(680px, 1fr) minmax(320px, 380px);
   gap: 24px;
   align-items: start;
 }
