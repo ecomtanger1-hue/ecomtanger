@@ -1050,8 +1050,14 @@
   padding: 0 12px;
 }
 
+.create-image-row button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
 .create-image-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
 }
 
@@ -1069,6 +1075,23 @@
   background:
     linear-gradient(135deg, rgba(18, 140, 85, 0.1), rgba(240, 101, 67, 0.08)),
     #fbfaf8;
+}
+
+.offer-display-panel {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid #ded8ce;
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(15, 139, 141, 0.08), rgba(18, 140, 85, 0.08)),
+    #fbfaf8;
+}
+
+.trust-editor-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 140px;
+  gap: 12px;
 }
 
 .compact-title-row {
@@ -1485,9 +1508,16 @@
 
 .mini-product-preview strong,
 .mini-product-preview span,
-.mini-product-preview p {
+.mini-product-preview p,
+.mini-product-preview small {
   display: block;
   margin: 0;
+}
+
+.mini-product-preview small {
+  color: #d94d31;
+  font-size: 0.72rem;
+  font-weight: 950;
 }
 
 .mini-product-preview strong {
@@ -1499,11 +1529,61 @@
   font-weight: 950;
 }
 
+.mini-product-preview del {
+  color: #8b8278;
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
 .mini-product-preview p {
   margin-top: 4px;
   color: #776d63;
   font-size: 0.74rem;
   line-height: 1.35;
+}
+
+.mini-trust-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 7px;
+}
+
+.mini-trust-row em {
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: #e7f8ed;
+  color: #0f7046;
+  font-style: normal;
+  font-size: 0.68rem;
+  font-weight: 850;
+}
+
+.mini-trust-row .tone-teal {
+  background: #e6f7fb;
+  color: #0f7880;
+}
+
+.mini-trust-row .tone-neutral {
+  background: #f2ede4;
+  color: #5a5047;
+}
+
+.mini-trust-row .tone-coral {
+  background: #fff1ed;
+  color: #d94d31;
+}
+
+.mini-product-preview button {
+  width: fit-content;
+  min-height: 30px;
+  margin-top: 8px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 7px;
+  background: #f06543;
+  color: #fff;
+  font-weight: 900;
 }
 
 .full-width-action {
@@ -1536,6 +1616,10 @@ a.full-width-action {
   .product-dashboard-tools,
   .form-grid,
   .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .trust-editor-grid {
     grid-template-columns: 1fr;
   }
 

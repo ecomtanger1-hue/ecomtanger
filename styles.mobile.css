@@ -1,0 +1,50 @@
+/* Split from styles.css so mobile and desktop edits can be made independently. */
+
+@media (max-width: 420px) {
+  .topbar {
+    gap: 5px;
+    padding-inline: 8px;
+  }
+
+  .brand {
+    max-width: 118px;
+    font-size: 0.86rem;
+  }
+
+  .brand-mark {
+    width: 32px;
+    height: 32px;
+  }
+
+  .header-search {
+    flex-basis: 78px;
+    padding-inline: 8px;
+  }
+
+  .language-toggle {
+    min-height: 36px;
+    padding-inline: 7px;
+  }
+
+  .icon-button {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@media (max-width: 899px) {
+  .product-card:active,
+  .category-card:active,
+  .pay-method:active {
+    transform: scale(0.985);
+  }
+
+  .product-card,
+  .category-card,
+  .pay-method {
+    transition:
+      transform 160ms ease,
+      box-shadow 180ms ease,
+      border-color 180ms ease;
+  }
+}

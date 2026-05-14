@@ -24,6 +24,7 @@ const translations = {
     bestOffers: "أفضل العروض",
     discountBadge: "تخفيض",
     orderSummary: "طلب سريع",
+    checkoutHeading: "اطلب الآن",
     estimatedTotal: "المجموع التقريبي",
     totalNote: "بدون مصاريف مخفية. نؤكد التفاصيل عبر واتساب قبل الإرسال.",
     deliveryPromise: "توصيل طنجة 24-48 ساعة",
@@ -50,6 +51,8 @@ const translations = {
     sectionDelivery: "التوصيل",
     sectionRelated: "مشابهة",
     fullscreenImage: "عرض الصورة",
+    ratingReviews: "({count} تقييم)",
+    availableStock: "المخزون متوفر",
     sendWhatsapp: "أكد الطلب عبر واتساب",
     note: "الدفع عند الاستلام متاح. سنؤكد معك التفاصيل قبل الإرسال.",
     missing: "لم نجد هذا المنتج.",
@@ -84,6 +87,7 @@ const translations = {
     bestOffers: "Meilleures offres",
     discountBadge: "Promo",
     orderSummary: "Commande rapide",
+    checkoutHeading: "Commander",
     estimatedTotal: "Total estime",
     totalNote: "Sans frais caches. On confirme les details sur WhatsApp avant l'envoi.",
     deliveryPromise: "Livraison Tanger 24-48h",
@@ -110,6 +114,8 @@ const translations = {
     sectionDelivery: "Livraison",
     sectionRelated: "Similaires",
     fullscreenImage: "Voir l'image",
+    ratingReviews: "({count} avis)",
+    availableStock: "Stock disponible",
     sendWhatsapp: "Confirmer via WhatsApp",
     note: "Le paiement a la livraison est disponible. On confirme les details avant l'envoi.",
     missing: "Produit introuvable.",
@@ -254,10 +260,6 @@ function t(key) {
 
 function interpolate(template, values) {
   return Object.entries(values).reduce((text, [key, value]) => text.replaceAll(`{${key}}`, value), template);
-}
-
-function socialCount(product) {
-  return Number(product.ordersThisWeek || product.socialProof || 24 + Number(product.id || 1) * 7);
 }
 
 function trackEvent(event, payload = {}) {
@@ -478,6 +480,48 @@ function cachePublicStore(store) {
   }
 }
 
+let motionObserver = null;
+const motionRevealSelector = [
+  ".page-gallery",
+  ".pdp-info-column",
+  ".order-form-section",
+  ".desktop-pdp-trust-strip",
+  ".pdp-section-nav",
+  ".landing-story",
+  ".landing-specs",
+  ".landing-repeat-cta",
+  ".product-faq-section",
+  ".related-products",
+  ".product-card",
+].join(", ");
+
+function prefersReducedMotion() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function applyMotionReveal(root = document) {
+  if (prefersReducedMotion()) return;
+  if (!motionObserver) {
+    motionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          motionObserver.unobserve(entry.target);
+        });
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.12 },
+    );
+  }
+  root.querySelectorAll(motionRevealSelector).forEach((node, index) => {
+    if (node.dataset.motionObserved) return;
+    node.dataset.motionObserved = "true";
+    node.style.setProperty("--reveal-delay", `${Math.min(index % 6, 5) * 45}ms`);
+    node.classList.add("motion-reveal");
+    motionObserver.observe(node);
+  });
+}
+
 async function loadBackendStore() {
   try {
     const store = await StoreBackend.getPublicStore();
@@ -596,9 +640,76 @@ function productHighlights(product) {
     .filter(Boolean);
 }
 
+function offerText(value, fallback = "") {
+  return localText(value) || fallback;
+}
+
+function defaultTrustBadges() {
+  return [
+    { label: { ar: t("paymentPromise"), fr: t("paymentPromise") }, tone: "green" },
+    { label: { ar: t("deliveryPromise"), fr: t("deliveryPromise") }, tone: "teal" },
+    { label: { ar: t("supportPromise"), fr: t("supportPromise") }, tone: "green" },
+  ];
+}
+
+function productOffer(product) {
+  const offer = product.box?.offer || {};
+  const defaults = defaultTrustBadges();
+  const badges = Array.isArray(offer.trustBadges) && offer.trustBadges.length ? offer.trustBadges : defaults;
+  return {
+    eyebrow: offerText(offer.eyebrow, t("limitedOffer")),
+    ctaLabel: offerText(offer.ctaLabel, t("sendWhatsapp")),
+    trustBadges: badges
+      .map((badge, index) => ({
+        label: offerText(badge.label, offerText(defaults[index]?.label, "")),
+        tone: ["green", "teal", "neutral", "coral"].includes(badge.tone) ? badge.tone : defaults[index]?.tone || "green",
+      }))
+      .filter((badge) => badge.label)
+      .slice(0, 3),
+  };
+}
+
 function productDecisionFacts(product, soldOut, lowStock) {
   const facts = productHighlights(product);
   return [...new Set(facts.filter(Boolean))].slice(0, 5);
+}
+
+function productRating(product) {
+  const rating = product.box?.rating || {};
+  const value = Number(rating.value || product.ratingValue || 0);
+  const count = Number(rating.count || product.reviewCount || 0);
+  if (!value || !count) return null;
+  return { value: Math.min(5, Math.max(1, value)), count };
+}
+
+function variantLabelForProduct(product) {
+  const custom = localText(product?.box?.variantLabel);
+  if (custom) return custom;
+  const names = (product?.variants || []).map((variant) => localText(variant.name)).filter(Boolean);
+  const colorNames = ["أسود", "أبيض", "أحمر", "أزرق", "بني", "رمادي", "Noir", "Blanc", "Rouge", "Bleu", "Brown", "Gray", "Grey"];
+  const sizeNames = ["XS", "S", "M", "L", "XL", "XXL"];
+  if (names.length && names.every((name) => colorNames.includes(name))) return currentLang === "ar" ? "اللون" : "Couleur";
+  if (names.length && names.every((name) => sizeNames.includes(name))) return currentLang === "ar" ? "المقاس" : "Taille";
+  return currentLang === "ar" ? "اللون / المقاس" : "Couleur / taille";
+}
+
+function variantInfoButtons(variants, product) {
+  if (!variants.length) return "";
+  const firstAvailable =
+    variants.find((variant) => variant.stock === undefined || variant.stock === null || variant.stock === "" || Number(variant.stock) > 0) || variants[0];
+  return `
+    <div class="desktop-info-variants">
+      <span>${variantLabelForProduct(product)}</span>
+      <div>
+        ${variants
+          .map((variant, index) => {
+            const unavailable = variant.stock !== undefined && variant.stock !== null && variant.stock !== "" && Number(variant.stock) <= 0;
+            return `<button class="${firstAvailable?.id === variant.id ? "active" : ""}" type="button" data-info-variant="${variant.id}" ${unavailable ? "disabled" : ""}>${localText(variant.name)}</button>`;
+          })
+          .join("")}
+      </div>
+    </div>
+  `;
 }
 
 function productGallery(product, discount) {
@@ -631,31 +742,33 @@ function productGallery(product, discount) {
   `;
 }
 
-function orderForm(product, variants, soldOut) {
-  const maxQty = productHasManagedStock(product) && Number(product.stock) > 0 ? ` max="${Number(product.stock)}"` : "";
-  const firstAvailableVariant =
-    variants.find((variant) => variant.stock === undefined || variant.stock === null || variant.stock === "" || Number(variant.stock) > 0) || variants[0];
-  const firstExtraPrice = Number(firstAvailableVariant?.extraPrice || 0);
-  const managedStock = productHasManagedStock(product);
-  const lowStock = managedStock && !soldOut && Number(product.stock || 0) <= 5;
+function buySummary(product, soldOut, lowStock) {
   const discount = discountPercent(product);
   const intro = productSummary(product);
   const facts = productDecisionFacts(product, soldOut, lowStock);
+  const offer = productOffer(product);
+  const rating = productRating(product);
+  const variants = product.variants || [];
   return `
-    <form class="checkout-form product-order-form landing-order-form" data-product-order data-base-price="${Number(product.price || 0)}">
-      <div class="buy-box-header">
-        <span class="eyebrow">${categoryText(product)} · ${t("limitedOffer")}</span>
-        <h1>${localText(product.title)}</h1>
-        ${intro ? `<p class="buy-box-intro">${intro}</p>` : ""}
-        <div class="landing-price-row">
-          ${product.oldPrice ? `<span>${money(product.oldPrice)}</span>` : ""}
-          <strong>${money(product.price)}</strong>
-          ${discount ? `<em>-${discount}%</em>` : ""}
-        </div>
-        <div class="product-status-row">
-          <span>${stockText(product, soldOut, lowStock)}</span>
-          <span>${t("delivery")}</span>
-        </div>
+    <section class="pdp-buy-summary pdp-info-column">
+      <div class="desktop-promo-line">
+        ${offer.eyebrow ? `<em>${escapeHtml(offer.eyebrow)}</em>` : ""}
+      </div>
+      <h1>${localText(product.title)}</h1>
+      ${intro ? `<p class="buy-box-intro">${intro}</p>` : ""}
+      ${
+        rating
+          ? `<div class="desktop-rating-row" aria-label="${rating.value} / 5">
+              <span>${"★".repeat(Math.round(rating.value))}</span>
+              <small>${interpolate(t("ratingReviews"), { count: rating.count })}</small>
+            </div>`
+          : ""
+      }
+      <div class="landing-price-row">
+        ${product.oldPrice ? `<span>${money(product.oldPrice)}</span>` : ""}
+        ${discount ? `<em>${t("discountBadge")} ${discount}%</em>` : ""}
+        <strong>${money(product.price)}</strong>
+      </div>
         ${
           facts.length
             ? `<ul class="quick-fact-list">
@@ -663,11 +776,70 @@ function orderForm(product, variants, soldOut) {
               </ul>`
             : ""
         }
+        ${variantInfoButtons(variants, product)}
+        <div class="desktop-stock-status ${soldOut ? "is-out" : ""}">
+          <span></span>
+          <strong>${soldOut ? t("outOfStock") : lowStock ? t("lowStock") : t("availableStock")}</strong>
+        </div>
+    </section>
+  `;
+}
+
+function desktopTrustStrip() {
+  return `
+    <section class="desktop-pdp-trust-strip" aria-label="${t("deliveryReturns")}">
+      <article>
+        <span class="trust-strip-icon">↩</span>
+        <div>
+          <h2>${t("easyReturnTitle")}</h2>
+          <p>${t("easyReturnText")}</p>
+        </div>
+      </article>
+      <article>
+        <span class="trust-strip-icon">▣</span>
+        <div>
+          <h2>${t("deliveryCityTitle")}</h2>
+          <p>${t("deliveryCityText")} ${t("delivery")}</p>
+        </div>
+      </article>
+      <article>
+        <span class="trust-strip-icon">▤</span>
+        <div>
+          <h2>${t("cod")}</h2>
+          <p>${t("note")}</p>
+        </div>
+      </article>
+    </section>
+  `;
+}
+
+function orderForm(product, variants, soldOut) {
+  const maxQty = productHasManagedStock(product) && Number(product.stock) > 0 ? ` max="${Number(product.stock)}"` : "";
+  const firstAvailableVariant =
+    variants.find((variant) => variant.stock === undefined || variant.stock === null || variant.stock === "" || Number(variant.stock) > 0) || variants[0];
+  const firstExtraPrice = Number(firstAvailableVariant?.extraPrice || 0);
+  const managedStock = productHasManagedStock(product);
+  const lowStock = managedStock && !soldOut && Number(product.stock || 0) <= 5;
+  const offer = productOffer(product);
+  return `
+    <form class="checkout-form product-order-form landing-order-form" data-product-order data-base-price="${Number(product.price || 0)}">
+      <div class="desktop-order-price">
+        <h2>${t("checkoutHeading")}</h2>
+        <div class="landing-price-row">
+          ${product.oldPrice ? `<span>${money(product.oldPrice)}</span>` : ""}
+          <strong>${money(product.price)}</strong>
+          ${discountPercent(product) ? `<em>-${discountPercent(product)}%</em>` : ""}
+        </div>
+      </div>
+      <div class="order-form-heading">
+        <span class="eyebrow">${categoryText(product)} - ${stockText(product, soldOut, lowStock)}</span>
+        <h2>${t("orderTitle")}</h2>
+        <p>${t("note")}</p>
       </div>
       ${
         variants.length
           ? `<fieldset class="variant-choice-group">
-              <legend>${t("variantLabel")}</legend>
+              <legend>${variantLabelForProduct(product)}</legend>
               <div class="variant-choice-list">
                 ${variants
                   .map(
@@ -687,14 +859,6 @@ function orderForm(product, variants, soldOut) {
             </fieldset>`
           : ""
       }
-      <label class="quantity-field">
-        <span>${t("qtyLabel")}</span>
-        <div class="product-qty-stepper">
-          <button type="button" data-qty-step="-1" aria-label="-">-</button>
-          <input name="qty" type="number" min="1"${maxQty} value="1" required />
-          <button type="button" data-qty-step="1" aria-label="+">+</button>
-        </div>
-      </label>
       <div class="order-contact-fields">
         <label>
           <span>${t("nameLabel")}</span>
@@ -709,13 +873,27 @@ function orderForm(product, variants, soldOut) {
           <input name="address" type="text" placeholder="${t("addressPlaceholder")}" required />
         </label>
       </div>
+      <label class="quantity-field">
+        <span>${t("qtyLabel")}</span>
+        <div class="product-qty-stepper">
+          <button type="button" data-qty-step="-1" aria-label="-">-</button>
+          <input name="qty" type="number" min="1"${maxQty} value="1" required />
+          <button type="button" data-qty-step="1" aria-label="+">+</button>
+        </div>
+      </label>
       <div class="order-cost-preview">
         <span>${t("estimatedTotal")}</span>
         <strong data-order-total>${money(Number(product.price || 0) + firstExtraPrice)}</strong>
         <small>${t("totalNote")}</small>
       </div>
-      <button class="whatsapp-checkout" type="submit" ${soldOut ? "disabled" : ""}>${soldOut ? t("outOfStock") : t("sendWhatsapp")}</button>
-      <p class="checkout-note">${t("note")}</p>
+      <button class="whatsapp-checkout" type="submit" ${soldOut ? "disabled" : ""}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a8.5 8.5 0 0 0-7.28 12.88L4 21l5.25-1.37A8.5 8.5 0 1 0 12 3Z"/><path d="M9.4 8.7c.2-.44.36-.45.62-.45h.45c.15 0 .38.06.58.3.2.23.76.82.76 2 0 1.17-.78 2.3-.9 2.45-.1.16-1.55 2.62-3.82 3.57-.53.22-.95.35-1.27.45-.54.18-1.03.15-1.42.09-.43-.07-1.33-.6-1.52-1.18-.18-.58-.18-1.08-.13-1.18.06-.1.2-.16.43-.3.22-.13 1.32-.72 1.52-.8.2-.08.35-.13.5.14.14.27.57.96.7 1.12.13.15.26.18.48.06.22-.13.94-.38 1.78-1.22.66-.66 1.1-1.47 1.23-1.72.13-.25.02-.39-.1-.52-.12-.12-.27-.32-.4-.48-.13-.16-.18-.27-.27-.45-.09-.18-.04-.34.02-.48.06-.13.5-1.32.7-1.8Z"/></svg>
+        <span>${soldOut ? t("outOfStock") : escapeHtml(offer.ctaLabel)}</span>
+      </button>
+      <div class="checkout-reassurance-list">
+        <span><i aria-hidden="true">✓</i>${t("cod")}</span>
+        <span><i aria-hidden="true">✓</i>${t("note")}</span>
+      </div>
     </form>
   `;
 }
@@ -755,6 +933,12 @@ function updateOrderTotal(form) {
   const selectedVariant = form.querySelector('input[name="variant"]:checked');
   const extraPrice = Number(selectedVariant?.dataset.extraPrice || 0);
   totalNode.textContent = money((basePrice + extraPrice) * qty);
+}
+
+function updateInfoVariantState(variantId) {
+  document.querySelectorAll("[data-info-variant]").forEach((button) => {
+    button.classList.toggle("active", button.dataset.infoVariant === variantId);
+  });
 }
 
 function sectionNavigation(relatedCount) {
@@ -801,16 +985,22 @@ function render() {
       <section class="product-landing-hero">
         ${productGallery(product, discount)}
 
-        <div id="order-form" class="landing-order-wrap">
-          ${orderForm(product, variants, soldOut)}
+        <div class="landing-order-wrap">
+          ${buySummary(product, soldOut, lowStock)}
         </div>
+
+        <section id="order-form" class="order-form-section">
+          ${orderForm(product, variants, soldOut)}
+        </section>
       </section>
+
+      ${desktopTrustStrip()}
 
       ${sectionNavigation(related.length)}
 
       <a class="mobile-sticky-pdp-cta" href="#order-form">
         <span>${money(product.price)}</span>
-        <strong>${soldOut ? t("outOfStock") : t("sendWhatsapp")}</strong>
+        <strong>${soldOut ? t("outOfStock") : escapeHtml(productOffer(product).ctaLabel)}</strong>
       </a>
 
       <section class="product-detail-layout">
@@ -844,7 +1034,7 @@ function render() {
           <h2>${t("repeatCtaTitle")}</h2>
           <p>${t("repeatCtaText")}</p>
         </div>
-        <a class="primary-action" href="#order-form">${t("sendWhatsapp")}</a>
+        <a class="primary-action" href="#order-form">${escapeHtml(productOffer(product).ctaLabel)}</a>
       </section>
       <div id="delivery-section">${productFaq(product)}</div>
       ${
@@ -876,16 +1066,26 @@ function render() {
       ${galleryLightbox()}
     </section>
   `;
+  applyMotionReveal(page);
 }
 
 document.addEventListener("click", (event) => {
   const thumb = event.target.closest("[data-thumb]");
   const qtyStep = event.target.closest("[data-qty-step]");
+  const infoVariant = event.target.closest("[data-info-variant]");
   const openGallery = event.target.closest("[data-open-gallery]");
   const closeGallery = event.target.closest("[data-close-gallery]");
   const lightbox = event.target.closest("[data-gallery-lightbox]");
   if (thumb) {
-    document.querySelector(".detail-main-image").src = thumb.dataset.thumb;
+    const mainImage = document.querySelector(".detail-main-image");
+    if (mainImage?.src !== thumb.dataset.thumb) {
+      mainImage.classList.add("is-switching");
+      window.setTimeout(() => {
+        mainImage.src = thumb.dataset.thumb;
+      }, 110);
+      mainImage.addEventListener("load", () => mainImage.classList.remove("is-switching"), { once: true });
+      window.setTimeout(() => mainImage.classList.remove("is-switching"), 520);
+    }
     document.querySelector("[data-open-gallery]")?.setAttribute("data-open-gallery", thumb.dataset.thumb);
     document.querySelectorAll("[data-thumb]").forEach((button) => button.classList.toggle("active", button === thumb));
   }
@@ -916,6 +1116,15 @@ document.addEventListener("click", (event) => {
     input.value = next;
     updateOrderTotal(form);
   }
+  if (infoVariant) {
+    const form = document.querySelector("[data-product-order]");
+    const target = [...(form?.querySelectorAll('input[name="variant"]') || [])].find((input) => input.value === infoVariant.dataset.infoVariant);
+    if (target && !target.disabled) {
+      target.checked = true;
+      updateOrderTotal(form);
+      updateInfoVariantState(infoVariant.dataset.infoVariant);
+    }
+  }
   const relatedProduct = event.target.closest("[data-related-product]");
   if (relatedProduct) {
     trackEvent("related_product_click", { productId: Number(relatedProduct.dataset.relatedProduct), fromProductId: productId() });
@@ -941,6 +1150,7 @@ document.addEventListener("change", (event) => {
   const variant = event.target.closest('input[name="variant"]');
   if (!variant) return;
   updateOrderTotal(variant.closest("[data-product-order]"));
+  updateInfoVariantState(variant.value);
 });
 
 document.addEventListener("submit", async (event) => {
@@ -950,6 +1160,8 @@ document.addEventListener("submit", async (event) => {
 
   const product = products.find((item) => item.id === productId());
   const formData = new FormData(form);
+  const submitButton = form.querySelector(".whatsapp-checkout");
+  submitButton?.classList.add("is-loading");
   trackEvent("checkout_submit", { productId: product.id, source: "product_page" });
   await saveProductOrder(product, formData);
   const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(buildProductMessage(product, formData))}`;

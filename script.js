@@ -349,6 +349,55 @@ function cachePublicStore(store) {
   }
 }
 
+let motionObserver = null;
+let motionRefreshTimer = null;
+const motionRevealSelector = [
+  ".deal-band",
+  ".category-card",
+  ".product-card",
+  ".category-block",
+  ".pay-method",
+  ".faq-section",
+].join(", ");
+
+function prefersReducedMotion() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function motionRevealObserver() {
+  if (prefersReducedMotion()) return null;
+  if (motionObserver) return motionObserver;
+  motionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        motionObserver.unobserve(entry.target);
+      });
+    },
+    { rootMargin: "0px 0px -8% 0px", threshold: 0.12 },
+  );
+  return motionObserver;
+}
+
+function applyMotionReveal(root = document) {
+  if (prefersReducedMotion()) return;
+  const observer = motionRevealObserver();
+  if (!observer) return;
+  root.querySelectorAll(motionRevealSelector).forEach((node, index) => {
+    if (node.dataset.motionObserved) return;
+    node.dataset.motionObserved = "true";
+    node.style.setProperty("--reveal-delay", `${Math.min(index % 6, 5) * 45}ms`);
+    node.classList.add("motion-reveal");
+    observer.observe(node);
+  });
+}
+
+function scheduleMotionReveal() {
+  window.clearTimeout(motionRefreshTimer);
+  motionRefreshTimer = window.setTimeout(() => applyMotionReveal(), 0);
+}
+
 async function loadBackendStore() {
   try {
     const store = await StoreBackend.getPublicStore();
@@ -377,8 +426,27 @@ function money(value) {
   return `${value} MAD`;
 }
 
+function heroMoney(value) {
+  return `MAD ${Number(value || 0)}`;
+}
+
 function localText(value) {
   return typeof value === "string" ? value : value?.[currentLang] || value?.ar || value?.fr || "";
+}
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function stripHtml(value) {
+  const template = document.createElement("template");
+  template.innerHTML = String(value || "");
+  return template.content.textContent.trim();
 }
 
 function normalizeSearchText(value) {
@@ -449,6 +517,80 @@ function firstProductImage(product) {
   return Array.isArray(product.images) ? product.images.find(Boolean) : "";
 }
 
+function productImages(product) {
+  return Array.isArray(product.images) ? product.images.filter(Boolean) : [];
+}
+
+function featuredDealImages(product) {
+  const images = productImages(product);
+  const preferred = [
+    product.heroImage,
+    product.featuredImage,
+    product.coverImage,
+    product.mainImage,
+  ].filter(Boolean);
+  return [...preferred, ...images].filter((image, index, list) => list.indexOf(image) === index);
+}
+
+function productSummary(product) {
+  const boxSummary = localText(product.box?.summary);
+  return stripHtml(boxSummary || localText(product.description)).slice(0, 170);
+}
+
+function productHighlights(product) {
+  const value = product.highlights?.[currentLang] || product.highlights?.ar || product.highlights?.fr || [];
+  const items = Array.isArray(value) ? value : String(value || "").split("\n");
+  const cleaned = items.map((item) => stripHtml(item).trim()).filter(Boolean).slice(0, 4);
+  const fallback = currentLang === "ar"
+    ? [
+        "تصميم عملي بجيوب متعددة لتنظيم مثالي",
+        "حماية مبطنة للأغراض اليومية",
+        "مواد متينة ومقاومة للاستعمال اليومي",
+        "مريحة في الحمل وتناسب جميع التنقلات",
+      ]
+    : [
+        "Practical multi-pocket organization",
+        "Padded protection for daily essentials",
+        "Durable materials for daily use",
+        "Comfortable to carry on the move",
+      ];
+  return [...cleaned, ...fallback].filter((item, index, list) => list.indexOf(item) === index).slice(0, 4);
+}
+
+function offerText(value, fallback = "") {
+  return localText(value) || fallback;
+}
+
+function defaultTrustBadges() {
+  return [
+    { label: { ar: t("cod"), fr: t("cod") }, tone: "green" },
+    { label: { ar: t("delivery"), fr: t("delivery") }, tone: "teal" },
+    { label: { ar: t("trustConfirmTitle"), fr: t("trustConfirmTitle") }, tone: "green" },
+  ];
+}
+
+function productOffer(product) {
+  const offer = product.box?.offer || {};
+  const defaults = defaultTrustBadges();
+  const badges = Array.isArray(offer.trustBadges) && offer.trustBadges.length ? offer.trustBadges : defaults;
+  return {
+    eyebrow: offerText(offer.eyebrow, t("dealEyebrow")),
+    ctaLabel: offerText(offer.ctaLabel, t("dealOrder")),
+    trustBadges: badges
+      .map((badge, index) => ({
+        label: offerText(badge.label, offerText(defaults[index]?.label, "")),
+        tone: ["green", "teal", "neutral", "coral"].includes(badge.tone) ? badge.tone : defaults[index]?.tone || "green",
+      }))
+      .filter((badge) => badge.label)
+      .slice(0, 3),
+  };
+}
+
+function discountPercent(product) {
+  if (!product.oldPrice || Number(product.oldPrice) <= Number(product.price)) return null;
+  return Math.round(((Number(product.oldPrice) - Number(product.price)) / Number(product.oldPrice)) * 100);
+}
+
 function productImageMarkup(product) {
   const image = firstProductImage(product);
   if (!image) {
@@ -481,33 +623,12 @@ function setLanguage(lang) {
   renderProducts();
   renderCategorySections();
   renderCart();
+  scheduleMotionReveal();
 }
 
 function renderFeaturedDeal() {
-  const featuredId = Number(storeSettings.featuredProductId);
-  const product = products.find((item) => item.id === featuredId) || products.find((item) => item.featured) || products[0];
   const dealBand = document.querySelector(".deal-band");
-  if (!product) {
-    if (dealBand) dealBand.hidden = true;
-    return;
-  }
-  if (dealBand) dealBand.hidden = false;
-
-  const dealTitle = document.querySelector("[data-i18n='dealTitle']");
-  const orderButton = document.querySelector("[data-i18n='dealOrder']");
-  const detailsLink = document.querySelector("[data-i18n='dealDetails']");
-  const bgLink = document.querySelector(".deal-bg-link");
-  const priceRow = document.querySelector(".deal-price-row");
-
-  if (dealTitle) dealTitle.textContent = localText(product.title);
-  if (orderButton) orderButton.dataset.add = product.id;
-  if (detailsLink) detailsLink.href = `product.html?id=${product.id}`;
-  if (bgLink) bgLink.href = `product.html?id=${product.id}`;
-  const dealImage = firstProductImage(product);
-  if (dealBand && dealImage) dealBand.style.backgroundImage = `url("${dealImage}")`;
-  if (priceRow) {
-    priceRow.innerHTML = `<strong>${money(product.price)}</strong>${product.oldPrice ? `<span>${money(product.oldPrice)}</span>` : ""}`;
-  }
+  if (dealBand) dealBand.remove();
 }
 
 function visibleProducts() {
@@ -551,6 +672,7 @@ function renderCategoryShowcase() {
       `;
     })
     .join("");
+  scheduleMotionReveal();
 }
 
 function updateFilterControls() {
@@ -589,6 +711,7 @@ function renderProducts() {
   if (!items.length) {
     productGrid.innerHTML = `<p class="empty-cart">${t("noProducts")}</p>`;
   }
+  scheduleMotionReveal();
 }
 
 function productCard(product) {
@@ -639,6 +762,7 @@ function renderCategorySections() {
       `;
     })
     .join("");
+  scheduleMotionReveal();
 }
 
 function cartSummary() {
@@ -787,6 +911,7 @@ document.addEventListener("click", (event) => {
   const addButton = event.target.closest("[data-add]");
   const incButton = event.target.closest("[data-inc]");
   const decButton = event.target.closest("[data-dec]");
+  const dealThumb = event.target.closest("[data-deal-thumb]");
   const openButton = event.target.closest(".cart-button, .nav-cart");
   const closeButton = event.target.closest("[data-close-cart]");
   const closeProductButton = event.target.closest("[data-close-product]");
@@ -794,7 +919,23 @@ document.addEventListener("click", (event) => {
   const productCard = event.target.closest("[data-product]");
 
   if (addButton) {
+    addButton.classList.remove("just-added");
+    void addButton.offsetWidth;
+    addButton.classList.add("just-added");
+    window.setTimeout(() => addButton.classList.remove("just-added"), 460);
     addToCart(addButton.dataset.add);
+    return;
+  }
+  if (dealThumb) {
+    const image = dealThumb.dataset.dealThumb;
+    const mainImage = document.querySelector("[data-deal-main-image]");
+    const mainImageNode = mainImage?.querySelector("img");
+    const dealBand = document.querySelector(".deal-band");
+    if (mainImageNode) mainImageNode.src = image;
+    if (dealBand) dealBand.style.backgroundImage = `url("${image}")`;
+    document.querySelectorAll("[data-deal-thumb]").forEach((button) => {
+      button.classList.toggle("active", button === dealThumb);
+    });
     return;
   }
   if (incButton) updateQty(incButton.dataset.inc, 1);
@@ -844,6 +985,8 @@ checkoutForm.addEventListener("submit", async (event) => {
   }
 
   const formData = new FormData(checkoutForm);
+  const submitButton = checkoutForm.querySelector(".whatsapp-checkout");
+  submitButton?.classList.add("is-loading");
   trackEvent("checkout_submit", { itemCount: cartSummary().count, total: cartSummary().total });
   await saveOrder(formData);
   const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(buildWhatsAppMessage(formData))}`;

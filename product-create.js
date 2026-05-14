@@ -27,6 +27,15 @@ const variantPresets = {
   Capacity: ["250ml", "500ml", "1L", "2L"],
 };
 
+const variantLabels = {
+  Size: { ar: "المقاس", fr: "Taille" },
+  Color: { ar: "اللون", fr: "Couleur" },
+  Material: { ar: "المادة", fr: "Matiere" },
+  Pack: { ar: "الكمية", fr: "Pack" },
+  Scent: { ar: "الرائحة", fr: "Parfum" },
+  Capacity: { ar: "السعة", fr: "Capacite" },
+};
+
 let selectedVariantValues = [];
 let customVariantValues = [];
 let variantDrafts = {};
@@ -104,6 +113,55 @@ function lines(value) {
     .filter(Boolean);
 }
 
+function escapeHtml(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function offerDefaults() {
+  return {
+    eyebrow: { ar: "عرض اليوم", fr: "Offre du jour" },
+    ctaLabel: { ar: "اطلب الآن", fr: "Commander" },
+    trustBadges: [
+      { label: { ar: "الدفع عند الاستلام", fr: "Paiement a la livraison" }, tone: "green" },
+      { label: { ar: "توصيل داخل طنجة", fr: "Livraison a Tanger" }, tone: "teal" },
+      { label: { ar: "تأكيد سريع", fr: "Confirmation rapide" }, tone: "green" },
+    ],
+  };
+}
+
+function textRecord(value, fallback = "") {
+  if (typeof value === "string") return { ar: value, fr: value };
+  return {
+    ar: value?.ar || value?.fr || fallback,
+    fr: value?.fr || value?.ar || fallback,
+  };
+}
+
+function offerPayload() {
+  const defaults = offerDefaults();
+  const eyebrow = form.offerEyebrow.value.trim() || defaults.eyebrow.ar;
+  const ctaLabel = form.offerCtaLabel.value.trim() || defaults.ctaLabel.ar;
+  return {
+    eyebrow: { ar: eyebrow, fr: eyebrow },
+    ctaLabel: { ar: ctaLabel, fr: ctaLabel },
+    trustBadges: [0, 1, 2]
+      .map((index) => {
+        const fallback = defaults.trustBadges[index];
+        const label = form[`trustBadgeLabel${index}`].value.trim() || fallback.label.ar;
+        return {
+          label: { ar: label, fr: label },
+          tone: form[`trustBadgeTone${index}`].value || fallback.tone,
+        };
+      })
+      .filter((badge) => badge.label.ar || badge.label.fr),
+  };
+}
+
 function specsFromText(value) {
   return lines(value).map((line) => {
     const separator = line.includes(":") ? ":" : line.includes("：") ? "：" : null;
@@ -126,11 +184,19 @@ function specsToText(specs = []) {
 function productBoxPayload() {
   const included = form.box.value.trim();
   const summary = form.summary.value.trim();
+  const socialProof = form.socialProofText.value.trim();
+  const ratingValue = form.ratingValue.value ? Number(form.ratingValue.value) : null;
+  const reviewCount = form.reviewCount.value ? Number(form.reviewCount.value) : null;
+  const variantLabel = form.hasVariants.checked ? variantLabels[form.variantPreset.value] || { ar: form.variantPreset.value, fr: form.variantPreset.value } : { ar: "", fr: "" };
   return {
     ar: included,
     fr: included,
     summary: { ar: summary, fr: summary },
+    socialProof: { ar: socialProof, fr: socialProof },
+    rating: { value: ratingValue, count: reviewCount },
+    variantLabel,
     specs: specsFromText(form.specs.value),
+    offer: offerPayload(),
   };
 }
 
@@ -155,12 +221,15 @@ function renderImages() {
     .map(
       (image, index) => `
         <div class="create-image-row">
-          <img src="${image}" alt="" />
+          <img src="${escapeHtml(image)}" alt="" />
           <div>
             <strong>${index === 0 ? "Cover image" : `Image ${index + 1}`}</strong>
             <span class="image-source-label">${image.startsWith("data:") ? "Uploaded image" : "Image URL"}</span>
           </div>
           <div class="create-image-actions">
+            <button type="button" data-cover-image="${index}" ${index === 0 ? "disabled" : ""} aria-label="Set image as cover">Cover</button>
+            <button type="button" data-move-image="${index}" data-direction="-1" ${index === 0 ? "disabled" : ""} aria-label="Move image up">Up</button>
+            <button type="button" data-move-image="${index}" data-direction="1" ${index === images.length - 1 ? "disabled" : ""} aria-label="Move image down">Down</button>
             <button type="button" data-insert-product-image="${index}" aria-label="Insert image in description">Insert</button>
             <button type="button" data-remove-image="${index}" aria-label="Remove image">Remove</button>
           </div>
@@ -360,6 +429,8 @@ function updateCompletion() {
     { key: "description", label: "Rich description", done: Boolean(plainDescription()), required: true },
     { key: "summary", label: "Short selling summary", done: Boolean(form.summary.value.trim()), required: false },
     { key: "benefits", label: "Quick benefits", done: lines(form.highlights.value).length >= 3, required: false },
+    { key: "social", label: "Social proof", done: Boolean(form.socialProofText.value.trim()), required: false },
+    { key: "reviews", label: "Rating and reviews", done: Boolean(form.ratingValue.value && form.reviewCount.value), required: false },
     { key: "specs", label: "Structured specs", done: specsFromText(form.specs.value).length > 0, required: false },
   ];
   const done = checks.filter((check) => check.done).length;
@@ -394,14 +465,26 @@ function renderProductPreview() {
   if (!productPreview) return;
   const title = form.title.value.trim() || "Product preview";
   const price = form.price.value ? `MAD ${Number(form.price.value)}` : "MAD --";
+  const oldPrice = form.oldPrice.value ? `MAD ${Number(form.oldPrice.value)}` : "";
   const image = currentImages()[0];
   const summary = form.summary.value.trim() || plainDescription() || "Add a short summary to preview the product decision area.";
+  const offer = offerPayload();
+  const trustBadges = offer.trustBadges.slice(0, 3);
+  const socialProof = form.socialProofText.value.trim();
+  const reviewCount = form.reviewCount.value.trim();
   productPreview.innerHTML = `
-    ${image ? `<img src="${image}" alt="" />` : `<div class="mini-product-placeholder">Image</div>`}
+    ${image ? `<img src="${escapeHtml(image)}" alt="" />` : `<div class="mini-product-placeholder">Image</div>`}
     <div>
-      <strong>${title}</strong>
-      <span>${price}</span>
-      <p>${summary}</p>
+      <small>${escapeHtml(offer.eyebrow.ar)}</small>
+      <strong>${escapeHtml(title)}</strong>
+      <span>${oldPrice ? `<del>${oldPrice}</del> ` : ""}${price}</span>
+      ${socialProof ? `<small>${escapeHtml(socialProof)}</small>` : ""}
+      ${reviewCount ? `<small>★★★★★ (${escapeHtml(reviewCount)})</small>` : ""}
+      <p>${escapeHtml(summary)}</p>
+      <div class="mini-trust-row">
+        ${trustBadges.map((badge) => `<em class="tone-${badge.tone || "green"}">${escapeHtml(badge.label.ar || badge.label.fr)}</em>`).join("")}
+      </div>
+      <button type="button">${escapeHtml(offer.ctaLabel.ar)}</button>
     </div>
   `;
 }
@@ -448,6 +531,22 @@ function variantValue(variant) {
   return variant.name?.ar || variant.name?.fr || "";
 }
 
+function fillOfferFields(offer = {}) {
+  const defaults = offerDefaults();
+  const eyebrow = textRecord(offer.eyebrow, defaults.eyebrow.ar);
+  const ctaLabel = textRecord(offer.ctaLabel, defaults.ctaLabel.ar);
+  const badges = Array.isArray(offer.trustBadges) ? offer.trustBadges : [];
+  form.offerEyebrow.value = eyebrow.ar || defaults.eyebrow.ar;
+  form.offerCtaLabel.value = ctaLabel.ar || defaults.ctaLabel.ar;
+  [0, 1, 2].forEach((index) => {
+    const fallback = defaults.trustBadges[index];
+    const badge = badges[index] || fallback;
+    const label = textRecord(badge.label, fallback.label.ar);
+    form[`trustBadgeLabel${index}`].value = label.ar || fallback.label.ar;
+    form[`trustBadgeTone${index}`].value = badge.tone || fallback.tone;
+  });
+}
+
 function fillProductForm(product) {
   form.title.value = product.title?.ar || product.title?.fr || "";
   form.sku.value = product.sku || "";
@@ -461,9 +560,13 @@ function fillProductForm(product) {
   form.featured.checked = Boolean(product.featured);
   richEditor.innerHTML = product.description?.ar || product.description?.fr || "";
   form.summary.value = product.box?.summary?.ar || product.box?.summary?.fr || "";
+  form.socialProofText.value = product.box?.socialProof?.ar || product.box?.socialProof?.fr || "";
+  form.ratingValue.value = product.box?.rating?.value ?? 5;
+  form.reviewCount.value = product.box?.rating?.count ?? "";
   form.highlights.value = (product.highlights?.ar || product.highlights?.fr || []).join("\n");
   form.box.value = product.box?.ar || product.box?.fr || "";
   form.specs.value = specsToText(product.box?.specs || []);
+  fillOfferFields(product.box?.offer);
 
   selectedVariantValues = [];
   customVariantValues = [];
@@ -523,6 +626,8 @@ async function loadEditableProduct() {
 document.addEventListener("click", (event) => {
   const remove = event.target.closest("[data-remove-image]");
   const insertProductImage = event.target.closest("[data-insert-product-image]");
+  const coverImage = event.target.closest("[data-cover-image]");
+  const moveImage = event.target.closest("[data-move-image]");
   const preset = event.target.closest("[data-preset-value]");
   const editorButton = event.target.closest("[data-editor-command]");
   const editorInsert = event.target.closest("[data-editor-insert]");
@@ -572,6 +677,23 @@ document.addEventListener("click", (event) => {
     const images = currentImages();
     images.splice(Number(remove.dataset.removeImage), 1);
     setImages(images);
+  }
+
+  if (coverImage) {
+    const images = currentImages();
+    const index = Number(coverImage.dataset.coverImage);
+    const [image] = images.splice(index, 1);
+    if (image) setImages([image, ...images]);
+  }
+
+  if (moveImage) {
+    const images = currentImages();
+    const index = Number(moveImage.dataset.moveImage);
+    const nextIndex = index + Number(moveImage.dataset.direction || 0);
+    if (nextIndex >= 0 && nextIndex < images.length) {
+      [images[index], images[nextIndex]] = [images[nextIndex], images[index]];
+      setImages(images);
+    }
   }
 
   if (insertProductImage) {
@@ -671,6 +793,7 @@ form.addEventListener("submit", async (event) => {
 renderImages();
 renderPresetChips();
 renderCategorySuggestions([], []);
+fillOfferFields();
 updateCompletion();
 StoreBackend.requireAdmin()
   .then(loadEditableProduct)

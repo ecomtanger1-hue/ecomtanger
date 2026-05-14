@@ -134,7 +134,20 @@ function normalizeProduct(input, fallback = {}) {
         ar: String(box.summary?.ar ?? fallback.box?.summary?.ar ?? "").trim(),
         fr: String(box.summary?.fr ?? fallback.box?.summary?.fr ?? "").trim(),
       },
+      socialProof: {
+        ar: String(box.socialProof?.ar ?? fallback.box?.socialProof?.ar ?? "").trim(),
+        fr: String(box.socialProof?.fr ?? fallback.box?.socialProof?.fr ?? "").trim(),
+      },
+      rating: {
+        value: box.rating?.value === "" || box.rating?.value === null ? null : Number(box.rating?.value ?? fallback.box?.rating?.value ?? 0) || null,
+        count: box.rating?.count === "" || box.rating?.count === null ? null : Number(box.rating?.count ?? fallback.box?.rating?.count ?? 0) || null,
+      },
+      variantLabel: {
+        ar: String(box.variantLabel?.ar ?? fallback.box?.variantLabel?.ar ?? "").trim(),
+        fr: String(box.variantLabel?.fr ?? fallback.box?.variantLabel?.fr ?? "").trim(),
+      },
       specs: Array.isArray(box.specs) ? box.specs : fallback.box?.specs || [],
+      offer: box.offer || fallback.box?.offer || {},
     },
     images,
     variants: variants.map((variant, index) => ({

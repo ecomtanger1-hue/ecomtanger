@@ -9,7 +9,9 @@
       content="Boutique mobile-first pour commander a Tanger avec WhatsApp et paiement a la livraison."
     />
     <link rel="preconnect" href="https://images.unsplash.com" />
-    <link rel="stylesheet" href="styles.css?v=6" />
+    <link rel="stylesheet" href="styles.base.css?v=3" />
+    <link rel="stylesheet" href="styles.mobile.css?v=2" media="(max-width: 899px)" />
+    <link rel="stylesheet" href="styles.desktop.css?v=6" media="(min-width: 900px)" />
   </head>
   <body>
     <div class="app-shell">
@@ -44,6 +46,10 @@
       <main>
         <section class="hero-band deal-band" aria-label="Deal of the day">
           <a class="deal-bg-link" href="product.html?id=1" aria-label="Mini blender portable"></a>
+          <div class="deal-media" aria-hidden="true">
+            <div class="deal-main-image" data-deal-main-image></div>
+            <div class="deal-thumbs" data-deal-thumbs></div>
+          </div>
           <div class="hero-copy deal-copy">
             <span class="eyebrow" data-i18n="dealEyebrow">عرض اليوم</span>
             <h1 data-i18n="dealTitle">خلاط صغير محمول</h1>
@@ -52,6 +58,12 @@
               <strong>189 MAD</strong>
               <span>249 MAD</span>
             </div>
+            <div class="deal-trust-row">
+              <span data-i18n="trustCodTitle">الدفع عند الاستلام</span>
+              <span data-i18n="trustDeliveryTitle">توصيل طنجة</span>
+              <span data-i18n="trustConfirmTitle">تأكيد عبر واتساب</span>
+            </div>
+            <ul class="deal-benefit-list" data-deal-benefits></ul>
             <div class="hero-actions">
               <button class="primary-action" type="button" data-add="1" data-i18n="dealOrder">اطلب الآن</button>
               <a class="ghost-action" href="product.html?id=1" data-i18n="dealDetails">التفاصيل</a>
@@ -165,6 +177,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     <script src="supabase-service.js"></script>
-    <script src="script.js?v=10"></script>
+    <script src="script.js?v=13"></script>
   </body>
 </html>

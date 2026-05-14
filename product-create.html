@@ -4,8 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Create Product | CasaTanja Admin</title>
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="stylesheet" href="admin.css?v=6" />
+    <link rel="stylesheet" href="styles.base.css?v=3" />
+    <link rel="stylesheet" href="styles.mobile.css?v=2" media="(max-width: 899px)" />
+    <link rel="stylesheet" href="styles.desktop.css?v=6" media="(min-width: 900px)" />
+    <link rel="stylesheet" href="admin.css?v=7" />
   </head>
   <body class="admin-body product-create-body">
     <div class="create-page">
@@ -87,13 +89,85 @@
                   Quick benefits, one per line
                   <textarea name="highlights" dir="rtl" rows="5" placeholder="تصميم عملي للاستعمال اليومي&#10;جيوب داخلية متعددة&#10;حجم مناسب للحمل باليد&#10;الدفع عند الاستلام"></textarea>
                 </label>
+                <label>
+                  Social proof text
+                  <input name="socialProofText" dir="rtl" placeholder="تم طلبه 38 مرة هذا الأسبوع" />
+                </label>
+                <label>
+                  Rating value
+                  <input name="ratingValue" type="number" min="1" max="5" step="0.1" value="5" />
+                </label>
+                <label>
+                  Review count
+                  <input name="reviewCount" type="number" min="0" placeholder="128" />
+                </label>
+              </div>
+            </section>
+
+            <section class="offer-display-panel">
+              <div class="panel-title-row compact-title-row">
+                <div>
+                  <h2>Offer display</h2>
+                  <p>Controls the product page buy summary and the homepage featured deal when this product is selected.</p>
+                </div>
+              </div>
+              <div class="summary-grid">
+                <label>
+                  Offer label
+                  <input name="offerEyebrow" dir="rtl" placeholder="عرض اليوم" />
+                </label>
+                <label>
+                  CTA label
+                  <input name="offerCtaLabel" dir="rtl" placeholder="اطلب الآن" />
+                </label>
+              </div>
+              <div class="trust-editor-grid">
+                <label>
+                  Trust badge 1
+                  <input name="trustBadgeLabel0" dir="rtl" placeholder="الدفع عند الاستلام" />
+                </label>
+                <label>
+                  Tone
+                  <select name="trustBadgeTone0">
+                    <option value="green">Green</option>
+                    <option value="teal">Teal</option>
+                    <option value="neutral">Neutral</option>
+                    <option value="coral">Coral</option>
+                  </select>
+                </label>
+                <label>
+                  Trust badge 2
+                  <input name="trustBadgeLabel1" dir="rtl" placeholder="توصيل داخل طنجة" />
+                </label>
+                <label>
+                  Tone
+                  <select name="trustBadgeTone1">
+                    <option value="teal">Teal</option>
+                    <option value="green">Green</option>
+                    <option value="neutral">Neutral</option>
+                    <option value="coral">Coral</option>
+                  </select>
+                </label>
+                <label>
+                  Trust badge 3
+                  <input name="trustBadgeLabel2" dir="rtl" placeholder="تأكيد سريع" />
+                </label>
+                <label>
+                  Tone
+                  <select name="trustBadgeTone2">
+                    <option value="green">Green</option>
+                    <option value="teal">Teal</option>
+                    <option value="neutral">Neutral</option>
+                    <option value="coral">Coral</option>
+                  </select>
+                </label>
               </div>
             </section>
 
             <div class="media-dropzone">
               <div>
                 <h3>Product images</h3>
-                <p>Upload files or paste image URLs. The first image becomes the storefront cover.</p>
+                <p>Upload files or paste image URLs. Move images to control the storefront cover and thumbnails.</p>
               </div>
               <label class="upload-button">
                 Upload image
@@ -292,6 +366,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     <script src="supabase-service.js"></script>
-    <script src="product-create.js?v=13"></script>
+    <script src="product-create.js?v=16"></script>
   </body>
 </html>
