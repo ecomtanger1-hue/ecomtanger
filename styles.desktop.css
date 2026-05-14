@@ -1355,3 +1355,27 @@
     grid-template-columns: minmax(280px, 0.32fr) minmax(310px, 0.34fr) minmax(340px, 0.34fr);
   }
 }
+
+@media (min-width: 900px) {
+  .app-shell {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+  }
+
+  .product-page-shell .topbar {
+    width: auto;
+    max-width: none;
+    margin: -18px calc(-1 * clamp(18px, 2vw, 32px)) 0;
+  }
+
+  .product-page-shell {
+    background: #fff;
+  }
+
+  .product-page {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+  }
+}
