@@ -661,13 +661,12 @@ function renderCategoryShowcase() {
   ].filter((item) => item.product);
 
   categoryShowcase.innerHTML = categories
-    .map(({ category, product, count, label }) => {
+    .map(({ category, product, label }) => {
       const image = categoryImage(category) || firstProductImage(product || {});
       return `
         <button class="category-card" type="button" data-filter="${category}">
           <span class="category-card-image">${image ? `<img src="${image}" alt="${label}" loading="lazy" />` : ""}</span>
           <strong>${label}</strong>
-          <small>${count} ${currentLang === "ar" ? "منتج" : "produits"}</small>
         </button>
       `;
     })
@@ -686,13 +685,12 @@ function renderProducts() {
 
   productGrid.innerHTML = items
     .map((product) => {
-      const soldOut = Number(product.stock || 0) <= 0;
-      const limited = !soldOut && Number(product.stock || 0) <= 5;
+      const limited = Number(product.stock || 0) > 0 && Number(product.stock || 0) <= 5;
       return `
         <article class="product-card" data-product="${product.id}" tabindex="0" role="button" aria-label="${localText(product.title)}">
           <div class="product-image">
             ${productImageMarkup(product)}
-            <span class="badge">${soldOut ? t("outOfStock") : limited ? t("lowStock") : t("cod")}</span>
+            <span class="badge">${limited ? t("lowStock") : t("cod")}</span>
           </div>
           <div class="product-info">
             <h3 class="product-title">${localText(product.title)}</h3>
@@ -701,7 +699,7 @@ function renderProducts() {
               <span class="category">${categoryLabel(product.category)}</span>
             </div>
             <div class="delivery-note">${t("delivery")}</div>
-            <button class="add-button" type="button" data-add="${product.id}" ${soldOut ? "disabled" : ""}>${soldOut ? t("outOfStock") : t("addPay")}</button>
+            <button class="add-button" type="button" data-add="${product.id}">${t("addPay")}</button>
           </div>
         </article>
       `;
@@ -715,13 +713,12 @@ function renderProducts() {
 }
 
 function productCard(product) {
-  const soldOut = Number(product.stock || 0) <= 0;
-  const limited = !soldOut && Number(product.stock || 0) <= 5;
+  const limited = Number(product.stock || 0) > 0 && Number(product.stock || 0) <= 5;
   return `
     <article class="product-card compact-card" data-product="${product.id}" tabindex="0" role="button" aria-label="${localText(product.title)}">
       <div class="product-image">
         ${productImageMarkup(product)}
-        <span class="badge">${soldOut ? t("outOfStock") : limited ? t("lowStock") : t("cod")}</span>
+        <span class="badge">${limited ? t("lowStock") : t("cod")}</span>
       </div>
       <div class="product-info">
         <h3 class="product-title">${localText(product.title)}</h3>
@@ -729,6 +726,7 @@ function productCard(product) {
           <strong class="price">${money(product.price)}</strong>
           <span class="category">${categoryLabel(product.category)}</span>
         </div>
+        <button class="add-button" type="button" data-add="${product.id}">${t("addPay")}</button>
       </div>
     </article>
   `;
@@ -741,7 +739,7 @@ function renderCategorySections() {
     ...activeProducts.map((product) => product.category).filter(Boolean),
   ].filter((category, index, list) => category && list.indexOf(category) === index);
   const sections = [
-    { title: t("tabAll"), items: activeProducts.filter((product) => Number(product.stock || 0) > 0).slice(0, 4) },
+    { title: t("tabAll"), items: activeProducts.slice(0, 4) },
     ...categoryNames.map((category) => ({ title: categoryLabel(category), category })),
   ];
 
@@ -753,7 +751,6 @@ function renderCategorySections() {
         <section class="category-block">
           <div class="section-heading">
             <div>
-              <span class="eyebrow">${section.title}</span>
               <h2>${section.title}</h2>
             </div>
           </div>
@@ -831,7 +828,6 @@ function closeProduct() {
 function addToCart(id, shouldOpenCart = true) {
   const product = products.find((item) => item.id === Number(id));
   if (!product) return;
-  if (Number(product.stock || 0) <= 0) return;
 
   const existing = cart.get(product.id);
   cart.set(product.id, { ...product, qty: existing ? existing.qty + 1 : 1 });

@@ -25,7 +25,7 @@ const translations = {
     discountBadge: "تخفيض",
     orderSummary: "طلب سريع",
     checkoutHeading: "اطلب الآن",
-    estimatedTotal: "المجموع التقريبي",
+    estimatedTotal: "المجموع",
     totalNote: "بدون مصاريف مخفية. نؤكد التفاصيل عبر واتساب قبل الإرسال.",
     deliveryPromise: "توصيل طنجة 24-48 ساعة",
     paymentPromise: "الدفع عند الاستلام",
@@ -88,7 +88,7 @@ const translations = {
     discountBadge: "Promo",
     orderSummary: "Commande rapide",
     checkoutHeading: "Commander",
-    estimatedTotal: "Total estime",
+    estimatedTotal: "Total",
     totalNote: "Sans frais caches. On confirme les details sur WhatsApp avant l'envoi.",
     deliveryPromise: "Livraison Tanger 24-48h",
     paymentPromise: "Paiement a la livraison",
@@ -746,14 +746,10 @@ function buySummary(product, soldOut, lowStock) {
   const discount = discountPercent(product);
   const intro = productSummary(product);
   const facts = productDecisionFacts(product, soldOut, lowStock);
-  const offer = productOffer(product);
   const rating = productRating(product);
   const variants = product.variants || [];
   return `
     <section class="pdp-buy-summary pdp-info-column">
-      <div class="desktop-promo-line">
-        ${offer.eyebrow ? `<em>${escapeHtml(offer.eyebrow)}</em>` : ""}
-      </div>
       <h1>${localText(product.title)}</h1>
       ${intro ? `<p class="buy-box-intro">${intro}</p>` : ""}
       ${
@@ -822,17 +818,16 @@ function orderForm(product, variants, soldOut) {
   const lowStock = managedStock && !soldOut && Number(product.stock || 0) <= 5;
   const offer = productOffer(product);
   return `
-    <form class="checkout-form product-order-form landing-order-form" data-product-order data-base-price="${Number(product.price || 0)}">
+    <form class="checkout-form product-order-form landing-order-form" data-product-order data-base-price="${Number(product.price || 0)}" data-old-price="${Number(product.oldPrice || 0)}">
       <div class="desktop-order-price">
         <h2>${t("checkoutHeading")}</h2>
         <div class="landing-price-row">
-          ${product.oldPrice ? `<span>${money(product.oldPrice)}</span>` : ""}
-          <strong>${money(product.price)}</strong>
+          ${product.oldPrice ? `<span data-order-old-total>${money(product.oldPrice)}</span>` : ""}
+          <strong data-order-total>${money(Number(product.price || 0) + firstExtraPrice)}</strong>
           ${discountPercent(product) ? `<em>-${discountPercent(product)}%</em>` : ""}
         </div>
       </div>
       <div class="order-form-heading">
-        <span class="eyebrow">${categoryText(product)} - ${stockText(product, soldOut, lowStock)}</span>
         <h2>${t("orderTitle")}</h2>
         <p>${t("note")}</p>
       </div>
@@ -926,13 +921,20 @@ function productFaq(product) {
 }
 
 function updateOrderTotal(form) {
-  const totalNode = form?.querySelector("[data-order-total]");
-  if (!form || !totalNode) return;
+  if (!form) return;
   const basePrice = Number(form.dataset.basePrice || 0);
+  const oldPrice = Number(form.dataset.oldPrice || 0);
   const qty = Math.max(1, Number(form.elements.qty?.value || 1));
   const selectedVariant = form.querySelector('input[name="variant"]:checked');
   const extraPrice = Number(selectedVariant?.dataset.extraPrice || 0);
-  totalNode.textContent = money((basePrice + extraPrice) * qty);
+  const total = (basePrice + extraPrice) * qty;
+  form.querySelectorAll("[data-order-total]").forEach((node) => {
+    node.textContent = money(total);
+  });
+  const oldTotalNode = form.querySelector("[data-order-old-total]");
+  if (oldTotalNode && oldPrice > basePrice) {
+    oldTotalNode.textContent = money((oldPrice + extraPrice) * qty);
+  }
 }
 
 function updateInfoVariantState(variantId) {
