@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CasaTanja Admin</title>
-    <link rel="stylesheet" href="styles.base.css?v=3" />
-    <link rel="stylesheet" href="styles.mobile.css?v=4" media="(max-width: 899px)" />
-    <link rel="stylesheet" href="styles.desktop.css?v=7" media="(min-width: 900px)" />
+    <link rel="stylesheet" href="styles.base.css?v=9" />
+    <link rel="stylesheet" href="styles.mobile.css?v=6" media="(max-width: 899px)" />
+    <link rel="stylesheet" href="styles.desktop.css?v=12" media="(min-width: 900px)" />
     <link rel="stylesheet" href="admin.css?v=4" />
   </head>
   <body class="admin-body">
@@ -104,7 +104,6 @@
               <button class="active" type="button" data-product-filter="all">All</button>
               <button type="button" data-product-filter="live">Live</button>
               <button type="button" data-product-filter="draft">Drafts</button>
-              <button type="button" data-product-filter="featured">Featured</button>
               <button type="button" data-product-filter="low">Low stock</button>
             </div>
           </div>
@@ -138,10 +137,6 @@
             <label>
               WhatsApp number, international format
               <input name="whatsappNumber" placeholder="212708012888" required />
-            </label>
-            <label>
-              Featured product ID
-              <input name="featuredProductId" type="number" min="1" placeholder="Optional" />
             </label>
             <button class="primary-action" type="submit">Save settings</button>
           </form>

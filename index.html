@@ -9,9 +9,9 @@
       content="Boutique mobile-first pour commander a Tanger avec WhatsApp et paiement a la livraison."
     />
     <link rel="preconnect" href="https://images.unsplash.com" />
-    <link rel="stylesheet" href="styles.base.css?v=3" />
-    <link rel="stylesheet" href="styles.mobile.css?v=4" media="(max-width: 899px)" />
-    <link rel="stylesheet" href="styles.desktop.css?v=7" media="(min-width: 900px)" />
+    <link rel="stylesheet" href="styles.base.css?v=9" />
+    <link rel="stylesheet" href="styles.mobile.css?v=6" media="(max-width: 899px)" />
+    <link rel="stylesheet" href="styles.desktop.css?v=12" media="(min-width: 900px)" />
   </head>
   <body>
     <div class="app-shell">
@@ -44,33 +44,6 @@
       </header>
 
       <main>
-        <section class="hero-band deal-band" aria-label="Deal of the day">
-          <a class="deal-bg-link" href="product.html?id=1" aria-label="Mini blender portable"></a>
-          <div class="deal-media" aria-hidden="true">
-            <div class="deal-main-image" data-deal-main-image></div>
-            <div class="deal-thumbs" data-deal-thumbs></div>
-          </div>
-          <div class="hero-copy deal-copy">
-            <span class="eyebrow" data-i18n="dealEyebrow">عرض اليوم</span>
-            <h1 data-i18n="dealTitle">خلاط صغير محمول</h1>
-            <p data-i18n="dealText">الأكثر طلبا هذا الأسبوع في طنجة. توصيل سريع والدفع عند الاستلام.</p>
-            <div class="deal-price-row">
-              <strong>189 MAD</strong>
-              <span>249 MAD</span>
-            </div>
-            <div class="deal-trust-row">
-              <span data-i18n="trustCodTitle">الدفع عند الاستلام</span>
-              <span data-i18n="trustDeliveryTitle">توصيل طنجة</span>
-              <span data-i18n="trustConfirmTitle">تأكيد عبر واتساب</span>
-            </div>
-            <ul class="deal-benefit-list" data-deal-benefits></ul>
-            <div class="hero-actions">
-              <button class="primary-action" type="button" data-add="1" data-i18n="dealOrder">اطلب الآن</button>
-              <a class="ghost-action" href="product.html?id=1" data-i18n="dealDetails">التفاصيل</a>
-            </div>
-          </div>
-        </section>
-
         <section class="tabs" aria-label="Categories" hidden>
           <button class="tab active" data-filter="all" data-i18n="tabAll" type="button">الأكثر طلبا</button>
           <button class="tab" data-filter="Maison" data-i18n="tabHome" type="button">المنزل</button>
@@ -82,6 +55,13 @@
         <section class="category-showcase" data-category-showcase aria-label="Shop by category"></section>
 
         <section id="products" class="product-section" aria-label="Produits">
+          <div class="section-heading" data-products-heading>
+            <div>
+              <h2 data-products-title>الأكثر طلبا</h2>
+              <p data-products-subtitle></p>
+            </div>
+            <button class="text-button" type="button" data-view-all data-i18n="viewAll">عرض الكل</button>
+          </div>
           <div class="product-grid" data-products></div>
         </section>
 
@@ -177,6 +157,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     <script src="supabase-service.js"></script>
-    <script src="script.js?v=17"></script>
+    <script src="script.js?v=24"></script>
   </body>
 </html>

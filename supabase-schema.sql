@@ -9,7 +9,6 @@ create table if not exists public.products (
   old_price numeric,
   stock integer,
   active boolean not null default true,
-  featured boolean not null default false,
   title jsonb not null default '{"ar":"","fr":""}'::jsonb,
   description jsonb not null default '{"ar":"","fr":""}'::jsonb,
   highlights jsonb not null default '{"ar":[],"fr":[]}'::jsonb,
@@ -35,7 +34,6 @@ create table if not exists public.settings (
   id text primary key default 'main',
   store_name text not null default 'CasaTanja',
   whatsapp_number text not null default '212708012888',
-  featured_product_id bigint,
   updated_at timestamptz not null default now()
 );
 
@@ -68,8 +66,8 @@ create table if not exists public.admin_users (
 -- select id, email from auth.users where email = 'you@example.com'
 -- on conflict (user_id) do nothing;
 
-insert into public.settings (id, store_name, whatsapp_number, featured_product_id)
-values ('main', 'CasaTanja', '212708012888', null)
+insert into public.settings (id, store_name, whatsapp_number)
+values ('main', 'CasaTanja', '212708012888')
 on conflict (id) do nothing;
 
 insert into public.categories (id, title, sort_order)

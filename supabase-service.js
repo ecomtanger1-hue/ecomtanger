@@ -39,7 +39,6 @@
       oldPrice: row.old_price === null || row.old_price === undefined ? null : Number(row.old_price),
       stock: row.stock === null || row.stock === undefined ? "" : Number(row.stock),
       active: row.active !== false,
-      featured: Boolean(row.featured),
       title: textRecord(row.title),
       description: textRecord(row.description),
       highlights: row.highlights || { ar: [], fr: [] },
@@ -59,7 +58,6 @@
       old_price: product.oldPrice === "" || product.oldPrice === undefined ? null : product.oldPrice,
       stock: product.stock === "" || product.stock === undefined ? null : product.stock,
       active: product.active !== false,
-      featured: Boolean(product.featured),
       title: textRecord(product.title),
       description: textRecord(product.description),
       highlights: product.highlights || { ar: [], fr: [] },
@@ -73,7 +71,6 @@
     return {
       storeName: row?.store_name || "CasaTanja",
       whatsappNumber: row?.whatsapp_number || "212708012888",
-      featuredProductId: row?.featured_product_id || "",
     };
   }
 
@@ -257,7 +254,6 @@
         id: "main",
         store_name: settings.storeName || "CasaTanja",
         whatsapp_number: settings.whatsappNumber || "212708012888",
-        featured_product_id: settings.featuredProductId || null,
       })
       .select("*")
       .single();

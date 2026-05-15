@@ -114,7 +114,6 @@ function normalizeProduct(input, fallback = {}) {
     oldPrice: input.oldPrice === "" || input.oldPrice === null ? null : Number(input.oldPrice ?? fallback.oldPrice ?? 0),
     stock: input.stock === "" ? "" : Number(input.stock ?? fallback.stock ?? 0),
     active: Boolean(input.active ?? fallback.active ?? true),
-    featured: Boolean(input.featured ?? fallback.featured ?? false),
     title: {
       ar: String(title.ar ?? fallback.title?.ar ?? "").trim(),
       fr: String(title.fr ?? fallback.title?.fr ?? "").trim(),
@@ -223,12 +222,6 @@ async function handleApi(request, response, url) {
     if (request.method === "POST") {
       const nextId = Math.max(0, ...store.products.map((product) => Number(product.id) || 0)) + 1;
       const product = { id: nextId, ...normalizeProduct(body) };
-      if (product.featured) {
-        store.products.forEach((item) => {
-          item.featured = false;
-        });
-        store.settings.featuredProductId = product.id;
-      }
       store.products.push(product);
       writeStore(store);
       sendJson(response, 201, product);
@@ -242,12 +235,6 @@ async function handleApi(request, response, url) {
         return;
       }
       const product = { id, ...normalizeProduct(body, store.products[index]) };
-      if (product.featured) {
-        store.products.forEach((item) => {
-          item.featured = item.id === id;
-        });
-        store.settings.featuredProductId = id;
-      }
       store.products[index] = product;
       writeStore(store);
       sendJson(response, 200, product);

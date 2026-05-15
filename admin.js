@@ -25,7 +25,6 @@ function productStockLabel(product) {
 }
 
 function productStatus(product) {
-  if (product.featured) return "Featured";
   return product.active === false ? "Draft" : "Live";
 }
 
@@ -88,7 +87,6 @@ function filteredProducts() {
       currentProductFilter === "all" ||
       (currentProductFilter === "live" && product.active !== false) ||
       (currentProductFilter === "draft" && product.active === false) ||
-      (currentProductFilter === "featured" && product.featured) ||
       (currentProductFilter === "low" && lowStock);
 
     const haystack = [product.id, product.sku, product.category, textValue(product.title), productStatus(product), money(product.price), productStockLabel(product)]
@@ -184,7 +182,6 @@ function renderOrders() {
 function renderSettings() {
   settingsForm.storeName.value = store.settings.storeName || "";
   settingsForm.whatsappNumber.value = store.settings.whatsappNumber || "";
-  settingsForm.featuredProductId.value = store.settings.featuredProductId || "";
 }
 
 document.addEventListener("click", async (event) => {
@@ -236,7 +233,6 @@ settingsForm.addEventListener("submit", async (event) => {
   await StoreBackend.saveSettings({
     storeName: settingsForm.storeName.value,
     whatsappNumber: settingsForm.whatsappNumber.value,
-    featuredProductId: Number(settingsForm.featuredProductId.value) || null,
   });
   await loadStore();
 });

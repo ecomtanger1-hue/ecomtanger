@@ -33,6 +33,34 @@
 }
 
 @media (max-width: 899px) {
+  .section-heading {
+    align-items: flex-start;
+  }
+
+  .section-heading p {
+    max-width: 22rem;
+    font-size: 0.78rem;
+  }
+
+  .text-button {
+    min-height: 34px;
+    padding-inline: 11px;
+  }
+
+  .product-price-line {
+    gap: 5px;
+  }
+
+  .card-old-price {
+    font-size: 0.7rem;
+  }
+
+  .card-discount {
+    min-height: 20px;
+    padding-inline: 6px;
+    font-size: 0.62rem;
+  }
+
   .product-card:active,
   .category-card:active,
   .pay-method:active {

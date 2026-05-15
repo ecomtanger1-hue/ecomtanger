@@ -501,7 +501,6 @@ function productPayload() {
     oldPrice: form.oldPrice.value ? Number(form.oldPrice.value) : null,
     stock: form.stock.value === "" ? "" : Number(form.stock.value),
     active: form.status.value === "active",
-    featured: form.featured.checked,
     title: { ar: title, fr: title },
     description: { ar: description, fr: description },
     highlights: { ar: lines(form.highlights.value), fr: lines(form.highlights.value) },
@@ -557,7 +556,6 @@ function fillProductForm(product) {
   form.price.value = product.price ?? "";
   form.oldPrice.value = product.oldPrice ?? "";
   form.stock.value = product.stock ?? "";
-  form.featured.checked = Boolean(product.featured);
   richEditor.innerHTML = product.description?.ar || product.description?.fr || "";
   form.summary.value = product.box?.summary?.ar || product.box?.summary?.fr || "";
   form.socialProofText.value = product.box?.socialProof?.ar || product.box?.socialProof?.fr || "";

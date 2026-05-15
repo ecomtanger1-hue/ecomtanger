@@ -9,11 +9,6 @@ const translations = {
     location: "طنجة اليوم",
     deliveryPill: "واتساب أو عند الاستلام",
     searchPlaceholder: "ابحث عن منتج",
-    dealEyebrow: "عرض اليوم",
-    dealTitle: "خلاط صغير محمول",
-    dealText: "الأكثر طلبا هذا الأسبوع في طنجة. توصيل سريع والدفع عند الاستلام.",
-    dealOrder: "اطلب الآن",
-    dealDetails: "التفاصيل",
     paymentWhatsAppTitle: "تأكيد عبر واتساب",
     paymentWhatsAppText: "تواصل معنا ونؤكد الطلب قبل الإرسال.",
     paymentCodTitle: "الدفع عند الاستلام",
@@ -32,6 +27,18 @@ const translations = {
     newProducts: "منتجات جديدة",
     tangierDeals: "عروض طنجة",
     view: "عرض",
+    viewAll: "عرض الكل",
+    bestSellersSubtitle: "منتجات يطلبها الزبناء أكثر في طنجة هذا الأسبوع.",
+    browseSubtitle: "اختر المنتج المناسب وأكد الطلب مباشرة عبر واتساب.",
+    searchSubtitle: "نتائج مطابقة لما تبحث عنه.",
+    newArrivals: "وصل حديثا",
+    newArrivalsSubtitle: "منتجات جديدة أضفناها للمتجر مؤخرا.",
+    todayOffers: "عروض اليوم",
+    todayOffersSubtitle: "منتجات عليها تخفيض واضح لفترة محدودة.",
+    categorySectionSubtitle: "اختيارات عملية جاهزة للطلب والتوصيل داخل طنجة.",
+    badgeOffer: "عرض",
+    badgeNew: "جديد",
+    badgeBestSeller: "الأكثر طلبا",
     navHome: "الرئيسية",
     navShop: "المتجر",
     navCart: "السلة",
@@ -91,11 +98,6 @@ const translations = {
     location: "Tanger aujourd'hui",
     deliveryPill: "WhatsApp ou livraison",
     searchPlaceholder: "Rechercher un produit",
-    dealEyebrow: "Offre du jour",
-    dealTitle: "Mini blender portable",
-    dealText: "Best seller cette semaine a Tanger. Livraison rapide et paiement a la reception.",
-    dealOrder: "Commander",
-    dealDetails: "Details",
     paymentWhatsAppTitle: "Confirmation WhatsApp",
     paymentWhatsAppText: "Notre equipe confirme la commande avant l'envoi.",
     paymentCodTitle: "Paiement a la livraison",
@@ -114,6 +116,18 @@ const translations = {
     newProducts: "Nouveautes",
     tangierDeals: "Offres a Tanger",
     view: "Voir",
+    viewAll: "Voir tout",
+    bestSellersSubtitle: "Les produits les plus demandes a Tanger cette semaine.",
+    browseSubtitle: "Choisissez le bon produit et confirmez directement via WhatsApp.",
+    searchSubtitle: "Resultats correspondant a votre recherche.",
+    newArrivals: "Nouveautes",
+    newArrivalsSubtitle: "Produits ajoutes recemment a la boutique.",
+    todayOffers: "Offres du jour",
+    todayOffersSubtitle: "Produits avec une vraie reduction pour une duree limitee.",
+    categorySectionSubtitle: "Selections pratiques, pretes a commander et livrer a Tanger.",
+    badgeOffer: "Offre",
+    badgeNew: "Nouveau",
+    badgeBestSeller: "Populaire",
     navHome: "Home",
     navShop: "Shop",
     navCart: "Panier",
@@ -288,6 +302,7 @@ const cart = new Map();
 let currentFilter = "all";
 let currentSearch = "";
 let currentLang = "ar";
+let showAllProducts = false;
 let storeSettings = {};
 let storeCategories = [];
 const publicStoreCacheKey = "casatanjaPublicStoreCache";
@@ -303,6 +318,9 @@ const langToggle = document.querySelector("[data-lang-toggle]");
 const currentLangLabel = document.querySelector("[data-current-lang]");
 const categorySections = document.querySelector("[data-category-sections]");
 const categoryShowcase = document.querySelector("[data-category-showcase]");
+const productsTitle = document.querySelector("[data-products-title]");
+const productsSubtitle = document.querySelector("[data-products-subtitle]");
+const viewAllButton = document.querySelector("[data-view-all]");
 const publicStoreCacheMaxAgeMs = 10 * 60 * 1000;
 
 const searchAliases = [
@@ -352,7 +370,6 @@ function cachePublicStore(store) {
 let motionObserver = null;
 let motionRefreshTimer = null;
 const motionRevealSelector = [
-  ".deal-band",
   ".category-card",
   ".product-card",
   ".category-block",
@@ -426,10 +443,6 @@ function money(value) {
   return `${value} MAD`;
 }
 
-function heroMoney(value) {
-  return `MAD ${Number(value || 0)}`;
-}
-
 function localText(value) {
   return typeof value === "string" ? value : value?.[currentLang] || value?.ar || value?.fr || "";
 }
@@ -441,12 +454,6 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
-}
-
-function stripHtml(value) {
-  const template = document.createElement("template");
-  template.innerHTML = String(value || "");
-  return template.content.textContent.trim();
 }
 
 function normalizeSearchText(value) {
@@ -517,75 +524,6 @@ function firstProductImage(product) {
   return Array.isArray(product.images) ? product.images.find(Boolean) : "";
 }
 
-function productImages(product) {
-  return Array.isArray(product.images) ? product.images.filter(Boolean) : [];
-}
-
-function featuredDealImages(product) {
-  const images = productImages(product);
-  const preferred = [
-    product.heroImage,
-    product.featuredImage,
-    product.coverImage,
-    product.mainImage,
-  ].filter(Boolean);
-  return [...preferred, ...images].filter((image, index, list) => list.indexOf(image) === index);
-}
-
-function productSummary(product) {
-  const boxSummary = localText(product.box?.summary);
-  return stripHtml(boxSummary || localText(product.description)).slice(0, 170);
-}
-
-function productHighlights(product) {
-  const value = product.highlights?.[currentLang] || product.highlights?.ar || product.highlights?.fr || [];
-  const items = Array.isArray(value) ? value : String(value || "").split("\n");
-  const cleaned = items.map((item) => stripHtml(item).trim()).filter(Boolean).slice(0, 4);
-  const fallback = currentLang === "ar"
-    ? [
-        "تصميم عملي بجيوب متعددة لتنظيم مثالي",
-        "حماية مبطنة للأغراض اليومية",
-        "مواد متينة ومقاومة للاستعمال اليومي",
-        "مريحة في الحمل وتناسب جميع التنقلات",
-      ]
-    : [
-        "Practical multi-pocket organization",
-        "Padded protection for daily essentials",
-        "Durable materials for daily use",
-        "Comfortable to carry on the move",
-      ];
-  return [...cleaned, ...fallback].filter((item, index, list) => list.indexOf(item) === index).slice(0, 4);
-}
-
-function offerText(value, fallback = "") {
-  return localText(value) || fallback;
-}
-
-function defaultTrustBadges() {
-  return [
-    { label: { ar: t("cod"), fr: t("cod") }, tone: "green" },
-    { label: { ar: t("delivery"), fr: t("delivery") }, tone: "teal" },
-    { label: { ar: t("trustConfirmTitle"), fr: t("trustConfirmTitle") }, tone: "green" },
-  ];
-}
-
-function productOffer(product) {
-  const offer = product.box?.offer || {};
-  const defaults = defaultTrustBadges();
-  const badges = Array.isArray(offer.trustBadges) && offer.trustBadges.length ? offer.trustBadges : defaults;
-  return {
-    eyebrow: offerText(offer.eyebrow, t("dealEyebrow")),
-    ctaLabel: offerText(offer.ctaLabel, t("dealOrder")),
-    trustBadges: badges
-      .map((badge, index) => ({
-        label: offerText(badge.label, offerText(defaults[index]?.label, "")),
-        tone: ["green", "teal", "neutral", "coral"].includes(badge.tone) ? badge.tone : defaults[index]?.tone || "green",
-      }))
-      .filter((badge) => badge.label)
-      .slice(0, 3),
-  };
-}
-
 function discountPercent(product) {
   if (!product.oldPrice || Number(product.oldPrice) <= Number(product.price)) return null;
   return Math.round(((Number(product.oldPrice) - Number(product.price)) / Number(product.oldPrice)) * 100);
@@ -597,6 +535,82 @@ function productImageMarkup(product) {
     return `<div class="product-image-placeholder">${localText(product.title)}</div>`;
   }
   return `<img src="${image}" alt="${localText(product.title)}" loading="lazy" />`;
+}
+
+function productHasDiscount(product) {
+  return Number(product.oldPrice || 0) > Number(product.price || 0);
+}
+
+function numericSignal(...values) {
+  for (const value of values) {
+    const direct = Number(value);
+    if (Number.isFinite(direct) && direct > 0) return direct;
+    const match = String(localText(value) || value || "").match(/\d+/);
+    if (match) return Number(match[0]);
+  }
+  return 0;
+}
+
+function productPopularityScore(product) {
+  return numericSignal(product.socialProofCount, product.socialProof, product.reviewCount, product.ratingCount) || Number(product.id || 0);
+}
+
+function bestSellerProducts(items) {
+  return [...items].sort((a, b) => productPopularityScore(b) - productPopularityScore(a));
+}
+
+function newestProducts(items) {
+  return [...items].sort((a, b) => Number(b.id || 0) - Number(a.id || 0));
+}
+
+function productBadge(product, preferredType = "") {
+  const limited = Number(product.stock || 0) > 0 && Number(product.stock || 0) <= 5;
+  if (limited) return { label: t("lowStock"), tone: "low" };
+  if (preferredType === "offer" && productHasDiscount(product)) return { label: t("badgeOffer"), tone: "offer" };
+  if (preferredType === "new") return { label: t("badgeNew"), tone: "new" };
+  if (preferredType === "best") return { label: t("badgeBestSeller"), tone: "best" };
+  if (productHasDiscount(product)) return { label: t("badgeOffer"), tone: "offer" };
+  return { label: t("cod"), tone: "cod" };
+}
+
+function productPriceMarkup(product) {
+  const discount = discountPercent(product);
+  const oldPrice = productHasDiscount(product) ? Number(product.oldPrice) : null;
+  return `
+    <div class="product-price-line">
+      <strong class="price">${money(product.price)}</strong>
+      ${oldPrice ? `<span class="card-old-price">${money(oldPrice)}</span>` : ""}
+      ${discount ? `<span class="card-discount">-${discount}%</span>` : ""}
+    </div>
+  `;
+}
+
+function renderLoadingProducts() {
+  const skeletonCards = Array.from({ length: 4 }, (_, index) => `
+    <article class="product-card product-card-skeleton" aria-hidden="true" style="--skeleton-delay: ${index * 85}ms">
+      <div class="product-image skeleton-block"></div>
+      <div class="product-info">
+        <div class="skeleton-line skeleton-title"></div>
+        <div class="skeleton-line skeleton-price"></div>
+        <div class="skeleton-line skeleton-note"></div>
+        <div class="skeleton-button"></div>
+      </div>
+    </article>
+  `).join("");
+  if (productGrid) productGrid.innerHTML = skeletonCards;
+  if (categorySections) {
+    categorySections.innerHTML = `
+      <section class="category-block category-block-skeleton" aria-hidden="true">
+        <div class="section-heading">
+          <div>
+            <div class="skeleton-line skeleton-heading"></div>
+            <div class="skeleton-line skeleton-subheading"></div>
+          </div>
+        </div>
+        <div class="product-grid category-grid">${skeletonCards}</div>
+      </section>
+    `;
+  }
 }
 
 function setLanguage(lang) {
@@ -617,18 +631,12 @@ function setLanguage(lang) {
   document.querySelectorAll("[data-i18n-aria]").forEach((node) => {
     node.setAttribute("aria-label", t(node.dataset.i18nAria));
   });
-  renderFeaturedDeal();
   renderCategoryShowcase();
   updateFilterControls();
   renderProducts();
   renderCategorySections();
   renderCart();
   scheduleMotionReveal();
-}
-
-function renderFeaturedDeal() {
-  const dealBand = document.querySelector(".deal-band");
-  if (dealBand) dealBand.remove();
 }
 
 function visibleProducts() {
@@ -682,50 +690,54 @@ function updateFilterControls() {
 
 function renderProducts() {
   const items = visibleProducts();
+  const isSearching = Boolean(currentSearch.trim());
+  const isFiltered = currentFilter !== "all";
+  const isExpandedBestSellers = showAllProducts && !isFiltered && !isSearching;
+  const isBrowsing = isFiltered || isSearching;
+  const displayItems = isExpandedBestSellers
+    ? bestSellerProducts(items)
+    : isBrowsing
+      ? items
+      : bestSellerProducts(items).slice(0, 4);
+  if (productsTitle) {
+    productsTitle.textContent = isFiltered ? categoryLabel(currentFilter) : isSearching ? t("tangierDeals") : t("tabAll");
+  }
+  if (productsSubtitle) {
+    productsSubtitle.textContent = isSearching
+      ? t("searchSubtitle")
+      : isFiltered
+        ? t("browseSubtitle")
+        : t("bestSellersSubtitle");
+  }
+  if (viewAllButton) {
+    viewAllButton.hidden = isExpandedBestSellers || isBrowsing || items.length <= 4;
+    viewAllButton.textContent = t("viewAll");
+  }
 
-  productGrid.innerHTML = items
-    .map((product) => {
-      const limited = Number(product.stock || 0) > 0 && Number(product.stock || 0) <= 5;
-      return `
-        <article class="product-card" data-product="${product.id}" tabindex="0" role="button" aria-label="${localText(product.title)}">
-          <div class="product-image">
-            ${productImageMarkup(product)}
-            <span class="badge">${limited ? t("lowStock") : t("cod")}</span>
-          </div>
-          <div class="product-info">
-            <h3 class="product-title">${localText(product.title)}</h3>
-            <div class="product-meta">
-              <strong class="price">${money(product.price)}</strong>
-              <span class="category">${categoryLabel(product.category)}</span>
-            </div>
-            <div class="delivery-note">${t("delivery")}</div>
-            <button class="add-button" type="button" data-add="${product.id}">${t("addPay")}</button>
-          </div>
-        </article>
-      `;
-    })
+  productGrid.innerHTML = displayItems
+    .map((product) => productCard(product, { badgeType: isBrowsing ? "" : "best" }))
     .join("");
 
-  if (!items.length) {
+  if (!displayItems.length) {
     productGrid.innerHTML = `<p class="empty-cart">${t("noProducts")}</p>`;
   }
   scheduleMotionReveal();
 }
 
-function productCard(product) {
-  const limited = Number(product.stock || 0) > 0 && Number(product.stock || 0) <= 5;
+function productCard(product, options = {}) {
+  const badge = productBadge(product, options.badgeType);
   return `
     <article class="product-card compact-card" data-product="${product.id}" tabindex="0" role="button" aria-label="${localText(product.title)}">
       <div class="product-image">
         ${productImageMarkup(product)}
-        <span class="badge">${limited ? t("lowStock") : t("cod")}</span>
+        <span class="badge badge-${badge.tone}">${badge.label}</span>
       </div>
       <div class="product-info">
         <h3 class="product-title">${localText(product.title)}</h3>
         <div class="product-meta">
-          <strong class="price">${money(product.price)}</strong>
-          <span class="category">${categoryLabel(product.category)}</span>
+          ${productPriceMarkup(product)}
         </div>
+        <div class="delivery-note">${t("delivery")}</div>
         <button class="add-button" type="button" data-add="${product.id}">${t("addPay")}</button>
       </div>
     </article>
@@ -733,28 +745,43 @@ function productCard(product) {
 }
 
 function renderCategorySections() {
+  if (currentFilter !== "all" || currentSearch.trim()) {
+    categorySections.innerHTML = "";
+    return;
+  }
   const activeProducts = products.filter((product) => product.active !== false);
   const categoryNames = [
     ...storeCategories.map((category) => category.id),
     ...activeProducts.map((product) => product.category).filter(Boolean),
   ].filter((category, index, list) => category && list.indexOf(category) === index);
+  const newestItems = newestProducts(activeProducts).slice(0, 4);
+  const offerItems = activeProducts.filter(productHasDiscount).slice(0, 4);
   const sections = [
-    { title: t("tabAll"), items: activeProducts.slice(0, 4) },
-    ...categoryNames.map((category) => ({ title: categoryLabel(category), category })),
-  ];
+    { title: t("newArrivals"), subtitle: t("newArrivalsSubtitle"), items: newestItems, badgeType: "new" },
+    offerItems.length ? { title: t("todayOffers"), subtitle: t("todayOffersSubtitle"), items: offerItems, badgeType: "offer" } : null,
+    ...categoryNames
+      .map((category) => {
+        const items = products.filter((product) => product.active !== false && product.category === category);
+        if (items.length < 3) return null;
+        return { title: categoryLabel(category), subtitle: t("categorySectionSubtitle"), category, items: items.slice(0, 4) };
+      })
+      .filter(Boolean),
+  ].filter(Boolean);
 
   categorySections.innerHTML = sections
     .map((section) => {
-      const items = section.items || products.filter((product) => product.active !== false && product.category === section.category).slice(0, 4);
+      const items = section.items || [];
       if (!items.length) return "";
       return `
         <section class="category-block">
           <div class="section-heading">
             <div>
               <h2>${section.title}</h2>
+              <p>${section.subtitle || ""}</p>
             </div>
+            ${section.category ? `<button class="text-button" type="button" data-filter="${section.category}">${t("viewAll")}</button>` : ""}
           </div>
-          <div class="product-grid category-grid">${items.map(productCard).join("")}</div>
+          <div class="product-grid category-grid">${items.map((product) => productCard(product, { badgeType: section.badgeType || "" })).join("")}</div>
         </section>
       `;
     })
@@ -907,11 +934,11 @@ document.addEventListener("click", (event) => {
   const addButton = event.target.closest("[data-add]");
   const incButton = event.target.closest("[data-inc]");
   const decButton = event.target.closest("[data-dec]");
-  const dealThumb = event.target.closest("[data-deal-thumb]");
   const openButton = event.target.closest(".cart-button, .nav-cart");
   const closeButton = event.target.closest("[data-close-cart]");
   const closeProductButton = event.target.closest("[data-close-product]");
   const filterButton = event.target.closest("[data-filter]");
+  const viewAll = event.target.closest("[data-view-all]");
   const productCard = event.target.closest("[data-product]");
 
   if (addButton) {
@@ -920,18 +947,6 @@ document.addEventListener("click", (event) => {
     addButton.classList.add("just-added");
     window.setTimeout(() => addButton.classList.remove("just-added"), 460);
     addToCart(addButton.dataset.add);
-    return;
-  }
-  if (dealThumb) {
-    const image = dealThumb.dataset.dealThumb;
-    const mainImage = document.querySelector("[data-deal-main-image]");
-    const mainImageNode = mainImage?.querySelector("img");
-    const dealBand = document.querySelector(".deal-band");
-    if (mainImageNode) mainImageNode.src = image;
-    if (dealBand) dealBand.style.backgroundImage = `url("${image}")`;
-    document.querySelectorAll("[data-deal-thumb]").forEach((button) => {
-      button.classList.toggle("active", button === dealThumb);
-    });
     return;
   }
   if (incButton) updateQty(incButton.dataset.inc, 1);
@@ -943,10 +958,22 @@ document.addEventListener("click", (event) => {
     openProduct(productCard.dataset.product);
   }
 
-  if (filterButton) {
-    currentFilter = filterButton.dataset.filter;
+  if (viewAll) {
+    showAllProducts = true;
+    currentFilter = "all";
+    currentSearch = "";
+    searchInput.value = "";
     updateFilterControls();
     renderProducts();
+    renderCategorySections();
+  }
+
+  if (filterButton) {
+    currentFilter = filterButton.dataset.filter;
+    showAllProducts = filterButton.dataset.filter === "all" ? true : showAllProducts;
+    updateFilterControls();
+    renderProducts();
+    renderCategorySections();
   }
 });
 
@@ -964,7 +991,9 @@ document.addEventListener("keydown", (event) => {
 
 searchInput.addEventListener("input", (event) => {
   currentSearch = event.target.value;
+  showAllProducts = Boolean(currentSearch.trim());
   renderProducts();
+  renderCategorySections();
 });
 
 langToggle.addEventListener("click", () => {
@@ -992,11 +1021,13 @@ checkoutForm.addEventListener("submit", async (event) => {
 
 async function initStorefront() {
   restoreCart();
-  applyStore(readCachedPublicStore());
+  const cachedStore = readCachedPublicStore();
+  applyStore(cachedStore);
   setLanguage(localStorage.getItem("storeLanguage") || "ar");
   updateFilterControls();
+  if (!cachedStore) renderLoadingProducts();
   const loaded = await loadBackendStore();
-  if (loaded) {
+  if (loaded || !cachedStore) {
     setLanguage(currentLang);
     updateFilterControls();
   }
