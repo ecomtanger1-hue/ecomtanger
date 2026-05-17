@@ -9,6 +9,14 @@ const translations = {
     location: "طنجة اليوم",
     deliveryPill: "واتساب أو عند الاستلام",
     searchPlaceholder: "ابحث عن منتج",
+    storefrontKicker: "اختيارات جاهزة للتوصيل",
+    storefrontTitle: "تسوق منتجات TanjaMol",
+    storefrontSubtitle: "منتجات عملية للبيت، الجمال، التقنية والمطبخ. أكد طلبك عبر واتساب وادفع عند الاستلام داخل طنجة.",
+    storefrontOfferKicker: "عرض اليوم",
+    storefrontOfferTitle: "اطلب الآن وخلّي التأكيد علينا",
+    storefrontOfferAction: "شاهد المنتجات",
+    shopByCategory: "تسوق حسب الفئة",
+    shopByCategorySubtitle: "أو شاهد كل المنتجات في الأسفل",
     paymentWhatsAppTitle: "تأكيد عبر واتساب",
     paymentWhatsAppText: "تواصل معنا ونؤكد الطلب قبل الإرسال.",
     paymentCodTitle: "الدفع عند الاستلام",
@@ -98,6 +106,14 @@ const translations = {
     location: "Tanger aujourd'hui",
     deliveryPill: "WhatsApp ou livraison",
     searchPlaceholder: "Rechercher un produit",
+    storefrontKicker: "Selections pretes a livrer",
+    storefrontTitle: "Acheter les produits TanjaMol",
+    storefrontSubtitle: "Produits pratiques pour la maison, beaute, tech et cuisine. Confirmez sur WhatsApp et payez a la livraison a Tanger.",
+    storefrontOfferKicker: "Offre du jour",
+    storefrontOfferTitle: "Commandez maintenant, on confirme avec vous",
+    storefrontOfferAction: "Voir les produits",
+    shopByCategory: "Shop par categorie",
+    shopByCategorySubtitle: "Ou voyez tous les produits ci-dessous",
     paymentWhatsAppTitle: "Confirmation WhatsApp",
     paymentWhatsAppText: "Notre equipe confirme la commande avant l'envoi.",
     paymentCodTitle: "Paiement a la livraison",
@@ -585,6 +601,13 @@ function productPriceMarkup(product) {
   `;
 }
 
+function shortProductDescription(product) {
+  const text = localText(product.box?.summary) || localText(product.description);
+  const clean = String(text || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  if (!clean) return "";
+  return clean.length > 112 ? `${clean.slice(0, 109).trim()}...` : clean;
+}
+
 function renderLoadingProducts() {
   const skeletonCards = Array.from({ length: 4 }, (_, index) => `
     <article class="product-card product-card-skeleton" aria-hidden="true" style="--skeleton-delay: ${index * 85}ms">
@@ -726,19 +749,22 @@ function renderProducts() {
 
 function productCard(product, options = {}) {
   const badge = productBadge(product, options.badgeType);
+  const description = shortProductDescription(product);
   return `
-    <article class="product-card compact-card" data-product="${product.id}" tabindex="0" role="button" aria-label="${localText(product.title)}">
+    <article class="product-card compact-card store-product-card" data-product="${product.id}" tabindex="0" role="button" aria-label="${localText(product.title)}">
       <div class="product-image">
         ${productImageMarkup(product)}
         <span class="badge badge-${badge.tone}">${badge.label}</span>
       </div>
       <div class="product-info">
         <h3 class="product-title">${localText(product.title)}</h3>
-        <div class="product-meta">
-          ${productPriceMarkup(product)}
+        ${description ? `<p class="product-card-desc">${escapeHtml(description)}</p>` : ""}
+        <div class="product-card-footer">
+          <div class="product-meta">
+            ${productPriceMarkup(product)}
+          </div>
+          <button class="add-button" type="button" data-add="${product.id}">${t("addPay")}</button>
         </div>
-        <div class="delivery-note">${t("delivery")}</div>
-        <button class="add-button" type="button" data-add="${product.id}">${t("addPay")}</button>
       </div>
     </article>
   `;

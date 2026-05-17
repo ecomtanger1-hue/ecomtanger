@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="styles.base.css?v=13" />
     <link rel="stylesheet" href="styles.mobile.css?v=8" media="(max-width: 899px)" />
     <link rel="stylesheet" href="styles.desktop.css?v=17" media="(min-width: 900px)" />
+    <link rel="stylesheet" href="storefront-modern.css?v=1" />
   </head>
   <body>
     <div class="app-shell">
@@ -50,6 +51,24 @@
           <button class="tab" data-filter="Cuisine" data-i18n="tabKitchen" type="button">مطبخ</button>
           <button class="tab" data-filter="Tech" data-i18n="tabTech" type="button">تقنية</button>
           <button class="tab" data-filter="Beaute" data-i18n="tabBeauty" type="button">جمال</button>
+        </section>
+
+        <section class="storefront-intro" aria-labelledby="storefront-title">
+          <div class="collection-copy">
+            <p data-i18n="storefrontKicker">اختيارات جاهزة للتوصيل</p>
+            <h1 id="storefront-title" data-i18n="storefrontTitle">تسوق منتجات TanjaMol</h1>
+            <p data-i18n="storefrontSubtitle">منتجات عملية للبيت، الجمال، التقنية والمطبخ. أكد طلبك عبر واتساب وادفع عند الاستلام داخل طنجة.</p>
+          </div>
+          <a class="collection-offer" href="#products">
+            <span data-i18n="storefrontOfferKicker">عرض اليوم</span>
+            <strong data-i18n="storefrontOfferTitle">اطلب الآن وخلّي التأكيد علينا</strong>
+            <small data-i18n="storefrontOfferAction">شاهد المنتجات</small>
+          </a>
+        </section>
+
+        <section class="shop-category-heading" aria-label="Shop by category">
+          <h2 data-i18n="shopByCategory">تسوق حسب الفئة</h2>
+          <p data-i18n="shopByCategorySubtitle">أو شاهد كل المنتجات في الأسفل</p>
         </section>
 
         <section class="category-showcase" data-category-showcase aria-label="Shop by category"></section>
@@ -157,6 +176,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     <script src="supabase-service.js"></script>
-    <script src="script.js?v=24"></script>
+    <script src="script.js?v=26"></script>
   </body>
 </html>
