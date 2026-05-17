@@ -1295,7 +1295,7 @@ function modernCheckout(product, variants, soldOut, lowStock) {
           </div>
         </div>
         <button class="whatsapp-cta whatsapp-checkout" type="submit" ${soldOut ? "disabled" : ""}>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a8.5 8.5 0 0 0-7.28 12.88L4 21l5.25-1.37A8.5 8.5 0 1 0 12 3Z"/><path d="M9.4 8.7c.2-.44.36-.45.62-.45h.45c.15 0 .38.06.58.3.2.23.76.82.76 2 0 1.17-.78 2.3-.9 2.45-.1.16-1.55 2.62-3.82 3.57-.53.22-.95.35-1.27.45-.54.18-1.03.15-1.42.09-.43-.07-1.33-.6-1.52-1.18-.18-.58-.18-1.08-.13-1.18.06-.1.2-.16.43-.3.22-.13 1.32-.72 1.52-.8.2-.08.35-.13.5.14.14.27.57.96.7 1.12.13.15.26.18.48.06.22-.13.94-.38 1.78-1.22.66-.66 1.1-1.47 1.23-1.72.13-.25.02-.39-.1-.52-.12-.12-.27-.32-.4-.48-.13-.16-.18-.27-.27-.45-.09-.18-.04-.34.02-.48.06-.13.5-1.32.7-1.8Z"/></svg>
+          <svg class="whatsapp-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16.04 3.2c-7.06 0-12.8 5.72-12.8 12.77 0 2.25.59 4.45 1.72 6.38L3.13 29l6.82-1.79a12.73 12.73 0 0 0 6.09 1.55h.01c7.05 0 12.79-5.72 12.79-12.77 0-3.41-1.33-6.62-3.75-9.04a12.7 12.7 0 0 0-9.05-3.75Zm0 23.4h-.01c-1.93 0-3.82-.52-5.46-1.5l-.39-.23-4.04 1.06 1.08-3.94-.25-.4a10.58 10.58 0 0 1-1.62-5.62c0-5.87 4.79-10.64 10.69-10.64 2.85 0 5.53 1.11 7.55 3.13a10.55 10.55 0 0 1 3.13 7.53c0 5.86-4.79 10.61-10.68 10.61Zm5.86-7.95c-.32-.16-1.9-.94-2.2-1.04-.3-.11-.52-.16-.74.16-.21.32-.85 1.04-1.04 1.26-.19.21-.38.24-.7.08-.32-.16-1.35-.5-2.57-1.58-.95-.85-1.59-1.9-1.78-2.22-.19-.32-.02-.5.14-.66.15-.14.32-.37.48-.56.16-.18.21-.32.32-.53.11-.22.05-.4-.03-.56-.08-.16-.74-1.78-1.02-2.44-.27-.64-.54-.55-.74-.56h-.63c-.21 0-.56.08-.85.4-.3.32-1.12 1.1-1.12 2.67s1.15 3.1 1.31 3.31c.16.22 2.26 3.45 5.47 4.84.76.33 1.36.53 1.83.67.77.24 1.46.2 2.01.12.61-.09 1.9-.78 2.17-1.53.27-.75.27-1.39.19-1.53-.08-.13-.29-.21-.61-.37Z"/></svg>
           <span>${soldOut ? t("outOfStock") : escapeHtml(offer.ctaLabel)}</span>
         </button>
       </form>
@@ -1380,29 +1380,28 @@ function modernLandingSections(product) {
       </div>
     </section>
 
-    <section class="use-section" aria-labelledby="use-title">
+    <section class="use-section flexible-product-section" aria-labelledby="use-title">
       <div class="section-heading">
-        <p>${t("howToOrder")}</p>
-        <h2 id="use-title">${modernText("Ù…Ù† Ø§Ù„Ø§Ø®ØªÙŠØ§Ø± Ø¥Ù„Ù‰ Ø§Ù„ØªØ£ÙƒÙŠØ¯ ÙÙŠ Ø«Ù„Ø§Ø« Ø®Ø·ÙˆØ§Øª", "De la selection a la confirmation en trois etapes")}</h2>
+        <h2 id="use-title">${modernText("Ù†Ø¸Ø±Ø© Ø£Ù‚Ø±Ø¨ Ø¹Ù„Ù‰ Ø§Ù„Ù…Ù†ØªØ¬", "Un regard plus proche sur le produit")}</h2>
       </div>
       <div class="step-grid">
         <article>
           ${images[0] ? `<img src="${images[0]}" alt="${escapeHtml(localText(product.title))}" loading="lazy" />` : ""}
           <span>1</span>
-          <h3>${modernText("Ø§Ø®ØªØ± Ø§Ù„Ù…Ù†ØªØ¬", "Choisissez le produit")}</h3>
-          <p>${modernText("Ø±Ø§Ø¬Ø¹ Ø§Ù„ØµÙˆØ± ÙˆØ§Ù„ØªÙØ§ØµÙŠÙ„ ÙˆØ§Ø®ØªØ± Ø§Ù„Ù†Ø³Ø®Ø© Ø§Ù„Ù…Ù†Ø§Ø³Ø¨Ø©.", "Verifiez les photos, les details et l'option adaptee.")}</p>
+          <h3>${modernText("ØªÙØ§ØµÙŠÙ„ Ø§Ù„Ø§Ø³ØªØ¹Ù…Ø§Ù„", "Details d'utilisation")}</h3>
+          <p>${summary ? escapeHtml(summary) : modernText("ÙÙƒØ±Ø© Ø³Ø±ÙŠØ¹Ø© Ø¹Ù† Ø·Ø±ÙŠÙ‚Ø© Ø§Ù„Ø§Ø³ØªÙØ§Ø¯Ø© Ù…Ù† Ø§Ù„Ù…Ù†ØªØ¬ ÙÙŠ Ø§Ù„ÙŠÙˆÙ…ÙŠ.", "Une idee rapide de l'utilisation du produit au quotidien.")}</p>
         </article>
         <article>
           ${images[1] ? `<img src="${images[1]}" alt="${escapeHtml(localText(product.title))}" loading="lazy" />` : ""}
           <span>2</span>
-          <h3>${modernText("Ø§Ù…Ù„Ø£ Ù…Ø¹Ù„ÙˆÙ…Ø§ØªÙƒ", "Ajoutez vos infos")}</h3>
-          <p>${modernText("Ø§ÙƒØªØ¨ Ø§Ù„Ø§Ø³Ù…ØŒ Ø§Ù„Ù‡Ø§ØªÙØŒ ÙˆØ§Ù„Ø¹Ù†ÙˆØ§Ù† Ù„ØªØ£ÙƒÙŠØ¯ Ø§Ù„Ø·Ù„Ø¨.", "Nom, telephone et adresse pour confirmer la commande.")}</p>
+          <h3>${modernText("Ø£Ø¨Ø±Ø² Ø§Ù„Ù…Ù…ÙŠØ²Ø§Øª", "Points forts")}</h3>
+          <p>${highlights[0] ? escapeHtml(highlights[0]) : modernText("Ø§Ø³ØªØ¹Ø±Ø§Ø¶ Ø¨Ø³ÙŠØ· Ù„Ù…Ø§ ÙŠØ¬Ø¹Ù„ Ø§Ù„Ù…Ù†ØªØ¬ Ù…ÙÙŠØ¯Ø§.", "Un resume simple de ce qui rend le produit utile.")}</p>
         </article>
         <article>
           ${images[2] ? `<img src="${images[2]}" alt="${escapeHtml(localText(product.title))}" loading="lazy" />` : ""}
           <span>3</span>
-          <h3>${modernText("Ø£ÙƒØ¯ Ø¹Ø¨Ø± ÙˆØ§ØªØ³Ø§Ø¨", "Confirmez sur WhatsApp")}</h3>
-          <p>${modernText("Ù†Ø±Ø§Ø¬Ø¹ Ø§Ù„ØªÙØ§ØµÙŠÙ„ Ù…Ø¹Ùƒ Ù‚Ø¨Ù„ Ø§Ù„Ø¥Ø±Ø³Ø§Ù„.", "On verifie les details avec vous avant l'envoi.")}</p>
+          <h3>${modernText("Ù…Ù†Ø§Ø³Ø¨ Ù„Ù…Ù†ØŸ", "Pour qui ?")}</h3>
+          <p>${highlights[1] ? escapeHtml(highlights[1]) : modernText("Ù…Ø³Ø§Ø­Ø© Ù…Ø±Ù†Ø© Ù„Ø´Ø±Ø­ Ø£ÙŠ Ø²Ø§ÙˆÙŠØ© ØªØ³ÙˆÙŠÙ‚ÙŠØ© Ù„Ù„Ù…Ù†ØªØ¬.", "Un espace flexible pour expliquer l'angle marketing du produit.")}</p>
         </article>
       </div>
     </section>
@@ -1442,10 +1441,6 @@ function modernLandingSections(product) {
       <details open>
         <summary>${t("deliveryReturns")}</summary>
         <p>${t("deliveryReturnsText")}</p>
-      </details>
-      <details>
-        <summary>${t("howToOrder")}</summary>
-        <p>${t("howToOrderText")}</p>
       </details>
       <details>
         <summary>${t("whatsInBox")}</summary>

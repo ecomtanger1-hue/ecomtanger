@@ -1,0 +1,6 @@
+interface:
+  display_name: "TanjaMol Product Page"
+  short_description: "Build COD product pages for Arabic/French stores."
+  default_prompt: "Use $tanjamol-product-page to create or update a dynamic COD product page with Arabic/French support, WhatsApp checkout, gallery, variants, add-ons, and landing content."
+policy:
+  allow_implicit_invocation: true
