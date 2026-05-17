@@ -334,6 +334,7 @@ const langToggle = document.querySelector("[data-lang-toggle]");
 const currentLangLabel = document.querySelector("[data-current-lang]");
 const categorySections = document.querySelector("[data-category-sections]");
 const categoryShowcase = document.querySelector("[data-category-showcase]");
+const storefrontCollage = document.querySelector("[data-storefront-collage]");
 const productsTitle = document.querySelector("[data-products-title]");
 const productsSubtitle = document.querySelector("[data-products-subtitle]");
 const viewAllButton = document.querySelector("[data-view-all]");
@@ -386,6 +387,8 @@ function cachePublicStore(store) {
 let motionObserver = null;
 let motionRefreshTimer = null;
 const motionRevealSelector = [
+  ".storefront-intro",
+  ".hero-product-chip",
   ".category-card",
   ".product-card",
   ".category-block",
@@ -654,6 +657,7 @@ function setLanguage(lang) {
   document.querySelectorAll("[data-i18n-aria]").forEach((node) => {
     node.setAttribute("aria-label", t(node.dataset.i18nAria));
   });
+  renderStorefrontCollage();
   renderCategoryShowcase();
   updateFilterControls();
   renderProducts();
@@ -703,6 +707,21 @@ function renderCategoryShowcase() {
     })
     .join("");
   scheduleMotionReveal();
+}
+
+function renderStorefrontCollage() {
+  if (!storefrontCollage) return;
+  const activeProducts = products.filter((product) => product.active !== false && firstProductImage(product)).slice(0, 5);
+  storefrontCollage.innerHTML = activeProducts
+    .map(
+      (product, index) => `
+        <a class="hero-product-chip hero-product-chip-${index + 1}" href="product.html?id=${product.id}" aria-label="${localText(product.title)}">
+          <img src="${firstProductImage(product)}" alt="" loading="lazy" />
+          <span>${localText(product.title)}</span>
+        </a>
+      `,
+    )
+    .join("");
 }
 
 function updateFilterControls() {

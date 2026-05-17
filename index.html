@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="styles.base.css?v=13" />
     <link rel="stylesheet" href="styles.mobile.css?v=8" media="(max-width: 899px)" />
     <link rel="stylesheet" href="styles.desktop.css?v=17" media="(min-width: 900px)" />
-    <link rel="stylesheet" href="storefront-modern.css?v=1" />
+    <link rel="stylesheet" href="storefront-modern.css?v=3" />
   </head>
   <body>
     <div class="app-shell">
@@ -58,7 +58,13 @@
             <p data-i18n="storefrontKicker">اختيارات جاهزة للتوصيل</p>
             <h1 id="storefront-title" data-i18n="storefrontTitle">تسوق منتجات TanjaMol</h1>
             <p data-i18n="storefrontSubtitle">منتجات عملية للبيت، الجمال، التقنية والمطبخ. أكد طلبك عبر واتساب وادفع عند الاستلام داخل طنجة.</p>
+            <div class="hero-trust-row" aria-label="Store promises">
+              <span data-i18n="delivery">طنجة 24-48 ساعة</span>
+              <span data-i18n="sendWhatsapp">أكد الطلب عبر واتساب</span>
+              <span data-i18n="cod">عند الاستلام</span>
+            </div>
           </div>
+          <div class="hero-product-collage" data-storefront-collage aria-hidden="true"></div>
           <a class="collection-offer" href="#products">
             <span data-i18n="storefrontOfferKicker">عرض اليوم</span>
             <strong data-i18n="storefrontOfferTitle">اطلب الآن وخلّي التأكيد علينا</strong>
@@ -176,6 +182,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     <script src="supabase-service.js"></script>
-    <script src="script.js?v=26"></script>
+    <script src="script.js?v=27"></script>
   </body>
 </html>
