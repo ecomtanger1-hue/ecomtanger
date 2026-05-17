@@ -1763,11 +1763,11 @@ legend {
   align-items: center;
   min-height: 58px;
   padding: 8px 10px;
-  border: 1px solid rgba(18, 140, 85, 0.16);
-  border-radius: 8px;
+  border: 1px solid rgba(18, 140, 85, 0.14);
+  border-radius: 12px;
   background: #fff;
   color: var(--ink);
-  box-shadow: 0 16px 46px rgba(21, 23, 26, 0.18);
+  box-shadow: 0 14px 36px rgba(21, 23, 26, 0.14);
 }
 
 .mobile-sticky-pdp-cta span {
@@ -1779,7 +1779,7 @@ legend {
   align-items: center;
   justify-content: center;
   min-height: 42px;
-  border-radius: 8px;
+  border-radius: 10px;
   background: var(--green);
   color: #fff;
   font-size: 0.92rem;
@@ -2085,13 +2085,15 @@ legend {
 }
 
 .landing-benefits article,
+.product-content-cards .content-card,
+.problem-solution-section,
 .landing-specs,
 .landing-repeat-cta,
 .landing-story {
-  border: 1px solid var(--line);
-  border-radius: 8px;
+  border: 1px solid rgba(229, 225, 217, 0.82);
+  border-radius: 10px;
   background: var(--surface);
-  box-shadow: 0 10px 24px rgba(21, 23, 26, 0.04);
+  box-shadow: 0 8px 22px rgba(21, 23, 26, 0.035);
 }
 
 .landing-benefits article {
@@ -2100,6 +2102,18 @@ legend {
   padding: 14px;
 }
 
+.product-content-cards {
+  display: grid;
+  gap: 12px;
+}
+
+.product-content-cards .content-card {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+}
+
+.product-content-cards h2,
 .landing-benefits h2,
 .landing-story h2,
 .landing-specs h2,
@@ -2108,12 +2122,84 @@ legend {
   font-size: 1.1rem;
 }
 
+.product-content-cards p,
 .landing-benefits p,
 .landing-story p,
 .landing-repeat-cta p {
   margin: 0;
   color: var(--muted);
   line-height: 1.55;
+}
+
+.product-content-cards ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.product-content-cards li {
+  position: relative;
+  padding-inline-start: 20px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.product-content-cards li::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0.58em;
+  inset-inline-start: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--green);
+}
+
+.problem-solution-section {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+}
+
+.problem-solution-heading {
+  display: grid;
+  gap: 8px;
+}
+
+.problem-solution-heading h2,
+.problem-solution-heading p,
+.problem-solution-grid p {
+  margin: 0;
+}
+
+.problem-solution-heading h2 {
+  font-size: 1.1rem;
+}
+
+.problem-solution-heading p,
+.problem-solution-grid p {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.problem-solution-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.problem-solution-grid article {
+  display: grid;
+  gap: 7px;
+  padding: 13px;
+  border-radius: 8px;
+  background: var(--surface-soft);
+}
+
+.problem-solution-grid strong {
+  color: var(--ink);
+  font-weight: 950;
 }
 
 .landing-benefits strong {
@@ -2269,19 +2355,20 @@ legend {
   display: grid;
   gap: 14px;
   padding: 16px;
-  background:
-    linear-gradient(135deg, rgba(21, 23, 26, 0.94), rgba(30, 48, 52, 0.92)),
-    var(--ink);
-  color: #fff;
+  border-color: rgba(22, 163, 74, 0.2);
+  background: linear-gradient(135deg, rgba(22, 163, 74, 0.08), rgba(15, 139, 141, 0.06)), #fff;
+  color: var(--ink);
 }
 
 .landing-repeat-cta p {
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--muted);
 }
 
 .landing-repeat-cta .primary-action {
   width: 100%;
   min-height: 48px;
+  background: var(--green);
+  box-shadow: 0 10px 22px rgba(22, 163, 74, 0.14);
 }
 
 .product-faq-section {
@@ -2303,8 +2390,8 @@ legend {
 
 .related-products {
   display: grid;
-  gap: 12px;
-  margin-top: 8px;
+  gap: 14px;
+  margin-top: 6px;
 }
 
 .product-page .related-products .product-grid {
@@ -2320,7 +2407,15 @@ legend {
 }
 
 .product-page .related-products .product-card {
-  flex: 0 0 165px;
+  flex: 0 0 176px;
+}
+
+.product-page .related-products .product-title {
+  min-height: 38px;
+}
+
+.product-page .related-products .related-details-button {
+  min-height: 38px;
 }
 
 .missing-product {

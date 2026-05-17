@@ -33,6 +33,155 @@
 }
 
 @media (max-width: 899px) {
+  .product-page-shell {
+    padding-bottom: calc(82px + env(safe-area-inset-bottom));
+  }
+
+  .product-page {
+    gap: 14px;
+  }
+
+  .product-landing-hero {
+    gap: 12px;
+  }
+
+  .page-gallery {
+    margin-inline: -10px;
+  }
+
+  .pdp-buy-summary,
+  .product-order-form {
+    border-radius: 10px;
+    box-shadow: 0 8px 22px rgba(21, 23, 26, 0.045);
+  }
+
+  .pdp-buy-summary {
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .buy-box-header h1 {
+    font-size: clamp(1.45rem, 6vw, 1.9rem);
+  }
+
+  .buy-box-intro {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .quick-fact-list {
+    gap: 7px;
+  }
+
+  .quick-fact-list li {
+    font-size: 0.84rem;
+  }
+
+  .order-form-section {
+    scroll-margin-top: 74px;
+  }
+
+  .product-order-form {
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .order-form-heading {
+    gap: 5px;
+  }
+
+  .order-form-heading h2 {
+    font-size: 1rem;
+  }
+
+  .order-form-heading p {
+    font-size: 0.8rem;
+  }
+
+  .variant-choice-group,
+  .quantity-field {
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+  }
+
+  .variant-choice-group legend,
+  .quantity-field > span {
+    margin-bottom: 8px;
+    color: var(--ink);
+    font-size: 0.82rem;
+    font-weight: 900;
+  }
+
+  .variant-choice span {
+    min-height: 38px;
+    padding-inline: 11px;
+  }
+
+  .product-qty-stepper {
+    border-radius: 9px;
+    background: #fff;
+  }
+
+  .product-qty-stepper button,
+  .product-qty-stepper input {
+    min-height: 42px;
+  }
+
+  .order-contact-fields {
+    gap: 10px;
+  }
+
+  .product-order-form input {
+    min-height: 44px;
+  }
+
+  .order-cost-preview {
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  .product-order-form .whatsapp-checkout {
+    min-height: 48px;
+    border-radius: 10px;
+  }
+
+  .product-order-form .checkout-reassurance-list {
+    justify-items: center;
+    font-size: 0.76rem;
+    text-align: center;
+  }
+
+  .product-order-form .checkout-reassurance-list span:nth-child(2) {
+    display: none;
+  }
+
+  .mobile-sticky-pdp-cta {
+    right: 10px;
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    left: 10px;
+    grid-template-columns: auto minmax(0, 1fr);
+    min-height: 54px;
+    padding: 7px 8px;
+    border-radius: 12px;
+    box-shadow: 0 10px 28px rgba(21, 23, 26, 0.14);
+  }
+
+  .mobile-sticky-pdp-cta span {
+    font-size: 0.86rem;
+  }
+
+  .mobile-sticky-pdp-cta strong {
+    min-height: 40px;
+    border-radius: 10px;
+    font-size: 0.84rem;
+  }
+
+  .landing-repeat-cta {
+    border-radius: 10px;
+  }
+
   .section-heading {
     align-items: flex-start;
   }

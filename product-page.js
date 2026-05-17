@@ -1,68 +1,76 @@
-let whatsappNumber = "212708012888";
+﻿let whatsappNumber = "212708012888";
 
 const translations = {
   ar: {
-    backAria: "العودة إلى المنتجات",
-    delivery: "طنجة 24-48 ساعة",
-    cod: "الدفع عند الاستلام",
-    description: "الوصف",
-    highlights: "المميزات",
-    orderTitle: "أكد طلبك عبر واتساب",
-    nameLabel: "الاسم الكامل",
-    phoneLabel: "الهاتف",
-    addressLabel: "الحي / المدينة",
-    namePlaceholder: "اسمك",
-    addressPlaceholder: "مثال: مالاباطا، طنجة",
-    qtyLabel: "الكمية",
-    variantLabel: "الخيار",
-    outOfStock: "غير متوفر حاليا",
-    lowStock: "باقي عدد محدود",
-    whatsInBox: "ماذا يوجد في العلبة",
-    deliveryReturns: "التوصيل والاستبدال",
-    howToOrder: "كيف تطلب",
-    relatedProducts: "منتجات مشابهة",
-    bestOffers: "أفضل العروض",
-    discountBadge: "تخفيض",
-    orderSummary: "طلب سريع",
-    checkoutHeading: "اطلب الآن",
-    estimatedTotal: "المجموع",
-    totalNote: "بدون مصاريف مخفية. نؤكد التفاصيل عبر واتساب قبل الإرسال.",
-    deliveryPromise: "توصيل طنجة 24-48 ساعة",
-    paymentPromise: "الدفع عند الاستلام",
-    supportPromise: "تأكيد ومتابعة عبر واتساب",
-    limitedOffer: "عرض محدود مع الدفع عند الاستلام",
-    deliveryCityTitle: "توصيل داخل طنجة",
-    deliveryCityText: "توصيل سريع وآمن إلى العنوان المحدد.",
-    deliveryMoroccoTitle: "قريبا في مدن أخرى",
-    deliveryMoroccoText: "نبدأ بطنجة ثم نوسع التوصيل لباقي المغرب.",
-    easyReturnTitle: "استبدال سهل",
-    easyReturnText: "أي مشكل في الطلب نراجعه معك عبر واتساب.",
-    repeatCtaTitle: "جاهز تطلب هذا المنتج؟",
-    repeatCtaText: "املأ معلوماتك في نموذج الطلب وسنؤكد معك التفاصيل عبر واتساب قبل الإرسال.",
-    technicalSheet: "معلومات المنتج",
-    specCategory: "الفئة",
-    specStock: "المخزون",
-    specDelivery: "التوصيل",
-    boxDefault: "المنتج، التغليف، وأي ملحقات موضحة في الصور.",
-    deliveryReturnsText: "التوصيل في طنجة خلال 24-48 ساعة. الدفع عند الاستلام متاح، ونراجع أي مشكل عبر واتساب.",
-    howToOrderText: "اختر الكمية أو الخيار المناسب، املأ معلوماتك، ثم أكد الطلب عبر واتساب.",
-    sectionDescription: "الوصف",
-    sectionSpecs: "المعلومات",
-    sectionDelivery: "التوصيل",
-    sectionRelated: "مشابهة",
-    fullscreenImage: "عرض الصورة",
-    ratingReviews: "({count} تقييم)",
-    availableStock: "المخزون متوفر",
-    sendWhatsapp: "أكد الطلب عبر واتساب",
-    note: "الدفع عند الاستلام متاح. سنؤكد معك التفاصيل قبل الإرسال.",
-    missing: "لم نجد هذا المنتج.",
-    backProducts: "العودة للمنتجات",
-    total: "المجموع",
-    messageIntro: "سلام، أريد تأكيد هذا الطلب:",
-    name: "الاسم",
-    phone: "الهاتف",
-    address: "العنوان",
-    variant: "الخيار",
+    backAria: "Ø§Ù„Ø¹ÙˆØ¯Ø© Ø¥Ù„Ù‰ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª",
+    delivery: "Ø·Ù†Ø¬Ø© 24-48 Ø³Ø§Ø¹Ø©",
+    cod: "Ø§Ù„Ø¯ÙØ¹ Ø¹Ù†Ø¯ Ø§Ù„Ø§Ø³ØªÙ„Ø§Ù…",
+    description: "Ø§Ù„ÙˆØµÙ",
+    highlights: "Ø§Ù„Ù…Ù…ÙŠØ²Ø§Øª",
+    orderTitle: "Ø£ÙƒØ¯ Ø·Ù„Ø¨Ùƒ Ø¹Ø¨Ø± ÙˆØ§ØªØ³Ø§Ø¨",
+    nameLabel: "Ø§Ù„Ø§Ø³Ù… Ø§Ù„ÙƒØ§Ù…Ù„",
+    phoneLabel: "Ø§Ù„Ù‡Ø§ØªÙ",
+    addressLabel: "Ø§Ù„Ø­ÙŠ / Ø§Ù„Ù…Ø¯ÙŠÙ†Ø©",
+    namePlaceholder: "Ø§Ø³Ù…Ùƒ",
+    addressPlaceholder: "Ù…Ø«Ø§Ù„: Ù…Ø§Ù„Ø§Ø¨Ø§Ø·Ø§ØŒ Ø·Ù†Ø¬Ø©",
+    qtyLabel: "Ø§Ù„ÙƒÙ…ÙŠØ©",
+    variantLabel: "Ø§Ù„Ø®ÙŠØ§Ø±",
+    outOfStock: "ØºÙŠØ± Ù…ØªÙˆÙØ± Ø­Ø§Ù„ÙŠØ§",
+    lowStock: "Ø¨Ø§Ù‚ÙŠ Ø¹Ø¯Ø¯ Ù…Ø­Ø¯ÙˆØ¯",
+    whatsInBox: "Ù…Ø§Ø°Ø§ ÙŠÙˆØ¬Ø¯ ÙÙŠ Ø§Ù„Ø¹Ù„Ø¨Ø©",
+    deliveryReturns: "Ø§Ù„ØªÙˆØµÙŠÙ„ ÙˆØ§Ù„Ø§Ø³ØªØ¨Ø¯Ø§Ù„",
+    howToOrder: "ÙƒÙŠÙ ØªØ·Ù„Ø¨",
+    relatedProducts: "Ù…Ù†ØªØ¬Ø§Øª Ù…Ø´Ø§Ø¨Ù‡Ø©",
+    bestOffers: "Ø£ÙØ¶Ù„ Ø§Ù„Ø¹Ø±ÙˆØ¶",
+    discountBadge: "ØªØ®ÙÙŠØ¶",
+    orderSummary: "Ø·Ù„Ø¨ Ø³Ø±ÙŠØ¹",
+    checkoutHeading: "Ø§Ø·Ù„Ø¨ Ø§Ù„Ø¢Ù†",
+    estimatedTotal: "Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹",
+    totalNote: "Ø¨Ø¯ÙˆÙ† Ù…ØµØ§Ø±ÙŠÙ Ù…Ø®ÙÙŠØ©. Ù†Ø¤ÙƒØ¯ Ø§Ù„ØªÙØ§ØµÙŠÙ„ Ø¹Ø¨Ø± ÙˆØ§ØªØ³Ø§Ø¨ Ù‚Ø¨Ù„ Ø§Ù„Ø¥Ø±Ø³Ø§Ù„.",
+    deliveryPromise: "ØªÙˆØµÙŠÙ„ Ø·Ù†Ø¬Ø© 24-48 Ø³Ø§Ø¹Ø©",
+    paymentPromise: "Ø§Ù„Ø¯ÙØ¹ Ø¹Ù†Ø¯ Ø§Ù„Ø§Ø³ØªÙ„Ø§Ù…",
+    supportPromise: "ØªØ£ÙƒÙŠØ¯ ÙˆÙ…ØªØ§Ø¨Ø¹Ø© Ø¹Ø¨Ø± ÙˆØ§ØªØ³Ø§Ø¨",
+    limitedOffer: "Ø¹Ø±Ø¶ Ù…Ø­Ø¯ÙˆØ¯ Ù…Ø¹ Ø§Ù„Ø¯ÙØ¹ Ø¹Ù†Ø¯ Ø§Ù„Ø§Ø³ØªÙ„Ø§Ù…",
+    deliveryCityTitle: "ØªÙˆØµÙŠÙ„ Ø¯Ø§Ø®Ù„ Ø·Ù†Ø¬Ø©",
+    deliveryCityText: "ØªÙˆØµÙŠÙ„ Ø³Ø±ÙŠØ¹ ÙˆØ¢Ù…Ù† Ø¥Ù„Ù‰ Ø§Ù„Ø¹Ù†ÙˆØ§Ù† Ø§Ù„Ù…Ø­Ø¯Ø¯.",
+    deliveryMoroccoTitle: "Ù‚Ø±ÙŠØ¨Ø§ ÙÙŠ Ù…Ø¯Ù† Ø£Ø®Ø±Ù‰",
+    deliveryMoroccoText: "Ù†Ø¨Ø¯Ø£ Ø¨Ø·Ù†Ø¬Ø© Ø«Ù… Ù†ÙˆØ³Ø¹ Ø§Ù„ØªÙˆØµÙŠÙ„ Ù„Ø¨Ø§Ù‚ÙŠ Ø§Ù„Ù…ØºØ±Ø¨.",
+    easyReturnTitle: "Ø§Ø³ØªØ¨Ø¯Ø§Ù„ Ø³Ù‡Ù„",
+    easyReturnText: "Ø£ÙŠ Ù…Ø´ÙƒÙ„ ÙÙŠ Ø§Ù„Ø·Ù„Ø¨ Ù†Ø±Ø§Ø¬Ø¹Ù‡ Ù…Ø¹Ùƒ Ø¹Ø¨Ø± ÙˆØ§ØªØ³Ø§Ø¨.",
+    repeatCtaTitle: "Ù‡Ù„ ÙŠÙ†Ø§Ø³Ø¨Ùƒ Ù‡Ø°Ø§ Ø§Ù„Ù…Ù†ØªØ¬ØŸ",
+    repeatCtaText: "Ø±Ø§Ø¬Ø¹ Ø§Ù„ØªÙØ§ØµÙŠÙ„ØŒ Ø«Ù… Ø§Ù…Ù„Ø£ Ù†Ù…ÙˆØ°Ø¬ Ø§Ù„Ø·Ù„Ø¨ Ø¹Ù†Ø¯Ù…Ø§ ØªÙƒÙˆÙ† Ø¬Ø§Ù‡Ø²Ø§. Ø³Ù†Ø¤ÙƒØ¯ Ù…Ø¹Ùƒ ÙƒÙ„ Ø´ÙŠØ¡ Ø¹Ø¨Ø± ÙˆØ§ØªØ³Ø§Ø¨ Ù‚Ø¨Ù„ Ø§Ù„Ø¥Ø±Ø³Ø§Ù„.",
+    repeatCtaButton: "Ø§Ù„Ø§Ù†ØªÙ‚Ø§Ù„ Ø¥Ù„Ù‰ Ù†Ù…ÙˆØ°Ø¬ Ø§Ù„Ø·Ù„Ø¨",
+    technicalSheet: "Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬",
+    specCategory: "Ø§Ù„ÙØ¦Ø©",
+    specStock: "Ø§Ù„Ù…Ø®Ø²ÙˆÙ†",
+    specDelivery: "Ø§Ù„ØªÙˆØµÙŠÙ„",
+    boxDefault: "Ø§Ù„Ù…Ù†ØªØ¬ØŒ Ø§Ù„ØªØºÙ„ÙŠÙØŒ ÙˆØ£ÙŠ Ù…Ù„Ø­Ù‚Ø§Øª Ù…ÙˆØ¶Ø­Ø© ÙÙŠ Ø§Ù„ØµÙˆØ±.",
+    deliveryReturnsText: "Ø§Ù„ØªÙˆØµÙŠÙ„ ÙÙŠ Ø·Ù†Ø¬Ø© Ø®Ù„Ø§Ù„ 24-48 Ø³Ø§Ø¹Ø©. Ø§Ù„Ø¯ÙØ¹ Ø¹Ù†Ø¯ Ø§Ù„Ø§Ø³ØªÙ„Ø§Ù… Ù…ØªØ§Ø­ØŒ ÙˆÙ†Ø±Ø§Ø¬Ø¹ Ø£ÙŠ Ù…Ø´ÙƒÙ„ Ø¹Ø¨Ø± ÙˆØ§ØªØ³Ø§Ø¨.",
+    howToOrderText: "Ø§Ø®ØªØ± Ø§Ù„ÙƒÙ…ÙŠØ© Ø£Ùˆ Ø§Ù„Ø®ÙŠØ§Ø± Ø§Ù„Ù…Ù†Ø§Ø³Ø¨ØŒ Ø§Ù…Ù„Ø£ Ù…Ø¹Ù„ÙˆÙ…Ø§ØªÙƒØŒ Ø«Ù… Ø£ÙƒØ¯ Ø§Ù„Ø·Ù„Ø¨ Ø¹Ø¨Ø± ÙˆØ§ØªØ³Ø§Ø¨.",
+    problemSolutionEyebrow: "Ù„Ù…Ø§Ø°Ø§ Ù‡Ø°Ø§ Ø§Ù„Ù…Ù†ØªØ¬ØŸ",
+    problemSolutionTitle: "Ù…Ø´ÙƒÙ„Ø© Ø¨Ø³ÙŠØ·Ø©ØŒ Ø­Ù„ Ø¹Ù…Ù„ÙŠ",
+    problemLabel: "Ù‚Ø¨Ù„",
+    solutionLabel: "Ø¨Ø¹Ø¯",
+    problemText: "ØªØ¨Ø­Ø« Ø¹Ù† Ø­Ù„ Ø¹Ù…Ù„ÙŠ Ø¨Ø¯ÙˆÙ† ØªØ¹Ù‚ÙŠØ¯ØŒ ÙˆØªØ±ÙŠØ¯ Ø£Ù† ØªØªØ£ÙƒØ¯ Ù…Ù† Ø§Ù„ØªÙØ§ØµÙŠÙ„ Ù‚Ø¨Ù„ Ø§Ù„Ø´Ø±Ø§Ø¡.",
+    solutionText: "Ø§Ø®ØªØ± Ø§Ù„Ù…Ù†ØªØ¬ØŒ Ø£ÙƒØ¯ Ø§Ù„Ø·Ù„Ø¨ Ø¹Ø¨Ø± ÙˆØ§ØªØ³Ø§Ø¨ØŒ ÙˆØ§Ø¯ÙØ¹ Ø¹Ù†Ø¯ Ø§Ù„Ø§Ø³ØªÙ„Ø§Ù… Ø¨Ø¹Ø¯ Ø§Ù„ØªÙˆØµÙ„.",
+    sectionDescription: "Ø§Ù„ÙˆØµÙ",
+    sectionSpecs: "Ø§Ù„Ù…Ø¹Ù„ÙˆÙ…Ø§Øª",
+    sectionDelivery: "Ø§Ù„ØªÙˆØµÙŠÙ„",
+    sectionRelated: "Ù…Ø´Ø§Ø¨Ù‡Ø©",
+    fullscreenImage: "Ø¹Ø±Ø¶ Ø§Ù„ØµÙˆØ±Ø©",
+    ratingReviews: "({count} ØªÙ‚ÙŠÙŠÙ…)",
+    availableStock: "Ø§Ù„Ù…Ø®Ø²ÙˆÙ† Ù…ØªÙˆÙØ±",
+    sendWhatsapp: "Ø£ÙƒØ¯ Ø§Ù„Ø·Ù„Ø¨ Ø¹Ø¨Ø± ÙˆØ§ØªØ³Ø§Ø¨",
+    note: "Ø§Ù„Ø¯ÙØ¹ Ø¹Ù†Ø¯ Ø§Ù„Ø§Ø³ØªÙ„Ø§Ù… Ù…ØªØ§Ø­. Ø³Ù†Ø¤ÙƒØ¯ Ù…Ø¹Ùƒ Ø§Ù„ØªÙØ§ØµÙŠÙ„ Ù‚Ø¨Ù„ Ø§Ù„Ø¥Ø±Ø³Ø§Ù„.",
+    missing: "Ù„Ù… Ù†Ø¬Ø¯ Ù‡Ø°Ø§ Ø§Ù„Ù…Ù†ØªØ¬.",
+    backProducts: "Ø§Ù„Ø¹ÙˆØ¯Ø© Ù„Ù„Ù…Ù†ØªØ¬Ø§Øª",
+    total: "Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹",
+    messageIntro: "Ø³Ù„Ø§Ù…ØŒ Ø£Ø±ÙŠØ¯ ØªØ£ÙƒÙŠØ¯ Ù‡Ø°Ø§ Ø§Ù„Ø·Ù„Ø¨:",
+    name: "Ø§Ù„Ø§Ø³Ù…",
+    phone: "Ø§Ù„Ù‡Ø§ØªÙ",
+    address: "Ø§Ù„Ø¹Ù†ÙˆØ§Ù†",
+    variant: "Ø§Ù„Ø®ÙŠØ§Ø±",
+    viewDetails: "Ø§Ù„ØªÙØ§ØµÙŠÙ„",
   },
   fr: {
     backAria: "Retour aux produits",
@@ -100,8 +108,9 @@ const translations = {
     deliveryMoroccoText: "On commence par Tanger puis on etend au Maroc.",
     easyReturnTitle: "Echange facile",
     easyReturnText: "Tout probleme est traite avec vous sur WhatsApp.",
-    repeatCtaTitle: "Pret a commander ce produit ?",
-    repeatCtaText: "Remplissez le formulaire, puis on confirme les details sur WhatsApp avant l'envoi.",
+    repeatCtaTitle: "Ce produit vous convient ?",
+    repeatCtaText: "Verifiez les details, puis remplissez le formulaire quand vous etes pret. On confirme tout sur WhatsApp avant l'envoi.",
+    repeatCtaButton: "Aller au formulaire",
     technicalSheet: "Fiche produit",
     specCategory: "Categorie",
     specStock: "Stock",
@@ -109,6 +118,12 @@ const translations = {
     boxDefault: "Le produit, son emballage, et les accessoires visibles sur les photos.",
     deliveryReturnsText: "Livraison a Tanger sous 24-48h. Paiement a la livraison disponible, probleme traite sur WhatsApp.",
     howToOrderText: "Choisissez la quantite ou l'option, renseignez vos infos, puis confirmez via WhatsApp.",
+    problemSolutionEyebrow: "Pourquoi ce produit ?",
+    problemSolutionTitle: "Un besoin simple, une solution pratique",
+    problemLabel: "Avant",
+    solutionLabel: "Apres",
+    problemText: "Vous cherchez une solution utile sans complication, avec les details verifies avant l'achat.",
+    solutionText: "Choisissez le produit, confirmez sur WhatsApp, puis payez a la livraison apres reception.",
     sectionDescription: "Description",
     sectionSpecs: "Infos",
     sectionDelivery: "Livraison",
@@ -126,21 +141,22 @@ const translations = {
     phone: "Telephone",
     address: "Adresse",
     variant: "Option",
+    viewDetails: "Details",
   },
 };
 
 let products = [
   {
     id: 1,
-    category: { ar: "مطبخ", fr: "Cuisine" },
+    category: { ar: "Ù…Ø·Ø¨Ø®", fr: "Cuisine" },
     price: 189,
-    title: { ar: "خلاط صغير محمول", fr: "Mini blender portable" },
+    title: { ar: "Ø®Ù„Ø§Ø· ØµØºÙŠØ± Ù…Ø­Ù…ÙˆÙ„", fr: "Mini blender portable" },
     description: {
-      ar: "خلاط عملي للعصائر السريعة في البيت، العمل أو السفر. سهل الشحن والتنظيف ومناسب للاستعمال اليومي.",
+      ar: "Ø®Ù„Ø§Ø· Ø¹Ù…Ù„ÙŠ Ù„Ù„Ø¹ØµØ§Ø¦Ø± Ø§Ù„Ø³Ø±ÙŠØ¹Ø© ÙÙŠ Ø§Ù„Ø¨ÙŠØªØŒ Ø§Ù„Ø¹Ù…Ù„ Ø£Ùˆ Ø§Ù„Ø³ÙØ±. Ø³Ù‡Ù„ Ø§Ù„Ø´Ø­Ù† ÙˆØ§Ù„ØªÙ†Ø¸ÙŠÙ ÙˆÙ…Ù†Ø§Ø³Ø¨ Ù„Ù„Ø§Ø³ØªØ¹Ù…Ø§Ù„ Ø§Ù„ÙŠÙˆÙ…ÙŠ.",
       fr: "Un blender pratique pour les jus rapides a la maison, au bureau ou en deplacement. Rechargeable, compact et facile a nettoyer.",
     },
     highlights: {
-      ar: ["بطارية قابلة للشحن", "حجم خفيف للحمل", "كوب مدمج للشرب"],
+      ar: ["Ø¨Ø·Ø§Ø±ÙŠØ© Ù‚Ø§Ø¨Ù„Ø© Ù„Ù„Ø´Ø­Ù†", "Ø­Ø¬Ù… Ø®ÙÙŠÙ Ù„Ù„Ø­Ù…Ù„", "ÙƒÙˆØ¨ Ù…Ø¯Ù…Ø¬ Ù„Ù„Ø´Ø±Ø¨"],
       fr: ["Batterie rechargeable", "Format leger", "Gobelet integre"],
     },
     images: [
@@ -151,15 +167,15 @@ let products = [
   },
   {
     id: 2,
-    category: { ar: "المنزل", fr: "Maison" },
+    category: { ar: "Ø§Ù„Ù…Ù†Ø²Ù„", fr: "Maison" },
     price: 129,
-    title: { ar: "منظم منزلي قابل للطي", fr: "Organiseur maison pliable" },
+    title: { ar: "Ù…Ù†Ø¸Ù… Ù…Ù†Ø²Ù„ÙŠ Ù‚Ø§Ø¨Ù„ Ù„Ù„Ø·ÙŠ", fr: "Organiseur maison pliable" },
     description: {
-      ar: "حل بسيط لترتيب الملابس، الإكسسوارات أو أدوات المنزل بدون أخذ مساحة كبيرة.",
+      ar: "Ø­Ù„ Ø¨Ø³ÙŠØ· Ù„ØªØ±ØªÙŠØ¨ Ø§Ù„Ù…Ù„Ø§Ø¨Ø³ØŒ Ø§Ù„Ø¥ÙƒØ³Ø³ÙˆØ§Ø±Ø§Øª Ø£Ùˆ Ø£Ø¯ÙˆØ§Øª Ø§Ù„Ù…Ù†Ø²Ù„ Ø¨Ø¯ÙˆÙ† Ø£Ø®Ø° Ù…Ø³Ø§Ø­Ø© ÙƒØ¨ÙŠØ±Ø©.",
       fr: "Une solution simple pour organiser vetements, accessoires ou produits de maison sans prendre trop d'espace.",
     },
     highlights: {
-      ar: ["قابل للطي", "مناسب للخزانة والرفوف", "سهل التنظيف"],
+      ar: ["Ù‚Ø§Ø¨Ù„ Ù„Ù„Ø·ÙŠ", "Ù…Ù†Ø§Ø³Ø¨ Ù„Ù„Ø®Ø²Ø§Ù†Ø© ÙˆØ§Ù„Ø±ÙÙˆÙ", "Ø³Ù‡Ù„ Ø§Ù„ØªÙ†Ø¸ÙŠÙ"],
       fr: ["Pliable", "Ideal pour placards et etageres", "Facile a nettoyer"],
     },
     images: [
@@ -170,15 +186,15 @@ let products = [
   },
   {
     id: 3,
-    category: { ar: "تقنية", fr: "Tech" },
+    category: { ar: "ØªÙ‚Ù†ÙŠØ©", fr: "Tech" },
     price: 159,
-    title: { ar: "سماعات بلوتوث صغيرة", fr: "Ecouteurs Bluetooth compact" },
+    title: { ar: "Ø³Ù…Ø§Ø¹Ø§Øª Ø¨Ù„ÙˆØªÙˆØ« ØµØºÙŠØ±Ø©", fr: "Ecouteurs Bluetooth compact" },
     description: {
-      ar: "سماعات لاسلكية للاستعمال اليومي مع علبة شحن صغيرة وصوت واضح للمكالمات والموسيقى.",
+      ar: "Ø³Ù…Ø§Ø¹Ø§Øª Ù„Ø§Ø³Ù„ÙƒÙŠØ© Ù„Ù„Ø§Ø³ØªØ¹Ù…Ø§Ù„ Ø§Ù„ÙŠÙˆÙ…ÙŠ Ù…Ø¹ Ø¹Ù„Ø¨Ø© Ø´Ø­Ù† ØµØºÙŠØ±Ø© ÙˆØµÙˆØª ÙˆØ§Ø¶Ø­ Ù„Ù„Ù…ÙƒØ§Ù„Ù…Ø§Øª ÙˆØ§Ù„Ù…ÙˆØ³ÙŠÙ‚Ù‰.",
       fr: "Des ecouteurs sans fil pour le quotidien, avec boitier compact et son clair pour appels et musique.",
     },
     highlights: {
-      ar: ["علبة شحن", "مناسبة للمكالمات", "تصميم خفيف"],
+      ar: ["Ø¹Ù„Ø¨Ø© Ø´Ø­Ù†", "Ù…Ù†Ø§Ø³Ø¨Ø© Ù„Ù„Ù…ÙƒØ§Ù„Ù…Ø§Øª", "ØªØµÙ…ÙŠÙ… Ø®ÙÙŠÙ"],
       fr: ["Boitier de charge", "Appels clairs", "Design leger"],
     },
     images: [
@@ -189,15 +205,15 @@ let products = [
   },
   {
     id: 4,
-    category: { ar: "جمال", fr: "Beaute" },
+    category: { ar: "Ø¬Ù…Ø§Ù„", fr: "Beaute" },
     price: 249,
-    title: { ar: "فرشاة تصفيف 3 في 1", fr: "Brosse coiffante 3 en 1" },
+    title: { ar: "ÙØ±Ø´Ø§Ø© ØªØµÙÙŠÙ 3 ÙÙŠ 1", fr: "Brosse coiffante 3 en 1" },
     description: {
-      ar: "فرشاة عملية لتجفيف وتصفيف الشعر بسرعة، مناسبة للاستعمال في البيت قبل الخروج.",
+      ar: "ÙØ±Ø´Ø§Ø© Ø¹Ù…Ù„ÙŠØ© Ù„ØªØ¬ÙÙŠÙ ÙˆØªØµÙÙŠÙ Ø§Ù„Ø´Ø¹Ø± Ø¨Ø³Ø±Ø¹Ø©ØŒ Ù…Ù†Ø§Ø³Ø¨Ø© Ù„Ù„Ø§Ø³ØªØ¹Ù…Ø§Ù„ ÙÙŠ Ø§Ù„Ø¨ÙŠØª Ù‚Ø¨Ù„ Ø§Ù„Ø®Ø±ÙˆØ¬.",
       fr: "Une brosse pratique pour secher et coiffer rapidement les cheveux a la maison.",
     },
     highlights: {
-      ar: ["تصفيف سريع", "ثلاث وظائف", "مقبض مريح"],
+      ar: ["ØªØµÙÙŠÙ Ø³Ø±ÙŠØ¹", "Ø«Ù„Ø§Ø« ÙˆØ¸Ø§Ø¦Ù", "Ù…Ù‚Ø¨Ø¶ Ù…Ø±ÙŠØ­"],
       fr: ["Coiffage rapide", "Trois fonctions", "Poignee confortable"],
     },
     images: [
@@ -208,15 +224,15 @@ let products = [
   },
   {
     id: 5,
-    category: { ar: "المنزل", fr: "Maison" },
+    category: { ar: "Ø§Ù„Ù…Ù†Ø²Ù„", fr: "Maison" },
     price: 99,
-    title: { ar: "مصباح LED قابل للشحن", fr: "Lampe LED rechargeable" },
+    title: { ar: "Ù…ØµØ¨Ø§Ø­ LED Ù‚Ø§Ø¨Ù„ Ù„Ù„Ø´Ø­Ù†", fr: "Lampe LED rechargeable" },
     description: {
-      ar: "مصباح خفيف للقراءة، المكتب أو غرفة النوم، يشتغل بالشحن ويعطي إضاءة ناعمة.",
+      ar: "Ù…ØµØ¨Ø§Ø­ Ø®ÙÙŠÙ Ù„Ù„Ù‚Ø±Ø§Ø¡Ø©ØŒ Ø§Ù„Ù…ÙƒØªØ¨ Ø£Ùˆ ØºØ±ÙØ© Ø§Ù„Ù†ÙˆÙ…ØŒ ÙŠØ´ØªØºÙ„ Ø¨Ø§Ù„Ø´Ø­Ù† ÙˆÙŠØ¹Ø·ÙŠ Ø¥Ø¶Ø§Ø¡Ø© Ù†Ø§Ø¹Ù…Ø©.",
       fr: "Une lampe legere pour la lecture, le bureau ou la chambre, rechargeable avec lumiere douce.",
     },
     highlights: {
-      ar: ["إضاءة ناعمة", "قابل للشحن", "مناسب للمكتب"],
+      ar: ["Ø¥Ø¶Ø§Ø¡Ø© Ù†Ø§Ø¹Ù…Ø©", "Ù‚Ø§Ø¨Ù„ Ù„Ù„Ø´Ø­Ù†", "Ù…Ù†Ø§Ø³Ø¨ Ù„Ù„Ù…ÙƒØªØ¨"],
       fr: ["Lumiere douce", "Rechargeable", "Ideal bureau"],
     },
     images: [
@@ -227,15 +243,15 @@ let products = [
   },
   {
     id: 6,
-    category: { ar: "تقنية", fr: "Tech" },
+    category: { ar: "ØªÙ‚Ù†ÙŠØ©", fr: "Tech" },
     price: 89,
-    title: { ar: "حامل هاتف للسيارة", fr: "Support telephone voiture" },
+    title: { ar: "Ø­Ø§Ù…Ù„ Ù‡Ø§ØªÙ Ù„Ù„Ø³ÙŠØ§Ø±Ø©", fr: "Support telephone voiture" },
     description: {
-      ar: "حامل ثابت للهاتف داخل السيارة، يساعدك في استعمال الخرائط والمكالمات بدون إزعاج.",
+      ar: "Ø­Ø§Ù…Ù„ Ø«Ø§Ø¨Øª Ù„Ù„Ù‡Ø§ØªÙ Ø¯Ø§Ø®Ù„ Ø§Ù„Ø³ÙŠØ§Ø±Ø©ØŒ ÙŠØ³Ø§Ø¹Ø¯Ùƒ ÙÙŠ Ø§Ø³ØªØ¹Ù…Ø§Ù„ Ø§Ù„Ø®Ø±Ø§Ø¦Ø· ÙˆØ§Ù„Ù…ÙƒØ§Ù„Ù…Ø§Øª Ø¨Ø¯ÙˆÙ† Ø¥Ø²Ø¹Ø§Ø¬.",
       fr: "Un support stable pour utiliser le GPS et les appels en voiture plus confortablement.",
     },
     highlights: {
-      ar: ["ثبات جيد", "دوران مرن", "مناسب لمعظم الهواتف"],
+      ar: ["Ø«Ø¨Ø§Øª Ø¬ÙŠØ¯", "Ø¯ÙˆØ±Ø§Ù† Ù…Ø±Ù†", "Ù…Ù†Ø§Ø³Ø¨ Ù„Ù…Ø¹Ø¸Ù… Ø§Ù„Ù‡ÙˆØ§ØªÙ"],
       fr: ["Bonne stabilite", "Rotation flexible", "Compatible avec la plupart des telephones"],
     },
     images: [
@@ -254,8 +270,48 @@ const page = document.querySelector("[data-product-page]");
 const langToggle = document.querySelector("[data-lang-toggle]");
 const currentLangLabel = document.querySelector("[data-current-lang]");
 
+function repairText(value) {
+  const text = String(value ?? "");
+  if (!/[ÃÂØÙ]/.test(text)) return text;
+  try {
+    const cp1252 = {
+      "€": 0x80,
+      "‚": 0x82,
+      "ƒ": 0x83,
+      "„": 0x84,
+      "…": 0x85,
+      "†": 0x86,
+      "‡": 0x87,
+      "ˆ": 0x88,
+      "‰": 0x89,
+      "Š": 0x8a,
+      "‹": 0x8b,
+      "Œ": 0x8c,
+      "Ž": 0x8e,
+      "‘": 0x91,
+      "’": 0x92,
+      "“": 0x93,
+      "”": 0x94,
+      "•": 0x95,
+      "–": 0x96,
+      "—": 0x97,
+      "˜": 0x98,
+      "™": 0x99,
+      "š": 0x9a,
+      "›": 0x9b,
+      "œ": 0x9c,
+      "ž": 0x9e,
+      "Ÿ": 0x9f,
+    };
+    const bytes = Uint8Array.from([...text].map((char) => cp1252[char] ?? char.charCodeAt(0)));
+    return new TextDecoder("utf-8").decode(bytes);
+  } catch (error) {
+    return text;
+  }
+}
+
 function t(key) {
-  return translations[currentLang][key] || key;
+  return repairText(translations[currentLang][key] || key);
 }
 
 function interpolate(template, values) {
@@ -279,8 +335,8 @@ function productId() {
 }
 
 function localText(value) {
-  if (typeof value === "string") return value;
-  return value?.[currentLang] ?? value?.ar ?? value?.fr ?? "";
+  if (typeof value === "string") return repairText(value);
+  return repairText(value?.[currentLang] ?? value?.ar ?? value?.fr ?? "");
 }
 
 function escapeHtml(value) {
@@ -370,6 +426,10 @@ function productBoxText(product) {
   return localText(product.box) || t("boxDefault");
 }
 
+function productHasBoxContent(product) {
+  return Boolean(localText(product.box));
+}
+
 function productSpecs(product) {
   return Array.isArray(product.box?.specs)
     ? product.box.specs.filter((spec) => spec?.label || spec?.value)
@@ -396,7 +456,7 @@ function setLinkTag(selector, attrs) {
 }
 
 function updateProductMeta(product, soldOut) {
-  const title = `${localText(product.title)} | CasaTanja`;
+  const title = `${localText(product.title)} | TanjaMol`;
   const description = (productSummary(product) || plainDescription(product) || t("note")).slice(0, 155);
   const image = (product.images || []).find(Boolean) || "";
   const url = window.location.href;
@@ -441,10 +501,10 @@ function productHasManagedStock(product) {
 function categoryText(product) {
   if (typeof product.category !== "string") return localText(product.category);
   const labels = {
-    Cuisine: { ar: "مطبخ", fr: "Cuisine" },
-    Maison: { ar: "المنزل", fr: "Maison" },
-    Tech: { ar: "تقنية", fr: "Tech" },
-    Beaute: { ar: "جمال", fr: "Beaute" },
+    Cuisine: { ar: "Ù…Ø·Ø¨Ø®", fr: "Cuisine" },
+    Maison: { ar: "Ø§Ù„Ù…Ù†Ø²Ù„", fr: "Maison" },
+    Tech: { ar: "ØªÙ‚Ù†ÙŠØ©", fr: "Tech" },
+    Beaute: { ar: "Ø¬Ù…Ø§Ù„", fr: "Beaute" },
   };
   return labels[product.category]?.[currentLang] || product.category;
 }
@@ -488,6 +548,8 @@ const motionRevealSelector = [
   ".desktop-pdp-trust-strip",
   ".pdp-section-nav",
   ".landing-story",
+  ".product-content-cards",
+  ".problem-solution-section",
   ".landing-specs",
   ".landing-repeat-cta",
   ".product-faq-section",
@@ -548,17 +610,31 @@ function setLanguage(lang) {
   render();
 }
 
+function selectedAddOns() {
+  return [...document.querySelectorAll("[data-addon-product].is-added")].map((button) => ({
+    id: Number(button.dataset.addonProduct),
+    title: button.dataset.addonTitle || "",
+    price: Number(button.dataset.addonPrice || 0),
+  }));
+}
+
 function buildProductMessage(product, formData) {
   const qty = Number(formData.get("qty")) || 1;
   const variantId = formData.get("variant");
   const selectedVariant = (product.variants || []).find((variant) => variant.id === variantId);
   const variantLine = selectedVariant ? [`${t("variant")}: ${localText(selectedVariant.name)}`] : [];
   const unitPrice = product.price + Number(selectedVariant?.extraPrice || 0);
+  const addOns = selectedAddOns();
+  const addOnLines = addOns.length
+    ? ["", currentLang === "ar" ? "Ø¥Ø¶Ø§ÙØ§Øª Ø§Ù„Ø·Ù„Ø¨:" : "Ajouts:", ...addOns.map((item) => `- ${item.title}: ${money(item.price)}`)]
+    : [];
+  const addOnTotal = addOns.reduce((sum, item) => sum + item.price, 0);
   return [
     t("messageIntro"),
     `- ${localText(product.title)} x${qty}: ${money(unitPrice * qty)}`,
     ...variantLine,
-    `${t("total")}: ${money(unitPrice * qty)}`,
+    ...addOnLines,
+    `${t("total")}: ${money(unitPrice * qty + addOnTotal)}`,
     "",
     `${t("name")}: ${formData.get("name")}`,
     `${t("phone")}: ${formData.get("phone")}`,
@@ -571,6 +647,15 @@ async function saveProductOrder(product, formData) {
   const variantId = formData.get("variant");
   const selectedVariant = (product.variants || []).find((variant) => variant.id === variantId);
   const unitPrice = product.price + Number(selectedVariant?.extraPrice || 0);
+  const addOns = selectedAddOns();
+  const addOnItems = addOns.map((item) => ({
+    id: item.id,
+    title: item.title,
+    variant: null,
+    qty: 1,
+    price: item.price,
+  }));
+  const addOnTotal = addOns.reduce((sum, item) => sum + item.price, 0);
   try {
     return await StoreBackend.createOrder({
       customer: {
@@ -587,8 +672,9 @@ async function saveProductOrder(product, formData) {
           qty,
           price: unitPrice,
         },
+        ...addOnItems,
       ],
-      total: unitPrice * qty,
+      total: unitPrice * qty + addOnTotal,
       source: "product_page_whatsapp",
     });
   } catch (error) {
@@ -607,14 +693,23 @@ function renderMissing() {
 
 function relatedCard(product) {
   const image = (product.images || []).find(Boolean);
+  const discount = discountPercent(product);
   return `
     <article class="product-card compact-card" data-related-product="${product.id}">
       <div class="product-image">
         ${image ? `<img src="${image}" alt="${localText(product.title)}" loading="lazy" />` : `<div class="product-image-placeholder">${localText(product.title)}</div>`}
-        <span class="badge">${money(product.price)}</span>
+        <span class="badge ${discount ? "badge-offer" : "badge-cod"}">${discount ? `-${discount}%` : t("cod")}</span>
       </div>
       <div class="product-info">
         <h3 class="product-title">${localText(product.title)}</h3>
+        <div class="product-meta">
+          <div class="product-price-line">
+            <strong class="price">${money(product.price)}</strong>
+            ${product.oldPrice ? `<span class="card-old-price">${money(product.oldPrice)}</span>` : ""}
+          </div>
+        </div>
+        <div class="delivery-note">${t("delivery")}</div>
+        <button class="add-button related-details-button" type="button">${t("viewDetails")}</button>
       </div>
     </article>
   `;
@@ -686,11 +781,11 @@ function variantLabelForProduct(product) {
   const custom = localText(product?.box?.variantLabel);
   if (custom) return custom;
   const names = (product?.variants || []).map((variant) => localText(variant.name)).filter(Boolean);
-  const colorNames = ["أسود", "أبيض", "أحمر", "أزرق", "بني", "رمادي", "Noir", "Blanc", "Rouge", "Bleu", "Brown", "Gray", "Grey"];
+  const colorNames = ["Ø£Ø³ÙˆØ¯", "Ø£Ø¨ÙŠØ¶", "Ø£Ø­Ù…Ø±", "Ø£Ø²Ø±Ù‚", "Ø¨Ù†ÙŠ", "Ø±Ù…Ø§Ø¯ÙŠ", "Noir", "Blanc", "Rouge", "Bleu", "Brown", "Gray", "Grey"];
   const sizeNames = ["XS", "S", "M", "L", "XL", "XXL"];
-  if (names.length && names.every((name) => colorNames.includes(name))) return currentLang === "ar" ? "اللون" : "Couleur";
-  if (names.length && names.every((name) => sizeNames.includes(name))) return currentLang === "ar" ? "المقاس" : "Taille";
-  return currentLang === "ar" ? "اللون / المقاس" : "Couleur / taille";
+  if (names.length && names.every((name) => colorNames.includes(name))) return currentLang === "ar" ? "Ø§Ù„Ù„ÙˆÙ†" : "Couleur";
+  if (names.length && names.every((name) => sizeNames.includes(name))) return currentLang === "ar" ? "Ø§Ù„Ù…Ù‚Ø§Ø³" : "Taille";
+  return currentLang === "ar" ? "Ø§Ù„Ù„ÙˆÙ† / Ø§Ù„Ù…Ù‚Ø§Ø³" : "Couleur / taille";
 }
 
 function variantInfoButtons(variants, product) {
@@ -755,7 +850,7 @@ function buySummary(product, soldOut, lowStock) {
       ${
         rating
           ? `<div class="desktop-rating-row" aria-label="${rating.value} / 5">
-              <span>${"★".repeat(Math.round(rating.value))}</span>
+              <span>${"â˜…".repeat(Math.round(rating.value))}</span>
               <small>${interpolate(t("ratingReviews"), { count: rating.count })}</small>
             </div>`
           : ""
@@ -785,21 +880,21 @@ function desktopTrustStrip() {
   return `
     <section class="desktop-pdp-trust-strip" aria-label="${t("deliveryReturns")}">
       <article>
-        <span class="trust-strip-icon">↩</span>
+        <span class="trust-strip-icon">â†©</span>
         <div>
           <h2>${t("easyReturnTitle")}</h2>
           <p>${t("easyReturnText")}</p>
         </div>
       </article>
       <article>
-        <span class="trust-strip-icon">▣</span>
+        <span class="trust-strip-icon">â–£</span>
         <div>
           <h2>${t("deliveryCityTitle")}</h2>
           <p>${t("deliveryCityText")} ${t("delivery")}</p>
         </div>
       </article>
       <article>
-        <span class="trust-strip-icon">▤</span>
+        <span class="trust-strip-icon">â–¤</span>
         <div>
           <h2>${t("cod")}</h2>
           <p>${t("note")}</p>
@@ -854,6 +949,14 @@ function orderForm(product, variants, soldOut) {
             </fieldset>`
           : ""
       }
+      <label class="quantity-field">
+        <span>${t("qtyLabel")}</span>
+        <div class="product-qty-stepper">
+          <button type="button" data-qty-step="-1" aria-label="-">-</button>
+          <input name="qty" type="number" min="1"${maxQty} value="1" required />
+          <button type="button" data-qty-step="1" aria-label="+">+</button>
+        </div>
+      </label>
       <div class="order-contact-fields">
         <label>
           <span>${t("nameLabel")}</span>
@@ -868,14 +971,6 @@ function orderForm(product, variants, soldOut) {
           <input name="address" type="text" placeholder="${t("addressPlaceholder")}" required />
         </label>
       </div>
-      <label class="quantity-field">
-        <span>${t("qtyLabel")}</span>
-        <div class="product-qty-stepper">
-          <button type="button" data-qty-step="-1" aria-label="-">-</button>
-          <input name="qty" type="number" min="1"${maxQty} value="1" required />
-          <button type="button" data-qty-step="1" aria-label="+">+</button>
-        </div>
-      </label>
       <div class="order-cost-preview">
         <span>${t("estimatedTotal")}</span>
         <strong data-order-total>${money(Number(product.price || 0) + firstExtraPrice)}</strong>
@@ -886,14 +981,15 @@ function orderForm(product, variants, soldOut) {
         <span>${soldOut ? t("outOfStock") : escapeHtml(offer.ctaLabel)}</span>
       </button>
       <div class="checkout-reassurance-list">
-        <span><i aria-hidden="true">✓</i>${t("cod")}</span>
-        <span><i aria-hidden="true">✓</i>${t("note")}</span>
+        <span><i aria-hidden="true">âœ“</i>${t("cod")}</span>
+        <span><i aria-hidden="true">âœ“</i>${t("note")}</span>
       </div>
     </form>
   `;
 }
 
 function productFaq(product) {
+  const boxText = productHasBoxContent(product) ? productBoxText(product) : t("boxDefault");
   return `
     <section class="product-faq-section">
       <div class="section-heading">
@@ -913,9 +1009,448 @@ function productFaq(product) {
         </details>
         <details>
           <summary>${t("whatsInBox")}</summary>
-          <p>${productBoxText(product)}</p>
+          <p>${boxText}</p>
         </details>
       </div>
+    </section>
+  `;
+}
+
+function productDescriptionSection(product) {
+  if (!localText(product.description)) return "";
+  return `
+    <section id="description-section" class="landing-story">
+      <div>
+        <span class="eyebrow">${t("description")}</span>
+        <h2>${localText(product.title)}</h2>
+        <div class="rich-product-description">${richDescriptionMarkup(product)}</div>
+      </div>
+    </section>
+  `;
+}
+
+function productContentCards(product) {
+  const highlights = productHighlights(product).slice(0, 6);
+  const boxText = productHasBoxContent(product) ? productBoxText(product) : "";
+  const cards = [
+    highlights.length
+      ? `
+        <article class="content-card content-card-list">
+          <span class="eyebrow">${t("highlights")}</span>
+          <h2>${t("highlights")}</h2>
+          <ul>
+            ${highlights.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+          </ul>
+        </article>
+      `
+      : "",
+    boxText
+      ? `
+        <article class="content-card">
+          <span class="eyebrow">${t("whatsInBox")}</span>
+          <h2>${t("whatsInBox")}</h2>
+          <p>${escapeHtml(boxText)}</p>
+        </article>
+      `
+      : "",
+    `
+      <article class="content-card">
+        <span class="eyebrow">${t("deliveryReturns")}</span>
+        <h2>${t("deliveryReturns")}</h2>
+        <p>${t("deliveryReturnsText")}</p>
+      </article>
+    `,
+    `
+      <article class="content-card">
+        <span class="eyebrow">${t("howToOrder")}</span>
+        <h2>${t("howToOrder")}</h2>
+        <p>${t("howToOrderText")}</p>
+      </article>
+    `,
+  ].filter(Boolean);
+
+  return `<section class="product-content-cards">${cards.join("")}</section>`;
+}
+
+function productProblemSolution(product) {
+  const summary = productSummary(product);
+  return `
+    <section class="problem-solution-section">
+      <div class="problem-solution-heading">
+        <span class="eyebrow">${t("problemSolutionEyebrow")}</span>
+        <h2>${t("problemSolutionTitle")}</h2>
+        ${summary ? `<p>${escapeHtml(summary)}</p>` : ""}
+      </div>
+      <div class="problem-solution-grid">
+        <article>
+          <strong>${t("problemLabel")}</strong>
+          <p>${t("problemText")}</p>
+        </article>
+        <article>
+          <strong>${t("solutionLabel")}</strong>
+          <p>${t("solutionText")}</p>
+        </article>
+      </div>
+    </section>
+  `;
+}
+
+function modernText(ar, fr) {
+  return repairText(currentLang === "fr" ? fr : ar);
+}
+
+function modernMoney(value) {
+  return `MAD ${Number(value || 0)}`;
+}
+
+function modernImages(product) {
+  const images = (product.images || []).filter(Boolean);
+  return images.length ? images : [""];
+}
+
+function firstAvailableVariant(variants) {
+  return variants.find((variant) => variant.stock === undefined || variant.stock === null || variant.stock === "" || Number(variant.stock) > 0) || variants[0];
+}
+
+function variantName(variant) {
+  return localText(variant?.name);
+}
+
+function variantKind(product, variants) {
+  const label = variantLabelForProduct(product).toLowerCase();
+  const names = variants.map((variant) => variantName(variant).toLowerCase());
+  const colorWords = ["Ø£Ø¨ÙŠØ¶", "Ø§Ø¨ÙŠØ¶", "Ø£Ø³ÙˆØ¯", "Ø§Ø³ÙˆØ¯", "Ø£Ø²Ø±Ù‚", "Ø§Ø²Ø±Ù‚", "Ø£Ø­Ù…Ø±", "Ø§Ø­Ù…Ø±", "Ø£Ø®Ø¶Ø±", "Ø§Ø®Ø¶Ø±", "ÙˆØ±Ø¯ÙŠ", "Ø±Ù…Ø§Ø¯ÙŠ", "ÙØ¶ÙŠ", "Ø°Ù‡Ø¨ÙŠ", "blanc", "noir", "bleu", "rouge", "vert", "rose", "gris", "argent", "or"];
+  return label.includes("Ù„ÙˆÙ†") || label.includes("couleur") || names.some((name) => colorWords.includes(name)) ? "color" : "pill";
+}
+
+function swatchColor(label) {
+  const name = String(label || "").toLowerCase();
+  if (["Ø£Ø¨ÙŠØ¶", "Ø§Ø¨ÙŠØ¶", "blanc", "white"].includes(name)) return "#f8fafc";
+  if (["Ø£Ø³ÙˆØ¯", "Ø§Ø³ÙˆØ¯", "noir", "black"].includes(name)) return "#111827";
+  if (["Ø£Ø²Ø±Ù‚", "Ø§Ø²Ø±Ù‚", "bleu", "blue"].includes(name)) return "#2563eb";
+  if (["Ø£Ø­Ù…Ø±", "Ø§Ø­Ù…Ø±", "rouge", "red"].includes(name)) return "#ef4444";
+  if (["Ø£Ø®Ø¶Ø±", "Ø§Ø®Ø¶Ø±", "vert", "green"].includes(name)) return "#22c55e";
+  if (["ÙˆØ±Ø¯ÙŠ", "rose", "pink"].includes(name)) return "#ec4899";
+  if (["Ø±Ù…Ø§Ø¯ÙŠ", "gris", "gray", "grey"].includes(name)) return "#9ca3af";
+  if (["ÙØ¶ÙŠ", "argent", "silver"].includes(name)) return "#d1d5db";
+  if (["Ø°Ù‡Ø¨ÙŠ", "or", "gold"].includes(name)) return "#d4a017";
+  return "#e5e7eb";
+}
+
+function modernGallery(product) {
+  const images = modernImages(product);
+  const title = escapeHtml(localText(product.title));
+  return `
+    <div class="gallery-card">
+      <div class="gallery-stage">
+        ${
+          images[0]
+            ? `<img class="detail-main-image" data-main-image src="${images[0]}" alt="${title}" loading="eager" fetchpriority="high" />`
+            : `<div class="modern-image-placeholder">${title}</div>`
+        }
+      </div>
+      ${
+        images.length > 1
+          ? `<div class="thumb-strip" aria-label="Product images">
+              ${images
+                .map(
+                  (image, index) => `
+                    <button class="thumb ${index === 0 ? "is-active active" : ""}" type="button" data-thumb="${image}" aria-label="${title} ${index + 1}">
+                      <img src="${image}" alt="${title} ${index + 1}" loading="lazy" />
+                    </button>
+                  `,
+                )
+                .join("")}
+            </div>`
+          : ""
+      }
+    </div>
+  `;
+}
+
+function modernRating(product) {
+  const rating = productRating(product);
+  if (!rating) return "";
+  const stars = "â˜…".repeat(Math.round(rating.value));
+  return `
+    <div class="rating-row" aria-label="${rating.value} / 5">
+      <span class="stars">${stars}</span>
+      <span>${rating.value} ${modernText("Ù…Ù†", "sur")} ${rating.count} ${modernText("ØªÙ‚ÙŠÙŠÙ…", "avis")}</span>
+    </div>
+  `;
+}
+
+function modernPriceRow(product, firstExtraPrice = 0) {
+  const price = Number(product.price || 0) + Number(firstExtraPrice || 0);
+  const discount = discountPercent(product);
+  return `
+    <div class="price-row">
+      <strong data-hero-price>${modernMoney(price)}</strong>
+      ${product.oldPrice ? `<span>${modernMoney(Number(product.oldPrice || 0) + Number(firstExtraPrice || 0))}</span>` : ""}
+      ${discount ? `<em>${modernText("ØªØ®ÙÙŠØ¶", "Promo")} ${discount}%</em>` : ""}
+    </div>
+  `;
+}
+
+function modernVariantSelector(product, variants) {
+  if (!variants.length) return "";
+  const first = firstAvailableVariant(variants);
+  const kind = variantKind(product, variants);
+  const label = repairText(variantLabelForProduct(product));
+  if (kind === "color") {
+    return `
+      <fieldset class="choice-block color-choice modern-variant-control">
+        <div class="choice-title">
+          <span>${label}</span>
+        </div>
+        <div class="swatch-row" aria-label="${label}">
+          ${variants
+            .map((variant) => {
+              const unavailable = variant.stock !== undefined && variant.stock !== null && variant.stock !== "" && Number(variant.stock) <= 0;
+              const selected = first?.id === variant.id;
+              const name = variantName(variant);
+              return `
+                <label class="color-swatch ${selected ? "is-selected" : ""} ${unavailable ? "is-disabled" : ""}" style="--swatch: ${swatchColor(name)};" aria-label="${escapeHtml(name)}">
+                  <input name="variant" form="product-order-form" type="radio" value="${variant.id}" data-extra-price="${Number(variant.extraPrice || 0)}" ${selected ? "checked" : ""} ${unavailable ? "disabled" : ""} />
+                  <span></span>
+                </label>
+              `;
+            })
+            .join("")}
+        </div>
+      </fieldset>
+    `;
+  }
+
+  return `
+    <fieldset class="choice-block modern-variant-control">
+      <div class="choice-title">
+        <span>${label}</span>
+      </div>
+      <div class="variant-pill-row">
+        ${variants
+          .map((variant) => {
+            const unavailable = variant.stock !== undefined && variant.stock !== null && variant.stock !== "" && Number(variant.stock) <= 0;
+            const selected = first?.id === variant.id;
+            return `
+              <label class="variant-pill ${selected ? "is-selected" : ""} ${unavailable ? "is-disabled" : ""}">
+                <input name="variant" form="product-order-form" type="radio" value="${variant.id}" data-extra-price="${Number(variant.extraPrice || 0)}" ${selected ? "checked" : ""} ${unavailable ? "disabled" : ""} />
+                <span>${escapeHtml(variantName(variant))}${variant.extraPrice ? ` +${modernMoney(variant.extraPrice)}` : ""}</span>
+              </label>
+            `;
+          })
+          .join("")}
+      </div>
+    </fieldset>
+  `;
+}
+
+function modernBenefits(product) {
+  const highlights = productHighlights(product).slice(0, 5);
+  if (!highlights.length) return "";
+  return `
+    <ul class="benefit-list" aria-label="${t("highlights")}">
+      ${highlights.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+    </ul>
+  `;
+}
+
+function stockLine(product, soldOut, lowStock) {
+  if (soldOut) return t("outOfStock");
+  if (lowStock) return t("lowStock");
+  return modernText("Ù…ØªÙˆÙØ± Ø§Ù„Ø¢Ù† Ø¯Ø§Ø®Ù„ Ø·Ù†Ø¬Ø©", "Disponible a Tanger");
+}
+
+function modernCheckout(product, variants, soldOut, lowStock) {
+  const first = firstAvailableVariant(variants);
+  const firstExtraPrice = Number(first?.extraPrice || 0);
+  const maxQty = productHasManagedStock(product) && Number(product.stock) > 0 ? ` max="${Number(product.stock)}"` : "";
+  const offer = productOffer(product);
+  return `
+    <div class="checkout-card" id="order-form">
+      <h2 id="order-title">${modernText("Ø£ÙƒØ¯ Ø·Ù„Ø¨Ùƒ", "Confirmez votre commande")}</h2>
+      <div class="checkout-price">
+        <span data-order-total>${modernMoney(Number(product.price || 0) + firstExtraPrice)}</span>
+      </div>
+
+      <form id="product-order-form" class="order-form" data-product-order data-base-price="${Number(product.price || 0)}" data-old-price="${Number(product.oldPrice || 0)}">
+        <label>
+          ${t("nameLabel")}
+          <input name="name" type="text" placeholder="${repairText(currentLang === "ar" ? "Ù…Ø«Ø§Ù„: Ù…Ø­Ù…Ø¯ Ø£Ù…ÙŠÙ†" : "Ex: Mohamed Amine")}" required />
+        </label>
+        <label>
+          ${t("phoneLabel")}
+          <input name="phone" type="tel" placeholder="06 12 34 56 78" required />
+        </label>
+        <label>
+          ${t("addressLabel")}
+          <input name="address" type="text" placeholder="${repairText(currentLang === "ar" ? "Ù…Ø«Ø§Ù„: Ø·Ù†Ø¬Ø©ØŒ Ù…Ø§Ù„Ø§Ø¨Ø§Ø·Ø§" : "Ex: Tanger, Malabata")}" required />
+        </label>
+        <div class="quantity-row">
+          <span>${t("qtyLabel")}</span>
+          <div class="quantity-control">
+            <button type="button" data-qty-step="-1" aria-label="-">-</button>
+            <input name="qty" type="number" min="1"${maxQty} value="1" required aria-label="${t("qtyLabel")}" />
+            <button type="button" data-qty-step="1" aria-label="+">+</button>
+          </div>
+        </div>
+        <button class="whatsapp-cta whatsapp-checkout" type="submit" ${soldOut ? "disabled" : ""}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a8.5 8.5 0 0 0-7.28 12.88L4 21l5.25-1.37A8.5 8.5 0 1 0 12 3Z"/><path d="M9.4 8.7c.2-.44.36-.45.62-.45h.45c.15 0 .38.06.58.3.2.23.76.82.76 2 0 1.17-.78 2.3-.9 2.45-.1.16-1.55 2.62-3.82 3.57-.53.22-.95.35-1.27.45-.54.18-1.03.15-1.42.09-.43-.07-1.33-.6-1.52-1.18-.18-.58-.18-1.08-.13-1.18.06-.1.2-.16.43-.3.22-.13 1.32-.72 1.52-.8.2-.08.35-.13.5.14.14.27.57.96.7 1.12.13.15.26.18.48.06.22-.13.94-.38 1.78-1.22.66-.66 1.1-1.47 1.23-1.72.13-.25.02-.39-.1-.52-.12-.12-.27-.32-.4-.48-.13-.16-.18-.27-.27-.45-.09-.18-.04-.34.02-.48.06-.13.5-1.32.7-1.8Z"/></svg>
+          <span>${soldOut ? t("outOfStock") : escapeHtml(offer.ctaLabel)}</span>
+        </button>
+      </form>
+
+      <div class="trust-mini">
+        <span>${t("cod")}</span>
+        <span>${modernText("Ù†ØªÙˆØ§ØµÙ„ Ù…Ø¹Ùƒ Ù„ØªØ£ÙƒÙŠØ¯ Ø§Ù„ØªÙØ§ØµÙŠÙ„", "Confirmation sur WhatsApp")}</span>
+      </div>
+    </div>
+  `;
+}
+
+function modernAddOns(product) {
+  const addOns = products
+    .filter((item) => item.id !== product.id && item.active !== false)
+    .slice(0, 3);
+  if (!addOns.length) return "";
+  return `
+    <section class="add-ons-section" aria-labelledby="addons-title">
+      <div class="section-heading add-ons-heading">
+        <h2 id="addons-title">${modernText("Ù…Ù†ØªØ¬Ø§Øª ØªÙƒÙ…Ù„ Ø·Ù„Ø¨Ùƒ", "Produits qui completent votre commande")}</h2>
+      </div>
+      <div class="add-ons-grid">
+        ${addOns
+          .map((item) => {
+            const image = (item.images || []).find(Boolean);
+            return `
+              <button class="add-on-card" type="button" data-addon-product="${item.id}" data-addon-title="${escapeHtml(localText(item.title))}" data-addon-price="${Number(item.price || 0)}" aria-pressed="false">
+                <span class="addon-media">
+                  ${image ? `<img src="${image}" alt="${escapeHtml(localText(item.title))}" loading="lazy" />` : `<span>${escapeHtml(localText(item.title))}</span>`}
+                </span>
+                <span class="addon-copy">
+                  <span class="addon-title">${escapeHtml(localText(item.title))}</span>
+                  <span class="addon-desc">${escapeHtml(productSummary(item))}</span>
+                </span>
+                <span class="addon-footer">
+                  <strong>+ ${modernMoney(item.price)}</strong>
+                  <span class="addon-action">${modernText("Ø£Ø¶Ù Ù„Ù„Ø·Ù„Ø¨", "Ajouter")}</span>
+                </span>
+              </button>
+            `;
+          })
+          .join("")}
+      </div>
+    </section>
+  `;
+}
+
+function modernLandingSections(product) {
+  const images = modernImages(product);
+  const summary = productSummary(product);
+  const highlights = productHighlights(product);
+  const boxText = productHasBoxContent(product) ? productBoxText(product) : t("boxDefault");
+  const specs = productSpecs(product).slice(0, 4);
+  return `
+    <section class="landing-section split-feature" aria-labelledby="why-title">
+      <div class="section-copy">
+        <p class="section-kicker">${modernText("Ù„Ù…Ø§Ø°Ø§ ØªØ®ØªØ§Ø±Ù‡ØŸ", "Pourquoi le choisir ?")}</p>
+        <h2 id="why-title">${localText(product.title)}</h2>
+        ${summary ? `<p>${escapeHtml(summary)}</p>` : ""}
+        ${
+          highlights.length
+            ? `<div class="feature-list">
+                ${highlights
+                  .slice(0, 3)
+                  .map(
+                    (item, index) => `
+                      <article>
+                        <span>${String(index + 1).padStart(2, "0")}</span>
+                        <strong>${escapeHtml(item)}</strong>
+                        <p>${modernText("ØªÙØµÙŠÙ„ Ø¨Ø³ÙŠØ· ÙŠØ³Ø§Ø¹Ø¯ Ø§Ù„Ø¹Ù…ÙŠÙ„ ÙŠÙÙ‡Ù… Ø§Ù„Ù‚ÙŠÙ…Ø© Ù‚Ø¨Ù„ Ø§Ù„Ø·Ù„Ø¨.", "Un detail simple pour comprendre la valeur avant de commander.")}</p>
+                      </article>
+                    `,
+                  )
+                  .join("")}
+              </div>`
+            : ""
+        }
+      </div>
+      <div class="section-media tall">
+        ${images[1] ? `<img src="${images[1]}" alt="${escapeHtml(localText(product.title))}" loading="lazy" />` : ""}
+      </div>
+    </section>
+
+    <section class="use-section" aria-labelledby="use-title">
+      <div class="section-heading">
+        <p>${t("howToOrder")}</p>
+        <h2 id="use-title">${modernText("Ù…Ù† Ø§Ù„Ø§Ø®ØªÙŠØ§Ø± Ø¥Ù„Ù‰ Ø§Ù„ØªØ£ÙƒÙŠØ¯ ÙÙŠ Ø«Ù„Ø§Ø« Ø®Ø·ÙˆØ§Øª", "De la selection a la confirmation en trois etapes")}</h2>
+      </div>
+      <div class="step-grid">
+        <article>
+          ${images[0] ? `<img src="${images[0]}" alt="${escapeHtml(localText(product.title))}" loading="lazy" />` : ""}
+          <span>1</span>
+          <h3>${modernText("Ø§Ø®ØªØ± Ø§Ù„Ù…Ù†ØªØ¬", "Choisissez le produit")}</h3>
+          <p>${modernText("Ø±Ø§Ø¬Ø¹ Ø§Ù„ØµÙˆØ± ÙˆØ§Ù„ØªÙØ§ØµÙŠÙ„ ÙˆØ§Ø®ØªØ± Ø§Ù„Ù†Ø³Ø®Ø© Ø§Ù„Ù…Ù†Ø§Ø³Ø¨Ø©.", "Verifiez les photos, les details et l'option adaptee.")}</p>
+        </article>
+        <article>
+          ${images[1] ? `<img src="${images[1]}" alt="${escapeHtml(localText(product.title))}" loading="lazy" />` : ""}
+          <span>2</span>
+          <h3>${modernText("Ø§Ù…Ù„Ø£ Ù…Ø¹Ù„ÙˆÙ…Ø§ØªÙƒ", "Ajoutez vos infos")}</h3>
+          <p>${modernText("Ø§ÙƒØªØ¨ Ø§Ù„Ø§Ø³Ù…ØŒ Ø§Ù„Ù‡Ø§ØªÙØŒ ÙˆØ§Ù„Ø¹Ù†ÙˆØ§Ù† Ù„ØªØ£ÙƒÙŠØ¯ Ø§Ù„Ø·Ù„Ø¨.", "Nom, telephone et adresse pour confirmer la commande.")}</p>
+        </article>
+        <article>
+          ${images[2] ? `<img src="${images[2]}" alt="${escapeHtml(localText(product.title))}" loading="lazy" />` : ""}
+          <span>3</span>
+          <h3>${modernText("Ø£ÙƒØ¯ Ø¹Ø¨Ø± ÙˆØ§ØªØ³Ø§Ø¨", "Confirmez sur WhatsApp")}</h3>
+          <p>${modernText("Ù†Ø±Ø§Ø¬Ø¹ Ø§Ù„ØªÙØ§ØµÙŠÙ„ Ù…Ø¹Ùƒ Ù‚Ø¨Ù„ Ø§Ù„Ø¥Ø±Ø³Ø§Ù„.", "On verifie les details avec vous avant l'envoi.")}</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="proof-section" aria-labelledby="proof-title">
+      <div>
+        <p class="section-kicker">${modernText("Ø«Ù‚Ø© Ù‚Ø¨Ù„ Ø§Ù„Ø·Ù„Ø¨", "Confiance avant commande")}</p>
+        <h2 id="proof-title">${modernText("Ø·Ù„Ø¨ ÙˆØ§Ø¶Ø­ØŒ ØªØ£ÙƒÙŠØ¯ Ø¹Ø¨Ø± ÙˆØ§ØªØ³Ø§Ø¨ØŒ ÙˆØ¯ÙØ¹ Ø¹Ù†Ø¯ Ø§Ù„Ø§Ø³ØªÙ„Ø§Ù….", "Commande claire, confirmation WhatsApp et paiement a la livraison.")}</h2>
+      </div>
+      <div class="proof-grid">
+        <article><strong>24-48h</strong><span>${t("delivery")}</span></article>
+        <article><strong>COD</strong><span>${t("cod")}</span></article>
+        <article><strong>WhatsApp</strong><span>${modernText("ØªØ£ÙƒÙŠØ¯ Ù‚Ø¨Ù„ Ø§Ù„Ø¥Ø±Ø³Ø§Ù„", "Confirmation avant envoi")}</span></article>
+      </div>
+    </section>
+
+    <section class="landing-section reverse">
+      <div class="section-media">
+        ${images[2] ? `<img src="${images[2]}" alt="${escapeHtml(localText(product.title))}" loading="lazy" />` : ""}
+      </div>
+      <div class="section-copy">
+        <p class="section-kicker">${t("whatsInBox")}</p>
+        <h2>${modernText("ÙƒÙ„ Ù…Ø§ ØªØ­ØªØ§Ø¬Ù‡ Ù‚Ø¨Ù„ Ø§Ù„Ø·Ù„Ø¨ ÙˆØ§Ø¶Ø­ Ù‡Ù†Ø§.", "Tout ce qu'il faut savoir avant de commander.")}</h2>
+        <ul class="box-list">
+          <li>${escapeHtml(boxText)}</li>
+          ${specs.map((spec) => `<li>${escapeHtml(localText(spec.label) || spec.label)}: ${escapeHtml(localText(spec.value) || spec.value)}</li>`).join("")}
+        </ul>
+        <a class="soft-cta" href="#order-form">${t("repeatCtaButton")}</a>
+      </div>
+    </section>
+
+    <section class="faq-section" aria-labelledby="faq-title">
+      <div class="section-heading">
+        <p>${modernText("Ø£Ø³Ø¦Ù„Ø© Ø³Ø±ÙŠØ¹Ø©", "Questions rapides")}</p>
+        <h2 id="faq-title">${modernText("ÙƒÙ„ Ù…Ø§ ØªØ­ØªØ§Ø¬ Ù…Ø¹Ø±ÙØªÙ‡ Ù‚Ø¨Ù„ Ø§Ù„Ø·Ù„Ø¨", "Ce qu'il faut savoir avant de commander")}</h2>
+      </div>
+      <details open>
+        <summary>${t("deliveryReturns")}</summary>
+        <p>${t("deliveryReturnsText")}</p>
+      </details>
+      <details>
+        <summary>${t("howToOrder")}</summary>
+        <p>${t("howToOrderText")}</p>
+      </details>
+      <details>
+        <summary>${t("whatsInBox")}</summary>
+        <p>${escapeHtml(boxText)}</p>
+      </details>
     </section>
   `;
 }
@@ -925,15 +1460,22 @@ function updateOrderTotal(form) {
   const basePrice = Number(form.dataset.basePrice || 0);
   const oldPrice = Number(form.dataset.oldPrice || 0);
   const qty = Math.max(1, Number(form.elements.qty?.value || 1));
-  const selectedVariant = form.querySelector('input[name="variant"]:checked');
+  const selectedVariant = form.querySelector('input[name="variant"]:checked') || document.querySelector('input[name="variant"]:checked');
   const extraPrice = Number(selectedVariant?.dataset.extraPrice || 0);
-  const total = (basePrice + extraPrice) * qty;
-  form.querySelectorAll("[data-order-total]").forEach((node) => {
-    node.textContent = money(total);
+  const addOnTotal = selectedAddOns().reduce((sum, item) => sum + item.price, 0);
+  const total = (basePrice + extraPrice) * qty + addOnTotal;
+  document.querySelectorAll("[data-order-total]").forEach((node) => {
+    node.textContent = modernMoney(total);
+  });
+  document.querySelectorAll("[data-mobile-total]").forEach((node) => {
+    node.textContent = modernMoney(total);
+  });
+  document.querySelectorAll("[data-hero-price]").forEach((node) => {
+    node.textContent = modernMoney(basePrice + extraPrice);
   });
   const oldTotalNode = form.querySelector("[data-order-old-total]");
   if (oldTotalNode && oldPrice > basePrice) {
-    oldTotalNode.textContent = money((oldPrice + extraPrice) * qty);
+    oldTotalNode.textContent = modernMoney((oldPrice + extraPrice) * qty + addOnTotal);
   }
 }
 
@@ -957,7 +1499,7 @@ function sectionNavigation(relatedCount) {
 function galleryLightbox() {
   return `
     <div class="gallery-lightbox" data-gallery-lightbox hidden>
-      <button class="gallery-lightbox-close" type="button" data-close-gallery aria-label="Close">×</button>
+      <button class="gallery-lightbox-close" type="button" data-close-gallery aria-label="Close">Ã—</button>
       <img data-gallery-lightbox-image alt="" />
     </div>
   `;
@@ -974,98 +1516,50 @@ function render() {
   const soldOut = managedStock && Number(product.stock) <= 0;
   const lowStock = managedStock && !soldOut && Number(product.stock || 0) <= 5;
   const variants = product.variants || [];
-  const related = products
-    .filter((item) => item.id !== product.id && item.active !== false && (item.category === product.category || categoryText(item) === categoryText(product)))
-    .slice(0, 4);
-  const bestOffers = products.filter((item) => item.id !== product.id && item.active !== false).slice(0, 4);
   const discount = discountPercent(product);
-  const specs = productSpecs(product);
+  const firstVariant = firstAvailableVariant(variants);
+  const firstExtraPrice = Number(firstVariant?.extraPrice || 0);
+
   trackEvent("product_view", { productId: product.id });
   updateProductMeta(product, soldOut);
+
   page.innerHTML = `
-    <section class="product-page">
-      <section class="product-landing-hero">
-        ${productGallery(product, discount)}
-
-        <div class="landing-order-wrap">
-          ${buySummary(product, soldOut, lowStock)}
+    <section class="product-page modern-product-page">
+      <section class="product-hero" aria-labelledby="product-title">
+        <div class="media-column">
+          ${modernGallery(product)}
         </div>
 
-        <section id="order-form" class="order-form-section">
-          ${orderForm(product, variants, soldOut)}
-        </section>
+        <article class="details-column">
+          ${modernRating(product)}
+          <h1 id="product-title">${escapeHtml(localText(product.title))}</h1>
+          ${productSummary(product) ? `<p class="summary">${escapeHtml(productSummary(product))}</p>` : ""}
+          ${modernPriceRow(product, firstExtraPrice)}
+          ${modernVariantSelector(product, variants)}
+          ${modernBenefits(product)}
+        </article>
+
+        <aside class="purchase-column" aria-labelledby="order-title">
+          ${modernCheckout(product, variants, soldOut, lowStock)}
+        </aside>
       </section>
 
-      ${desktopTrustStrip()}
+      ${modernAddOns(product)}
+      ${modernLandingSections(product)}
 
-      ${sectionNavigation(related.length)}
+      <section class="final-cta" aria-labelledby="final-cta-title">
+        <p>${modernText("Ø¬Ø§Ù‡Ø² ØªØ·Ù„Ø¨ØŸ", "Pret a commander ?")}</p>
+        <h2 id="final-cta-title">${t("repeatCtaTitle")}</h2>
+        <a href="#order-form">${t("repeatCtaButton")}</a>
+      </section>
 
-      <a class="mobile-sticky-pdp-cta" href="#order-form">
-        <span>${money(product.price)}</span>
-        <strong>${soldOut ? t("outOfStock") : escapeHtml(productOffer(product).ctaLabel)}</strong>
-      </a>
-
-      <section class="product-detail-layout">
-      <section id="description-section" class="landing-story">
+      <div class="mobile-sticky">
         <div>
-          <span class="eyebrow">${t("description")}</span>
-          <h2>${localText(product.title)}</h2>
-          <div class="rich-product-description">${richDescriptionMarkup(product)}</div>
+          <span data-mobile-total>${modernMoney(Number(product.price || 0) + firstExtraPrice)}</span>
+          <small>${t("cod")}</small>
         </div>
-      </section>
-
-      <section id="specs-section" class="landing-specs">
-        <div>
-          <span class="eyebrow">${t("technicalSheet")}</span>
-          <h2>${t("technicalSheet")}</h2>
-        </div>
-        <dl>
-          <div><dt>${t("specCategory")}</dt><dd>${categoryText(product)}</dd></div>
-          <div><dt>${t("specStock")}</dt><dd>${managedStock ? (soldOut ? t("outOfStock") : `${product.stock} ${lowStock ? `· ${t("lowStock")}` : ""}`) : t("cod")}</dd></div>
-          <div><dt>${t("specDelivery")}</dt><dd>${t("delivery")}</dd></div>
-          ${specs.map((spec) => `<div><dt>${escapeHtml(spec.label)}</dt><dd>${escapeHtml(spec.value)}</dd></div>`).join("")}
-          <div><dt>${t("whatsInBox")}</dt><dd>${productBoxText(product)}</dd></div>
-        </dl>
-      </section>
-
-      </section>
-
-      <section class="landing-repeat-cta">
-        <div>
-          <span class="eyebrow">${t("repeatCtaTitle")}</span>
-          <h2>${t("repeatCtaTitle")}</h2>
-          <p>${t("repeatCtaText")}</p>
-        </div>
-        <a class="primary-action" href="#order-form">${escapeHtml(productOffer(product).ctaLabel)}</a>
-      </section>
-      <div id="delivery-section">${productFaq(product)}</div>
-      ${
-        related.length
-          ? `<section id="related-section" class="related-products">
-              <div class="section-heading">
-                <div>
-                  <span class="eyebrow">${t("relatedProducts")}</span>
-                  <h2>${t("relatedProducts")}</h2>
-                </div>
-              </div>
-              <div class="product-grid category-grid">${related.map(relatedCard).join("")}</div>
-            </section>`
-          : ""
-      }
-      ${
-        bestOffers.length
-          ? `<section class="related-products best-offers">
-              <div class="section-heading">
-                <div>
-                  <span class="eyebrow">${t("bestOffers")}</span>
-                  <h2>${t("bestOffers")}</h2>
-                </div>
-              </div>
-              <div class="product-grid category-grid">${bestOffers.map(relatedCard).join("")}</div>
-            </section>`
-          : ""
-      }
-      ${galleryLightbox()}
+        <a href="#order-form">${modernText("Ø§Ø·Ù„Ø¨ Ø§Ù„Ø¢Ù†", "Commander")}</a>
+      </div>
     </section>
   `;
   applyMotionReveal(page);
@@ -1078,18 +1572,27 @@ document.addEventListener("click", (event) => {
   const openGallery = event.target.closest("[data-open-gallery]");
   const closeGallery = event.target.closest("[data-close-gallery]");
   const lightbox = event.target.closest("[data-gallery-lightbox]");
+  const addOn = event.target.closest("[data-addon-product]");
   if (thumb) {
     const mainImage = document.querySelector(".detail-main-image");
+    const galleryStage = thumb.closest(".gallery-card")?.querySelector(".gallery-stage");
     if (mainImage?.src !== thumb.dataset.thumb) {
+      galleryStage?.classList.add("is-changing");
       mainImage.classList.add("is-switching");
       window.setTimeout(() => {
         mainImage.src = thumb.dataset.thumb;
-      }, 110);
-      mainImage.addEventListener("load", () => mainImage.classList.remove("is-switching"), { once: true });
+      }, 140);
+      mainImage.addEventListener("load", () => {
+        mainImage.classList.remove("is-switching");
+        galleryStage?.classList.remove("is-changing");
+      }, { once: true });
       window.setTimeout(() => mainImage.classList.remove("is-switching"), 520);
     }
     document.querySelector("[data-open-gallery]")?.setAttribute("data-open-gallery", thumb.dataset.thumb);
-    document.querySelectorAll("[data-thumb]").forEach((button) => button.classList.toggle("active", button === thumb));
+    document.querySelectorAll("[data-thumb]").forEach((button) => {
+      button.classList.toggle("active", button === thumb);
+      button.classList.toggle("is-active", button === thumb);
+    });
   }
   if (openGallery) {
     const modal = document.querySelector("[data-gallery-lightbox]");
@@ -1127,6 +1630,15 @@ document.addEventListener("click", (event) => {
       updateInfoVariantState(infoVariant.dataset.infoVariant);
     }
   }
+  if (addOn) {
+    const isAdded = addOn.classList.toggle("is-added");
+    addOn.setAttribute("aria-pressed", String(isAdded));
+    const action = addOn.querySelector(".addon-action");
+    if (action) {
+      action.textContent = isAdded ? modernText("Ù…Ø¶Ø§Ù Ù„Ù„Ø·Ù„Ø¨", "Ajoute") : modernText("Ø£Ø¶Ù Ù„Ù„Ø·Ù„Ø¨", "Ajouter");
+    }
+    updateOrderTotal(document.querySelector("[data-product-order]"));
+  }
   const relatedProduct = event.target.closest("[data-related-product]");
   if (relatedProduct) {
     trackEvent("related_product_click", { productId: Number(relatedProduct.dataset.relatedProduct), fromProductId: productId() });
@@ -1151,7 +1663,14 @@ document.addEventListener("input", (event) => {
 document.addEventListener("change", (event) => {
   const variant = event.target.closest('input[name="variant"]');
   if (!variant) return;
-  updateOrderTotal(variant.closest("[data-product-order]"));
+  const group = variant.closest(".modern-variant-control");
+  if (group) {
+    group.querySelectorAll(".color-swatch, .variant-pill").forEach((node) => {
+      const input = node.querySelector('input[name="variant"]');
+      node.classList.toggle("is-selected", input === variant);
+    });
+  }
+  updateOrderTotal(document.querySelector("[data-product-order]"));
   updateInfoVariantState(variant.value);
 });
 
@@ -1185,3 +1704,4 @@ async function initProductPage() {
 }
 
 initProductPage();
+

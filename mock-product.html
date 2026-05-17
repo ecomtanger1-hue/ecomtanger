@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TanjaMol | Mock Product Page</title>
+  <link rel="stylesheet" href="mock-product.css">
+</head>
+<body>
+  <header class="mock-header">
+    <div class="mock-announcement">الدفع عند الاستلام داخل طنجة، والتأكيد عبر واتساب قبل الإرسال</div>
+    <nav class="mock-nav" aria-label="Main navigation">
+      <a class="brand" href="index.html" aria-label="TanjaMol home">
+        <span class="brand-mark">TM</span>
+        <span>TanjaMol</span>
+      </a>
+      <div class="nav-actions">
+        <button class="lang-toggle" type="button" data-lang-toggle>
+          <span>FR</span>
+          <strong>AR</strong>
+        </button>
+        <a class="nav-link" href="index.html">المتجر</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="product-hero" aria-labelledby="product-title">
+      <div class="media-column">
+        <div class="gallery-card">
+          <div class="gallery-stage">
+            <img id="mainImage" src="https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?auto=format&fit=crop&w=1200&q=86" alt="سماعات بلوتوث بعلبة شحن">
+          </div>
+          <div class="thumb-strip" aria-label="Product images">
+            <button class="thumb is-active" type="button" data-image="https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?auto=format&fit=crop&w=1200&q=86">
+              <img src="https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?auto=format&fit=crop&w=240&q=80" alt="الواجهة الرئيسية للسماعات">
+            </button>
+            <button class="thumb" type="button" data-image="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=1200&q=86">
+              <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=240&q=80" alt="السماعات داخل علبة الشحن">
+            </button>
+            <button class="thumb" type="button" data-image="https://images.unsplash.com/photo-1608156639585-b3a032ef9689?auto=format&fit=crop&w=1200&q=86">
+              <img src="https://images.unsplash.com/photo-1608156639585-b3a032ef9689?auto=format&fit=crop&w=240&q=80" alt="تفاصيل السماعات">
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <article class="details-column">
+        <div class="rating-row" aria-label="Product rating">
+          <span class="stars">★★★★★</span>
+          <span>4.9 من 128 تقييم</span>
+        </div>
+        <p class="eyebrow">اختيار عملي للاستعمال اليومي</p>
+        <h1 id="product-title">سماعات بلوتوث بعلبة شحن</h1>
+        <p class="summary">
+          صوت واضح ومكالمات أسهل خلال اليوم مع علبة شحن خفيفة، مناسبة للموسيقى، المكالمات، والتنقل داخل المدينة.
+        </p>
+
+        <div class="price-row">
+          <strong id="heroPrice">MAD 199</strong>
+          <span>MAD 269</span>
+          <em>تخفيض 26%</em>
+        </div>
+
+        <div class="choice-block color-choice">
+          <div class="choice-title">
+            <span>اللون</span>
+            <strong id="selectedColor">أبيض</strong>
+          </div>
+          <div class="swatch-row" data-choice-group="color" aria-label="اختيار اللون">
+            <button class="color-swatch is-selected" type="button" data-label="أبيض" style="--swatch: #f8fafc;" aria-label="أبيض">
+              <span></span>
+            </button>
+            <button class="color-swatch" type="button" data-label="أسود" style="--swatch: #111827;" aria-label="أسود">
+              <span></span>
+            </button>
+            <button class="color-swatch" type="button" data-label="أزرق" style="--swatch: #2563eb;" aria-label="أزرق">
+              <span></span>
+            </button>
+          </div>
+        </div>
+
+        <ul class="benefit-list" aria-label="Product benefits">
+          <li>اتصال سريع مع الهاتف بدون إعدادات معقدة</li>
+          <li>علبة شحن صغيرة وسهلة الحمل</li>
+          <li>مناسبة للمكالمات، الموسيقى، والدراسة</li>
+        </ul>
+      </article>
+
+      <aside class="purchase-column" aria-labelledby="order-title">
+        <div class="checkout-card" id="order-form">
+          <p class="stock-line">متوفر الآن داخل طنجة</p>
+          <h2 id="order-title">أكد طلبك</h2>
+          <div class="checkout-price">
+            <span id="checkoutPrice">MAD 199</span>
+            <small>الدفع عند الاستلام</small>
+          </div>
+
+          <form class="order-form">
+            <label>
+              الاسم الكامل
+              <input type="text" placeholder="مثال: محمد أمين">
+            </label>
+            <label>
+              رقم الهاتف
+              <input type="tel" placeholder="06 12 34 56 78">
+            </label>
+            <label>
+              العنوان / المدينة
+              <input type="text" placeholder="مثال: طنجة، مالاباطا">
+            </label>
+            <div class="quantity-row">
+              <span>الكمية</span>
+              <div class="quantity-control">
+                <button type="button" data-qty="minus">-</button>
+                <strong id="quantityValue">1</strong>
+                <button type="button" data-qty="plus">+</button>
+              </div>
+            </div>
+            <button class="whatsapp-cta" type="button">أكد الطلب عبر واتساب</button>
+          </form>
+
+          <div class="trust-mini">
+            <span>لا تدفع حتى تستلم المنتج</span>
+            <span>نتواصل معك لتأكيد التفاصيل</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="add-ons-section" aria-labelledby="addons-title">
+      <div class="section-heading">
+        <p>إضافات مفيدة</p>
+        <h2 id="addons-title">منتجات تكمل طلبك</h2>
+      </div>
+      <div class="add-ons-grid">
+        <button class="add-on-card" type="button" data-addon-price="39" aria-pressed="false">
+          <span class="addon-media">
+            <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=560&q=82" alt="كابل شحن إضافي">
+          </span>
+          <span class="addon-copy">
+            <span class="addon-title">كابل شحن إضافي</span>
+            <span class="addon-desc">احتياطي عملي للبيت أو المكتب.</span>
+          </span>
+          <span class="addon-footer">
+            <strong>+ MAD 39</strong>
+            <span class="addon-action">أضف للطلب</span>
+          </span>
+        </button>
+        <button class="add-on-card" type="button" data-addon-price="49" aria-pressed="false">
+          <span class="addon-media">
+            <img src="https://images.unsplash.com/photo-1625842268584-8f3296236761?auto=format&fit=crop&w=560&q=82" alt="حافظة صغيرة">
+          </span>
+          <span class="addon-copy">
+            <span class="addon-title">حافظة صغيرة</span>
+            <span class="addon-desc">تحافظ على السماعات داخل الحقيبة.</span>
+          </span>
+          <span class="addon-footer">
+            <strong>+ MAD 49</strong>
+            <span class="addon-action">أضف للطلب</span>
+          </span>
+        </button>
+        <button class="add-on-card" type="button" data-addon-price="29" aria-pressed="false">
+          <span class="addon-media">
+            <img src="https://images.unsplash.com/photo-1616348436168-de43ad0db179?auto=format&fit=crop&w=560&q=82" alt="قطعة تنظيف صغيرة">
+          </span>
+          <span class="addon-copy">
+            <span class="addon-title">قطعة تنظيف</span>
+            <span class="addon-desc">للحفاظ على العلبة والسماعات نظيفة.</span>
+          </span>
+          <span class="addon-footer">
+            <strong>+ MAD 29</strong>
+            <span class="addon-action">أضف للطلب</span>
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <section class="landing-section split-feature" aria-labelledby="why-title">
+      <div class="section-copy">
+        <p class="section-kicker">لماذا تختارها؟</p>
+        <h2 id="why-title">صوت أوضح بدون تعقيد، في الجيب طوال اليوم.</h2>
+        <p>
+          هذه الصفحة يجب أن تشرح المنتج كما لو كانت صفحة إعلان واحدة: المشكلة، الحل، طريقة الاستعمال، وما الذي سيصل للعميل.
+        </p>
+        <div class="feature-list">
+          <article>
+            <span>01</span>
+            <strong>اتصال سريع</strong>
+            <p>افتح العلبة، اربطها بالهاتف، وابدأ المكالمة أو الفيديو خلال ثوان.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <strong>خفيفة للحمل</strong>
+            <p>علبة صغيرة تناسب الجيب أو الحقيبة، جيدة للتنقل والعمل اليومي.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <strong>مناسبة للاستعمال اليومي</strong>
+            <p>للمكالمات، الدراسة، الموسيقى، والاجتماعات القصيرة خلال اليوم.</p>
+          </article>
+        </div>
+      </div>
+      <div class="section-media tall">
+        <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=1000&q=86" alt="سماعات بلوتوث داخل علبة الشحن">
+      </div>
+    </section>
+
+    <section class="use-section" aria-labelledby="use-title">
+      <div class="section-heading">
+        <p>طريقة الاستعمال</p>
+        <h2 id="use-title">من العلبة إلى الاستعمال في ثلاث خطوات</h2>
+      </div>
+      <div class="step-grid">
+        <article>
+          <img src="https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?auto=format&fit=crop&w=700&q=84" alt="فتح علبة الشحن">
+          <span>1</span>
+          <h3>افتح العلبة</h3>
+          <p>أخرج السماعات من العلبة وسيظهر الاتصال على الهاتف.</p>
+        </article>
+        <article>
+          <img src="https://images.unsplash.com/photo-1608156639585-b3a032ef9689?auto=format&fit=crop&w=700&q=84" alt="اختيار السماعات من الهاتف">
+          <span>2</span>
+          <h3>اربطها بالهاتف</h3>
+          <p>اخترها من البلوتوث مرة واحدة، وبعدها تتصل بسرعة كل مرة.</p>
+        </article>
+        <article>
+          <img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=700&q=84" alt="استعمال السماعات يوميا">
+          <span>3</span>
+          <h3>استعملها يوميا</h3>
+          <p>للمكالمات، الفيديو، الموسيقى، أو الدراسة بدون حمل أسلاك.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="compare-section" aria-labelledby="compare-title">
+      <div class="section-heading">
+        <p>اختر حسب استعمالك</p>
+        <h2 id="compare-title">مناسبة لأكثر من موقف خلال اليوم</h2>
+      </div>
+      <div class="compare-grid">
+        <article>
+          <h3>المكالمات</h3>
+          <p>صوت واضح ومريح عندما تكون خارج المنزل أو في الطريق.</p>
+        </article>
+        <article>
+          <h3>الدراسة والعمل</h3>
+          <p>خفيفة لاجتماعات قصيرة، دروس، أو متابعة محتوى بدون إزعاج.</p>
+        </article>
+        <article>
+          <h3>التنقل</h3>
+          <p>علبة شحن صغيرة تجعلها مناسبة للحقيبة والجيب.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="proof-section" aria-labelledby="proof-title">
+      <div>
+        <p class="section-kicker">ثقة قبل الطلب</p>
+        <h2 id="proof-title">طلب واضح، تأكيد عبر واتساب، ودفع عند الاستلام.</h2>
+      </div>
+      <div class="proof-grid">
+        <article>
+          <strong>24-48h</strong>
+          <span>توصيل داخل طنجة</span>
+        </article>
+        <article>
+          <strong>COD</strong>
+          <span>الدفع عند الاستلام</span>
+        </article>
+        <article>
+          <strong>WhatsApp</strong>
+          <span>تأكيد قبل الإرسال</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="landing-section reverse">
+      <div class="section-media">
+        <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=1000&q=86" alt="تفاصيل السماعات والاكسسوارات">
+      </div>
+      <div class="section-copy">
+        <p class="section-kicker">ماذا يوجد في العلبة؟</p>
+        <h2>كل ما تحتاجه للبدء مباشرة.</h2>
+        <ul class="box-list">
+          <li>زوج سماعات بلوتوث</li>
+          <li>علبة شحن محمولة</li>
+          <li>كابل شحن</li>
+          <li>دليل استعمال مختصر</li>
+        </ul>
+        <a class="soft-cta" href="#order-form">الانتقال إلى الطلب</a>
+      </div>
+    </section>
+
+    <section class="reviews-section" aria-labelledby="reviews-title">
+      <div class="section-heading">
+        <p>آراء العملاء</p>
+        <h2 id="reviews-title">تجربة شراء مريحة</h2>
+      </div>
+      <div class="reviews-grid">
+        <article>
+          <strong>أمينة، طنجة</strong>
+          <p>تواصلوا معي قبل الإرسال، والطلب وصل في اليوم الموالي.</p>
+        </article>
+        <article>
+          <strong>سعيد، مالاباطا</strong>
+          <p>الصوت واضح في المكالمات، والدفع عند الاستلام مريح.</p>
+        </article>
+        <article>
+          <strong>نورا، وسط المدينة</strong>
+          <p>العلبة صغيرة وخفيفة، مناسبة للخروج والعمل.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="final-cta" aria-labelledby="final-cta-title">
+      <p>جاهز تطلب؟</p>
+      <h2 id="final-cta-title">أكد طلبك الآن وسنتواصل معك قبل الإرسال.</h2>
+      <a href="#order-form">اطلب عبر واتساب</a>
+    </section>
+
+    <section class="faq-section" aria-labelledby="faq-title">
+      <div class="section-heading">
+        <p>أسئلة سريعة</p>
+        <h2 id="faq-title">كل ما تحتاج معرفته قبل الطلب</h2>
+      </div>
+      <details open>
+        <summary>هل الدفع عند الاستلام متاح؟</summary>
+        <p>نعم، داخل طنجة. سنتواصل معك عبر واتساب لتأكيد العنوان والوقت المناسب.</p>
+      </details>
+      <details>
+        <summary>هل يمكنني تغيير اللون؟</summary>
+        <p>نعم، اختر اللون قبل إرسال الطلب، ويمكن تأكيده مرة أخرى على واتساب.</p>
+      </details>
+      <details>
+        <summary>كم يستغرق التوصيل؟</summary>
+        <p>عادة بين 24 و48 ساعة داخل طنجة حسب المنطقة وتوقيت تأكيد الطلب.</p>
+      </details>
+      <details>
+        <summary>ماذا إذا كان هناك مشكل في المنتج؟</summary>
+        <p>تواصل معنا عبر واتساب وسنراجع الطلب معك بطريقة واضحة وسهلة.</p>
+      </details>
+    </section>
+  </main>
+
+  <div class="mobile-sticky">
+    <div>
+      <span id="stickyPrice">MAD 199</span>
+      <small>الدفع عند الاستلام</small>
+    </div>
+    <a href="#order-form">اطلب الآن</a>
+  </div>
+
+  <script src="mock-product.js"></script>
+</body>
+</html>
