@@ -372,6 +372,6 @@ http
     }
   })
   .listen(port, "127.0.0.1", () => {
-    console.log(`CasaTanja running at http://127.0.0.1:${port}`);
+    console.log(`TanjaMol running at http://127.0.0.1:${port}`);
     console.log(`Admin dashboard: http://127.0.0.1:${port}/admin.html`);
   });

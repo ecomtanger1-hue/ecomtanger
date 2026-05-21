@@ -1652,3 +1652,442 @@ a.full-width-action {
     flex: 1;
   }
 }
+
+/* Polaris-inspired admin refresh */
+.polaris-admin-body {
+  background: #f1f1f1;
+  color: #202223;
+}
+
+.polaris-admin-body .admin-shell {
+  grid-template-columns: 248px minmax(0, 1fr);
+}
+
+.polaris-admin-body .admin-sidebar {
+  border-right-color: #dcdfe4;
+  background: #ffffff;
+}
+
+.polaris-admin-body .brand-mark {
+  border-radius: 10px;
+  background: #202223;
+}
+
+.polaris-admin-body .admin-nav button,
+.polaris-admin-body .admin-store-link,
+.polaris-admin-body .ghost-admin-button,
+.polaris-admin-body .primary-action {
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.polaris-admin-body .primary-action {
+  min-height: 36px;
+  border: 1px solid #008060;
+  background: #008060;
+  color: #ffffff;
+  text-decoration: none;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
+}
+
+.polaris-admin-body .ghost-admin-button,
+.polaris-admin-body .admin-store-link {
+  min-height: 36px;
+  border-color: #c9cccf;
+  background: #ffffff;
+  color: #202223;
+  text-decoration: none;
+}
+
+.polaris-admin-body .ghost-admin-button:hover,
+.polaris-admin-body .admin-store-link:hover {
+  background: #f6f6f7;
+}
+
+.polaris-admin-body .admin-nav button.active {
+  border-color: transparent;
+  background: #edeeef;
+  color: #202223;
+}
+
+.polaris-admin-body .admin-nav button.active .nav-icon {
+  background: #202223;
+}
+
+.polaris-admin-body .side-status-card,
+.polaris-admin-body .side-footer-card,
+.polaris-admin-body .dashboard-hero,
+.polaris-admin-body .admin-stats article {
+  border-color: #dcdfe4;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+}
+
+.polaris-admin-body .admin-main {
+  width: min(100%, 1440px);
+  margin: 0 auto;
+  padding: 28px 32px 44px;
+}
+
+.polaris-page-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin: 0 0 16px;
+}
+
+.polaris-page-title h2 {
+  margin: 4px 0 0;
+  font-size: 1.7rem;
+  line-height: 1.18;
+}
+
+.polaris-page-title p {
+  margin: 6px 0 0;
+  color: #616161;
+}
+
+.polaris-card {
+  overflow: hidden;
+  border: 1px solid #dcdfe4;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05), 0 8px 24px rgba(23, 24, 24, 0.04);
+}
+
+.polaris-index-tabs {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding: 8px 12px 0;
+  border-bottom: 1px solid #dcdfe4;
+}
+
+.polaris-index-tabs button {
+  position: relative;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: #616161;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.polaris-index-tabs button.active {
+  border-bottom-color: #202223;
+  color: #202223;
+}
+
+.polaris-index-tabs span {
+  min-width: 22px;
+  margin-inline-start: 6px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: #edeeef;
+  color: #616161;
+  font-size: 0.72rem;
+}
+
+.polaris-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  border-bottom: 1px solid #dcdfe4;
+  background: #ffffff;
+}
+
+.polaris-search {
+  position: relative;
+  flex: 1;
+  min-width: 260px;
+  max-width: 620px;
+}
+
+.polaris-search svg {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  width: 18px;
+  height: 18px;
+  transform: translateY(-50%);
+  fill: #6d7175;
+}
+
+.polaris-search input {
+  width: 100%;
+  min-height: 38px;
+  padding: 0 12px 0 38px;
+  border: 1px solid #c9cccf;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #202223;
+}
+
+.polaris-toolbar-actions,
+.polaris-bulk-bar > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.polaris-bulk-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #dcdfe4;
+  background: #f1f8f5;
+}
+
+.polaris-bulk-bar[hidden] {
+  display: none;
+}
+
+.polaris-table-shell {
+  overflow-x: auto;
+}
+
+.polaris-product-table {
+  width: 100%;
+  min-width: 980px;
+  border-collapse: collapse;
+}
+
+.polaris-product-table th,
+.polaris-product-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #ebedf0;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.polaris-product-table th {
+  background: #fafbfb;
+  color: #616161;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.polaris-product-row {
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.polaris-product-row:hover {
+  background: #f6f6f7;
+}
+
+.select-cell {
+  width: 44px;
+}
+
+.select-cell input {
+  width: 17px;
+  height: 17px;
+  accent-color: #008060;
+}
+
+.polaris-product-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 300px;
+}
+
+.polaris-product-thumb {
+  width: 58px;
+  height: 58px;
+  flex: 0 0 58px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  border: 1px solid #dcdfe4;
+  border-radius: 8px;
+  background: #f6f6f7;
+  color: #6d7175;
+  font-weight: 800;
+}
+
+.polaris-product-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.polaris-product-cell h3 {
+  margin: 0;
+  color: #202223;
+  font-size: 0.94rem;
+}
+
+.polaris-product-cell p,
+.polaris-row-meta {
+  margin: 3px 0 0;
+  color: #6d7175;
+  font-size: 0.82rem;
+}
+
+.polaris-row-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.polaris-row-meta span {
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: #f1f2f3;
+}
+
+.polaris-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.tone-success {
+  background: #e3f1df;
+  color: #108043;
+}
+
+.tone-warning {
+  background: #fff4e5;
+  color: #8a6116;
+}
+
+.tone-critical {
+  background: #fed3d1;
+  color: #d72c0d;
+}
+
+.tone-neutral {
+  background: #edeeef;
+  color: #616161;
+}
+
+.landing-readiness {
+  display: grid;
+  gap: 6px;
+  min-width: 150px;
+}
+
+.landing-readiness strong {
+  color: #202223;
+  font-size: 0.8rem;
+}
+
+.readiness-meter {
+  width: 100%;
+  height: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #edeeef;
+}
+
+.readiness-meter::before {
+  content: "";
+  display: block;
+  width: var(--ready);
+  height: 100%;
+  border-radius: inherit;
+  background: #008060;
+}
+
+.price-cell strong,
+.price-cell span {
+  display: block;
+}
+
+.price-cell span {
+  color: #8c9196;
+  text-decoration: line-through;
+  font-size: 0.78rem;
+}
+
+.actions-cell {
+  width: 190px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.actions-cell .ghost-admin-button,
+.actions-cell .primary-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 0 12px;
+}
+
+.polaris-empty-state {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 52px 18px;
+  text-align: center;
+}
+
+.polaris-empty-state strong {
+  font-size: 1.08rem;
+}
+
+.polaris-empty-state p {
+  max-width: 420px;
+  margin: 0;
+  color: #616161;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 980px) {
+  .polaris-admin-body .admin-shell {
+    display: block;
+  }
+
+  .polaris-admin-body .admin-sidebar {
+    position: static;
+    height: auto;
+  }
+
+  .polaris-admin-body .admin-main {
+    padding: 18px;
+  }
+
+  .polaris-page-title,
+  .polaris-toolbar,
+  .polaris-bulk-bar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .polaris-toolbar-actions,
+  .polaris-bulk-bar > div {
+    width: 100%;
+  }
+
+  .polaris-toolbar-actions .ghost-admin-button,
+  .polaris-bulk-bar .ghost-admin-button,
+  .polaris-bulk-bar .primary-action {
+    flex: 1;
+  }
+}
