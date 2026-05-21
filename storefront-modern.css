@@ -349,13 +349,6 @@ html[dir="rtl"] .badge {
   }
 }
 
-@media (min-width: 1320px) {
-  .product-grid,
-  .category-grid {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-}
-
 @media (max-width: 899px) {
   .storefront-intro {
     margin-top: 16px;
@@ -376,7 +369,6 @@ html[dir="rtl"] .badge {
   }
 
   .product-card-desc {
-    min-height: 38px;
-    font-size: 0.78rem;
+    display: none;
   }
 }

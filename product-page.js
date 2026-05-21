@@ -1142,7 +1142,7 @@ function modernGallery(product) {
   const title = escapeHtml(localText(product.title));
   return `
     <div class="gallery-card">
-      <div class="gallery-stage">
+      <div class="gallery-stage" role="button" tabindex="0" data-open-gallery-index="0" aria-label="${title}">
         ${
           images[0]
             ? `<img class="detail-main-image" data-main-image src="${images[0]}" alt="${title}" loading="eager" fetchpriority="high" />`
@@ -1155,7 +1155,7 @@ function modernGallery(product) {
               ${images
                 .map(
                   (image, index) => `
-                    <button class="thumb ${index === 0 ? "is-active active" : ""}" type="button" data-thumb="${image}" aria-label="${title} ${index + 1}">
+                    <button class="thumb ${index === 0 ? "is-active active" : ""}" type="button" data-thumb="${image}" data-gallery-index="${index}" aria-label="${title} ${index + 1}">
                       <img src="${image}" alt="${title} ${index + 1}" loading="lazy" />
                     </button>
                   `,
@@ -1494,10 +1494,106 @@ function sectionNavigation(relatedCount) {
 function galleryLightbox() {
   return `
     <div class="gallery-lightbox" data-gallery-lightbox hidden>
-      <button class="gallery-lightbox-close" type="button" data-close-gallery aria-label="Close">Ã—</button>
-      <img data-gallery-lightbox-image alt="" />
+      <button class="gallery-lightbox-close" type="button" data-close-gallery aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+      <button class="gallery-lightbox-nav gallery-lightbox-prev" type="button" data-gallery-prev aria-label="Previous image">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
+      </button>
+      <figure class="gallery-lightbox-panel">
+        <div class="gallery-lightbox-frame">
+          <img data-gallery-lightbox-image alt="" />
+        </div>
+        <figcaption class="gallery-lightbox-caption" data-gallery-lightbox-caption></figcaption>
+        <div class="gallery-lightbox-thumbs" data-gallery-lightbox-thumbs aria-label="Product image thumbnails"></div>
+      </figure>
+      <button class="gallery-lightbox-nav gallery-lightbox-next" type="button" data-gallery-next aria-label="Next image">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6" /></svg>
+      </button>
     </div>
   `;
+}
+
+function galleryImages() {
+  const thumbs = [...document.querySelectorAll(".gallery-card [data-thumb]")];
+  if (thumbs.length) return thumbs.map((thumb) => thumb.dataset.thumb).filter(Boolean);
+  const mainImage = document.querySelector(".gallery-card .detail-main-image");
+  return mainImage?.src ? [mainImage.src] : [];
+}
+
+function galleryTitle() {
+  return document.querySelector(".gallery-card .detail-main-image")?.alt || "";
+}
+
+function setLightboxImage(index, animate = true) {
+  const modal = document.querySelector("[data-gallery-lightbox]");
+  const image = document.querySelector("[data-gallery-lightbox-image]");
+  const caption = document.querySelector("[data-gallery-lightbox-caption]");
+  const thumbs = document.querySelector("[data-gallery-lightbox-thumbs]");
+  const prev = document.querySelector("[data-gallery-prev]");
+  const next = document.querySelector("[data-gallery-next]");
+  const images = galleryImages();
+  if (!modal || !image || !images.length) return;
+  const activeIndex = ((index % images.length) + images.length) % images.length;
+  const title = galleryTitle();
+  const safeTitle = escapeHtml(title);
+  modal.dataset.activeIndex = String(activeIndex);
+  modal.dataset.galleryCount = String(images.length);
+  if (animate) {
+    image.classList.add("is-changing");
+    image.addEventListener("load", () => image.classList.remove("is-changing"), { once: true });
+    window.setTimeout(() => {
+      image.src = images[activeIndex];
+      image.alt = `${title} ${activeIndex + 1}`;
+    }, 110);
+    window.setTimeout(() => image.classList.remove("is-changing"), 420);
+  } else {
+    image.src = images[activeIndex];
+    image.alt = `${title} ${activeIndex + 1}`;
+  }
+  if (caption) {
+    caption.textContent = images.length > 1 ? `${activeIndex + 1} / ${images.length}` : title;
+  }
+  if (thumbs) {
+    thumbs.innerHTML = images
+      .map(
+        (src, thumbIndex) => `
+          <button class="lightbox-thumb ${thumbIndex === activeIndex ? "is-active" : ""}" type="button" data-lightbox-thumb="${thumbIndex}" aria-label="${safeTitle} ${thumbIndex + 1}">
+            <img src="${src}" alt="${safeTitle} ${thumbIndex + 1}" loading="lazy" />
+          </button>
+        `,
+      )
+      .join("");
+  }
+  if (prev && next) {
+    prev.hidden = images.length < 2;
+    next.hidden = images.length < 2;
+  }
+}
+
+function openLightbox(index = 0) {
+  const modal = document.querySelector("[data-gallery-lightbox]");
+  if (!modal || !galleryImages().length) return;
+  setLightboxImage(index, false);
+  modal.hidden = false;
+  requestAnimationFrame(() => modal.classList.add("is-open"));
+  document.body.classList.add("gallery-lightbox-open");
+}
+
+function closeLightbox() {
+  const modal = document.querySelector("[data-gallery-lightbox]");
+  if (!modal) return;
+  modal.classList.remove("is-open");
+  window.setTimeout(() => {
+    modal.hidden = true;
+  }, prefersReducedMotion() ? 0 : 180);
+  document.body.classList.remove("gallery-lightbox-open");
+}
+
+function moveLightbox(step) {
+  const modal = document.querySelector("[data-gallery-lightbox]");
+  if (!modal || modal.hidden) return;
+  setLightboxImage(Number(modal.dataset.activeIndex || 0) + step);
 }
 
 function render() {
@@ -1555,6 +1651,8 @@ function render() {
         </div>
         <a href="#order-form">${modernText("Ø§Ø·Ù„Ø¨ Ø§Ù„Ø¢Ù†", "Commander")}</a>
       </div>
+
+      ${galleryLightbox()}
     </section>
   `;
   applyMotionReveal(page);
@@ -1564,9 +1662,13 @@ document.addEventListener("click", (event) => {
   const thumb = event.target.closest("[data-thumb]");
   const qtyStep = event.target.closest("[data-qty-step]");
   const infoVariant = event.target.closest("[data-info-variant]");
+  const openModernGallery = event.target.closest("[data-open-gallery-index]");
   const openGallery = event.target.closest("[data-open-gallery]");
   const closeGallery = event.target.closest("[data-close-gallery]");
   const lightbox = event.target.closest("[data-gallery-lightbox]");
+  const lightboxThumb = event.target.closest("[data-lightbox-thumb]");
+  const lightboxPrev = event.target.closest("[data-gallery-prev]");
+  const lightboxNext = event.target.closest("[data-gallery-next]");
   const addOn = event.target.closest("[data-addon-product]");
   if (thumb) {
     const mainImage = document.querySelector(".detail-main-image");
@@ -1583,28 +1685,32 @@ document.addEventListener("click", (event) => {
       }, { once: true });
       window.setTimeout(() => mainImage.classList.remove("is-switching"), 520);
     }
+    galleryStage?.setAttribute("data-open-gallery-index", thumb.dataset.galleryIndex || "0");
     document.querySelector("[data-open-gallery]")?.setAttribute("data-open-gallery", thumb.dataset.thumb);
     document.querySelectorAll("[data-thumb]").forEach((button) => {
       button.classList.toggle("active", button === thumb);
       button.classList.toggle("is-active", button === thumb);
     });
   }
+  if (openModernGallery && !thumb) {
+    openLightbox(Number(openModernGallery.dataset.openGalleryIndex || 0));
+  }
   if (openGallery) {
-    const modal = document.querySelector("[data-gallery-lightbox]");
-    const image = document.querySelector("[data-gallery-lightbox-image]");
-    if (modal && image) {
-      image.src = openGallery.dataset.openGallery;
-      image.alt = document.querySelector(".detail-main-image")?.alt || "";
-      modal.hidden = false;
-      document.body.classList.add("gallery-lightbox-open");
-    }
+    const images = galleryImages();
+    const index = Math.max(0, images.findIndex((image) => image === openGallery.dataset.openGallery || image === document.querySelector(".detail-main-image")?.src));
+    openLightbox(index);
+  }
+  if (lightboxThumb) {
+    setLightboxImage(Number(lightboxThumb.dataset.lightboxThumb || 0));
+  }
+  if (lightboxPrev) {
+    moveLightbox(-1);
+  }
+  if (lightboxNext) {
+    moveLightbox(1);
   }
   if (closeGallery || (lightbox && event.target === lightbox)) {
-    const modal = document.querySelector("[data-gallery-lightbox]");
-    if (modal) {
-      modal.hidden = true;
-      document.body.classList.remove("gallery-lightbox-open");
-    }
+    closeLightbox();
   }
   if (qtyStep) {
     const form = qtyStep.closest("[data-product-order]");
@@ -1642,11 +1748,23 @@ document.addEventListener("click", (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
-  if (event.key !== "Escape") return;
+  const galleryTrigger = event.target.closest?.("[data-open-gallery-index]");
+  if (galleryTrigger && (event.key === "Enter" || event.key === " ")) {
+    event.preventDefault();
+    openLightbox(Number(galleryTrigger.dataset.openGalleryIndex || 0));
+    return;
+  }
   const modal = document.querySelector("[data-gallery-lightbox]");
   if (!modal || modal.hidden) return;
-  modal.hidden = true;
-  document.body.classList.remove("gallery-lightbox-open");
+  if (event.key === "Escape") {
+    closeLightbox();
+  }
+  if (event.key === "ArrowLeft") {
+    moveLightbox(document.documentElement.dir === "rtl" ? 1 : -1);
+  }
+  if (event.key === "ArrowRight") {
+    moveLightbox(document.documentElement.dir === "rtl" ? -1 : 1);
+  }
 });
 
 document.addEventListener("input", (event) => {
